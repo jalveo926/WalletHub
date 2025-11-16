@@ -1,2 +1,74 @@
-# WalletHub
-Aplicación web que permite a los usuarios registrar y organizar sus ingresos y gastos, crear categorías personalizadas, visualizar reportes con gráficos y consultar su saldo disponible. Además, ofrece la posibilidad de exportar resúmenes financieros en PDF o Excel para un mejor control y análisis de sus finanzas personales.
+# 💼 WalletHub
+
+> Tu centro de comando financiero personal
+
+Una aplicación moderna y potente que transforma la manera en que gestionas tu dinero. Visualiza, analiza y exporta tus finanzas con solo unos clics.
+
+---
+
+## ✨ ¿Por qué WalletHub?
+
+🔐 **Seguro y Personal** - Tus datos protegidos con autenticación robusta
+
+💸 **Control Total** - Registra cada ingreso y gasto al instante
+
+🎨 **Categorías Inteligentes** - Organiza tu dinero como tú quieras
+
+📊 **Dashboard en Vivo** - Conoce tu balance en tiempo real
+
+📈 **Visualizaciones Potentes** - Gráficos que cuentan la historia de tu dinero
+
+📤 **Exporta Todo** - Lleva tus datos a Excel o PDF cuando quieras
+
+---
+
+## 🛠️ Construido con lo mejor
+
+**Backend:** C# · .NET · SQL Server · Entity Framework
+
+**Frontend:** HTML5 · CSS3 · JavaScript · Chart.js
+
+**Extras:** EPPlus para Excel · PDFSharp para reportes
+
+---
+
+## 💡 Funcionalidades Core
+
+- ✅ Registro de ingresos y gastos con validación en tiempo real
+- ✅ Categorías personalizables que se adaptan a tu estilo de vida
+- ✅ Dashboard interactivo con tu balance actualizado
+- ✅ Reportes visuales que revelan patrones de gasto
+- ✅ Exportación instantánea a Excel y PDF
+- ✅ Filtros por fecha y tipo para análisis profundo
+
+---
+
+## 🎯 Próximamente
+
+- 🌙 Modo oscuro
+- 📱 App móvil
+- 🔔 Alertas de presupuesto
+- 🏦 Integración bancaria
+- 📅 Pagos recurrentes
+
+---
+
+## 🤝 ¿Quieres contribuir?
+
+¡Las pull requests son bienvenidas! Siéntete libre de mejorar el proyecto.
+
+---
+
+## 📄 Licencia
+
+MIT License - Úsalo, modifícalo, mejóralo.
+
+---
+
+<div align="center">
+
+**Hecho con ❤️ para personas que quieren control financiero real**
+
+⭐ Dale una estrella si te sirvió
+
+</div>
