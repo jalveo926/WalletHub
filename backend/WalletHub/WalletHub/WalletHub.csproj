@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ContextoDB\**" />
+    <Compile Remove="Servicios\**" />
+    <Content Remove="ContextoDB\**" />
+    <Content Remove="Servicios\**" />
+    <EmbeddedResource Remove="ContextoDB\**" />
+    <EmbeddedResource Remove="Servicios\**" />
+    <None Remove="ContextoDB\**" />
+    <None Remove="Servicios\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.22" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
