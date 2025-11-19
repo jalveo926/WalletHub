@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore;
 using WalletHub.Models;
+using WalletHub.Data.Configurations;
 namespace WalletHub.Data
 {
     public class ApplicationDbContext : DbContext
@@ -47,12 +48,49 @@ namespace WalletHub.Data
             // Configurar la tabla "Usuario"
             modelBuilder.Entity<Usuario>(entity =>
             {
-                
+                // Nombre de la tabla en la base de datos
+                entity.ToTable("Usuario");
+
+                // Configurar la llave primaria
+                entity.HasKey(e => e.idUsuario);
+
+                // Configurar propiedades requeridas
+                entity.Property(e => e.nombreUsu)
+                      .IsRequired()
+                      .HasMaxLength(50);
+
+                entity.Property(e => e.correoUsu)
+                      .IsRequired()
+                      .HasMaxLength(30);
+
+                entity.Property(e => e.pwHashUsu)
+                      .IsRequired()
+                      .HasMaxLength(200);
             });
             // Configurar la tabla "Categoria"
             modelBuilder.Entity<Categoria>(entity =>
             {
+                // Nombre de la tabla en la base de datos
+                entity.ToTable("Categoria");
 
+                // Configurar la llave primaria
+                entity.HasKey(e => e.idCategoria);
+
+                // Configurar propiedades requeridas
+                entity.Property(e => e.nombreCateg)
+                      .IsRequired()
+                      .HasMaxLength(30);
+
+                entity.Property(e => e.tipoCateg)
+                      .HasConversion<string>() // Convertir enum en string para guardarlo
+                      .IsRequired()
+                      .HasMaxLength(30);
+
+                entity.Property(e => e.idUsuario)
+                      .IsRequired()
+                      .HasMaxLength(50);
+
+                entity.HasData(CategoriaSeed.categoriasGlobales); // Insertar las categorias globales al crear la tabla
             });
             // Configurar la tabla "Transaccion"
             modelBuilder.Entity<Transaccion>(entity =>
