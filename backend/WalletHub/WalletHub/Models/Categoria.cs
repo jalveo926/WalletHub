@@ -7,7 +7,7 @@
         public TipoCategoria tipoCateg { get; set; }
 
         // FK Usuario
-        public string idUsuario { get; set; }
+        public string? idUsuario { get; set; } // Puede ser null si es una categoría global
         public Usuario Usuario { get; set; }
 
         // Relación 1 a muchas Transacciones
