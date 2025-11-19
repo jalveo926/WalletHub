@@ -92,7 +92,7 @@ namespace WalletHub.Data
                       .HasMaxLength(30);
 
                 entity.Property(e => e.idUsuario) //habilita not null para categorias globales del sistema, las creadas por el usuario si seran marcadas con su id
-                      .HasMaxLength(50);
+                      .HasMaxLength(5);
 
                 entity.HasOne(c => c.Usuario) //se define relación un usuario a muchas categorias
                       .WithMany(u => u.Categorias)
@@ -126,11 +126,11 @@ namespace WalletHub.Data
 
                 entity.Property(e => e.idUsuario)
                       .IsRequired()
-                      .HasMaxLength(50);
+                      .HasMaxLength(5);
 
                 entity.Property(e => e.idCategoria)
                       .IsRequired()
-                      .HasMaxLength(50);
+                      .HasMaxLength(5);
 
                 entity.HasOne(t => t.Usuario) // se define relación un usuario a muchas transacciones
                       .WithMany(u => u.Transacciones)
@@ -174,7 +174,7 @@ namespace WalletHub.Data
 
                 entity.Property(e => e.idUsuario)
                       .IsRequired()
-                      .HasMaxLength(50);
+                      .HasMaxLength(5);
 
                 entity.HasOne(r => r.Usuario) // se define relación un usuario a muchos reportes
                       .WithMany(u => u.Reportes)
