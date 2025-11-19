@@ -8,7 +8,10 @@
         public DateTime fechaCreacionRepo { get; set; }
         public DateTime inicioPeriodo { get; set; }
         public DateTime finalPeriodo { get; set; }
-        public string idUsuario { get; set; } = string.Empty; //FK
+
+        // FK Usuario
+        public string idUsuario { get; set; }
+        public Usuario Usuario { get; set; }
     }
 
     /// <summary>
