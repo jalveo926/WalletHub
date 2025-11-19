@@ -5,7 +5,13 @@
         public string idCategoria { get; set; } = string.Empty;
         public string nombreCateg { get; set; } = string.Empty;
         public TipoCategoria tipoCateg { get; set; }
-        public string idUsuario { get; set; } //FK, no usamos string.Empty para admitir categorias creadas por el sistema (idUsuario = null)
+
+        // FK Usuario
+        public string idUsuario { get; set; }
+        public Usuario Usuario { get; set; }
+
+        // Relación 1 a muchas Transacciones
+        public ICollection<Transaccion> Transacciones { get; set; }
     }
 
     /// <summary>
