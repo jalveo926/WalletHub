@@ -1,52 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WalletHub.Data;
+using WalletHub.Servicios;
 using WalletHub.Models;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace WalletHub.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RegistroUsuarioControlador : ControllerBase
+    public class RegistrarUsuarioControlador : ControllerBase
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly RegistrarUsuario _registrarUsuario;
 
-        public RegistroUsuarioControlador(ApplicationDbContext dbContext)
+        public RegistrarUsuarioControlador(RegistrarUsuario registrarUsuario)
         {
-            _dbContext = dbContext;
-        }
-
-        private string HashPassword(string password)
-        {
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
-            }
+            _registrarUsuario = registrarUsuario;
         }
 
         [HttpPost("register")]
         public IActionResult Register([FromBody] Usuario usuario)
         {
-            if (_dbContext.Usuario.Any(u => u.correoUsu == usuario.correoUsu))
+            if (_registrarUsuario.CorreoExiste(usuario.correoUsu))
                 return BadRequest("El correo ya está registrado.");
 
-            usuario.idUsuario = $"US{(_dbContext.Usuario.Count() + 1):D3}";
-            usuario.pwHashUsu = HashPassword(usuario.pwHashUsu);
-
-            usuario.Categorias = new List<Categoria>();
-            usuario.Transacciones = new List<Transaccion>();
-            usuario.Reportes = new List<Reporte>();
-
-            _dbContext.Usuario.Add(usuario);
-            _dbContext.SaveChanges();
-
+            _registrarUsuario.RegistrarNuevoUsuario(usuario);
             return Ok("Usuario registrado exitosamente.");
         }
     }
