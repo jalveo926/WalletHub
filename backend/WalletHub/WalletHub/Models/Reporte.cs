@@ -2,11 +2,16 @@
 {
     public class Reporte
     {
-        public int idReporte { get; set; }
+        public string idReporte { get; set; } = string.Empty;
         public string rutaArchivoRepo { get; set; } = string.Empty; //Se inicializa como cadena vacía para evitar null
         public TipoArchivo tipoArchivoRepo { get; set; }
         public DateTime fechaCreacionRepo { get; set; }
-        public DateTime periodoRepo { get; set; }
+        public DateTime inicioPeriodo { get; set; }
+        public DateTime finalPeriodo { get; set; }
+
+        // FK Usuario
+        public string idUsuario { get; set; }
+        public Usuario Usuario { get; set; }
     }
 
     /// <summary>
