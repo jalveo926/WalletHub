@@ -10,5 +10,7 @@
         public TransaccionDTO(string categoria) { 
             nombreCateg = categoria;
         }
+
+        public TransaccionDTO() { }
     }
 }
