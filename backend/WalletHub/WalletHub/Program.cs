@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WalletHub.Data;
+using WalletHub.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -11,7 +12,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddScoped<Login>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
