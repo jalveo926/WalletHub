@@ -5,7 +5,7 @@ using WalletHub.DTOs;
 namespace WalletHub.Data.Repository
 {
     public class TransaccionRepository : ITransaccionRepository
-{
+    {
         //Le da el contexto de la base de datos al repositorio para que se puedan hacer las operaciones
         private readonly ApplicationDbContext _context; // Inyección de dependencia del DbContext
 
@@ -32,5 +32,20 @@ namespace WalletHub.Data.Repository
             return resultado;
         }
 
+        public async Task<IEnumerable<TransaccionDTO>> GetAll()
+        {
+            var resultado = await _context.Transaccion
+                .Include(t => t.Categoria)
+                .Select(t => new TransaccionDTO(t.Categoria.nombreCateg)
+                {
+                    fechaTransac = t.fechaTransac,
+                    descripcionTransac = t.descripcionTransac,
+                    montoTransac = t.montoTransac,
+                    nombreCateg = t.Categoria.nombreCateg
+                })
+                .ToListAsync();
+
+            return resultado;
+        }
     }
 }

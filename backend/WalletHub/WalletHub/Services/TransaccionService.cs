@@ -33,5 +33,19 @@ namespace WalletHub.Services
                 throw new Exception("Error al filtrar transacciones por categoría.", ex);
             }
         }
+
+        public async Task<IEnumerable<TransaccionDTO>> ObtenerTodasTransaccionesAsync()
+        {
+            try
+            {
+                var todasTransacciones = await _transaccionRepository.GetAll();
+                return todasTransacciones;
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores, logging, etc.
+                throw new Exception("Error al obtener todas las transacciones.", ex);
+            }
+        }
     }
 }

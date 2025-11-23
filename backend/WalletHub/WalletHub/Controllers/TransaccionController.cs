@@ -16,7 +16,7 @@ namespace WalletHub.Controllers
             _transaccionService = transaccionService;
         }
 
-        [HttpGet]
+        [HttpGet("categoria")]
         public async Task<IActionResult> FiltrarCategoria(string categoria)
         {
 
@@ -35,6 +35,20 @@ namespace WalletHub.Controllers
                 {
                     return StatusCode(500, "Error al filtrar transacciones por categoría.");
                 }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ObtenerTodasTransacciones()
+        {
+            try
+            {
+                var todasTransacciones = await _transaccionService.ObtenerTodasTransaccionesAsync();
+                return Ok(todasTransacciones);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error al obtener todas las transacciones.");
+            }
         }
     }
 }
