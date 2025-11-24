@@ -1,6 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using WalletHub.Data;
 using WalletHub.Services;
+using WalletHub.Data.Interface;
+using WalletHub.Data.Repository;
+
+using WalletHub.Services;
+using WalletHub.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -13,6 +18,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<Login>();
+
+//Repositorios
+builder.Services.AddScoped<ITransaccionRepository, TransaccionRepository>();
+//Servicios
+builder.Services.AddScoped<ITransaccionService, TransaccionService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
