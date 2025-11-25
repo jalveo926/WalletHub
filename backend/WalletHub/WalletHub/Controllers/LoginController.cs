@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WalletHub.Data;
-using WalletHub.Models;
+using WalletHub.DTOs;
 using WalletHub.Services;
 
 namespace WalletHub.Controllers
@@ -10,9 +10,9 @@ namespace WalletHub.Controllers
     [ApiController]
     public class LoginController : Controller
     {
-        private readonly Login _loginServicio;
+        private readonly LoginService _loginServicio;
 
-        public LoginController(Login loginServicio)
+        public LoginController(LoginService loginServicio)
         {
             _loginServicio = loginServicio;
         }
@@ -21,19 +21,19 @@ namespace WalletHub.Controllers
 
         public async Task<IActionResult> Login([FromBody] LoginDto dto) //Recomendable usar dto en vez del modelo
         {
-            try
-            {
-                if (string.IsNullOrEmpty(dto.correoUsu) || string.IsNullOrEmpty(dto.pwHashUsu))
-                    return BadRequest(new
-                    {
-                        mensaje = "Los campos no pueden estar vacíos."
-                    });
+            if (string.IsNullOrEmpty(dto.correoUsu) || string.IsNullOrEmpty(dto.Contrasena))
+                return BadRequest(new
+                {
+                    mensaje = "Los campos no pueden estar vacíos."
+                });
 
+            try
+            {          
                 //Valida en la capa servicios si los datos son correctos o existentes
-                var usuario = await _loginServicio.LoginAsync(dto.correoUsu, dto.pwHashUsu);
+                var credencialesUsuario = await _loginServicio.VerificarCorreoContrasena(dto.correoUsu, dto.Contrasena);
 
                 //Si no existe el usuario o la contraseña no coincide
-                if (usuario == null)
+                if (credencialesUsuario == null)
                     return BadRequest(new { mensaje = "Correo o contraseña incorrectos." });
 
                 return Ok(new
@@ -41,9 +41,9 @@ namespace WalletHub.Controllers
                     mensaje = "Login exitoso",
                     usuario = new
                     {
-                        id = usuario.idUsuario,
-                        nombre = usuario.nombreUsu,
-                        correo = usuario.correoUsu
+                        id = credencialesUsuario.idUsuario,
+                        nombre = credencialesUsuario.nombreUsu,
+                        correo = credencialesUsuario.correoUsu
                     }
                 });
 
@@ -53,7 +53,6 @@ namespace WalletHub.Controllers
                 return StatusCode(500, new
                 {
                     mensaje = "Ocurrió un error al procesar la solicitud",
-                    error = ex.Message
                 });
             }
             

@@ -17,12 +17,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<Login>();
 
 //Repositorios
 builder.Services.AddScoped<ITransaccionRepository, TransaccionRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 //Servicios
 builder.Services.AddScoped<ITransaccionService, TransaccionService>();
+builder.Services.AddScoped<LoginService>();
 
 var app = builder.Build();
 
