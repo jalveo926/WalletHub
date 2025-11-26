@@ -41,7 +41,6 @@ namespace WalletHub.Controllers
                     mensaje = "Login exitoso",
                     usuario = new
                     {
-                        id = credencialesUsuario.idUsuario,
                         nombre = credencialesUsuario.nombreUsu,
                         correo = credencialesUsuario.correoUsu
                     }

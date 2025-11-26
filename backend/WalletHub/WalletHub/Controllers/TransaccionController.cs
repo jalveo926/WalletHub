@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WalletHub.Data.Interface;
-using WalletHub.Services.Interface;
-using WalletHub.Services;
+using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
+using WalletHub.Data.Interface;
+using WalletHub.Models;
+using WalletHub.Services;
+using WalletHub.Services.Interface;
 
 namespace WalletHub.Controllers
 {
@@ -21,19 +23,37 @@ namespace WalletHub.Controllers
         {
 
             //Validar que la categoria no sea nula o vacía
-            if (string.IsNullOrEmpty(categoria))
+            if (string.IsNullOrEmpty(categoria) )
             {
-                return BadRequest("La categoría no puede ser nula o vacía.");
+                return BadRequest(new {
+                   mensaje =  "La categoría no puede ser nula o vacía."
+                });
             }
+
+            
 
             try
                 {
                     var transaccionesFiltradas = await _transaccionService.FiltrarCategoriaAsync(categoria);
-                    return Ok(transaccionesFiltradas);
+                if (transaccionesFiltradas.IsNullOrEmpty()) {
+                    return BadRequest(new
+                    {
+                        mensaje = "No hay transacciones por mostrar este filtro",
+                        filtro = categoria
+                    });
+                }
+
+                    return Ok(new
+                {
+                    mensaje = "Filtrado de categorias exitoso",
+                    transaccionesFiltradas
+                });
                 }
                 catch (Exception ex)
                 {
-                    return StatusCode(500, "Error al filtrar transacciones por categoría.");
+                    return StatusCode(500, new {
+                        mensaje = "Ocurrio un error inesperado"
+                    } );
                 }
         }
 
@@ -43,11 +63,26 @@ namespace WalletHub.Controllers
             try
             {
                 var todasTransacciones = await _transaccionService.ObtenerTodasTransaccionesAsync();
-                return Ok(todasTransacciones);
+                if (todasTransacciones.IsNullOrEmpty())
+                {
+                    return BadRequest(new
+                    {
+                        mensaje = "No hay transacciones por mostrar este filtro"
+                    });
+                }
+
+                return Ok(new { 
+                    mensaje = "Transacciones obtenidas exitosamente",
+                    todasTransacciones
+                
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Error al obtener todas las transacciones.");
+                return StatusCode(500,new { 
+                    mensaje = "Error al obtener todas las transacciones.",
+
+                } );
             }
         }
     }
