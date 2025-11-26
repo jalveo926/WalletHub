@@ -15,11 +15,6 @@ namespace WalletHub.Services
             _usuarioRepository = usuarioRepository;
         }
 
-        public async Task<Usuario?> VerificarCorreoContrasena(string correo, string contrasena)
-        {
-            return await _usuarioRepository.GetByCorreoAndPasswordAsync(correo, contrasena);
-        }
-
         public async Task<Usuario?> RegistrarUsuarioAsync(Usuario usuario)
         {
             var usuarioRegistrado = await _usuarioRepository.RegistrarUsuarioAsync(usuario);
