@@ -24,7 +24,7 @@ namespace WalletHub.Services
             catch (ArgumentNullException ex)
             {
                 // Manejo de errores, logging, etc.
-                throw new Exception("Error al filtrar transacciones por categoría.", ex);
+                throw new Exception("No hay registros por categoría que mostrar.", ex);
 
             }
             catch (Exception ex)
@@ -40,6 +40,9 @@ namespace WalletHub.Services
             {
                 var todasTransacciones = await _transaccionRepository.GetAll();
                 return todasTransacciones;
+            }
+            catch (ArgumentNullException ex) {
+                throw new Exception("No hay registros que mostrar.", ex);
             }
             catch (Exception ex)
             {
