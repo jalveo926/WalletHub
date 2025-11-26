@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WalletHub.DTOs;
 using WalletHub.Services;
+using WalletHub.Services.Interface;
 
 namespace WalletHub.Controllers
 {
@@ -9,10 +10,14 @@ namespace WalletHub.Controllers
     public class RegistrarUsuarioController : ControllerBase
     {
         private readonly RegistrarUsuarioService _registrarUsuarioService;
+        private readonly IPasswordHashService _passwordHashService;
 
-        public RegistrarUsuarioController(RegistrarUsuarioService registrarUsuarioService)
+        public RegistrarUsuarioController(
+            RegistrarUsuarioService registrarUsuarioService,
+            IPasswordHashService passwordHashService)
         {
             _registrarUsuarioService = registrarUsuarioService;
+            _passwordHashService = passwordHashService;
         }
 
         [HttpPost]
@@ -30,11 +35,14 @@ namespace WalletHub.Controllers
 
             try
             {
+                // Hashea la contraseña antes de guardar
+                string hashedPassword = _passwordHashService.HashPassword(dto.Contrasena);
+
                 var nuevoUsuario = new Models.Usuario
                 {
                     nombreUsu = dto.nombreUsu,
                     correoUsu = dto.correoUsu,
-                    pwHashUsu = dto.Contrasena
+                    pwHashUsu = hashedPassword
                 };
 
                 var usuarioRegistrado = await _registrarUsuarioService.RegistrarUsuarioAsync(nuevoUsuario);
