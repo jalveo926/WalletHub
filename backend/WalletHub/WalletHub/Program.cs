@@ -20,9 +20,11 @@ builder.Services.AddSwaggerGen();
 
 //Repositorios
 builder.Services.AddScoped<ITransaccionRepository, TransaccionRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 //Servicios
 builder.Services.AddScoped<ITransaccionService, TransaccionService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<RegistrarUsuarioService>();
 //Servicios
 builder.Services.AddScoped<ITransaccionService, TransaccionService>();
 builder.Services.AddScoped<LoginService>();

@@ -33,6 +33,21 @@ namespace WalletHub.Data.Repository
             return credencialesUsuario;
         }
 
+        public async Task<Usuario?> RegistrarUsuarioAsync(Usuario usuario)
+        {
+            var existeUsuario = await _context.Usuario.FirstOrDefaultAsync(u => u.correoUsu == usuario.correoUsu);
+            if (existeUsuario != null)
+            {
+                // El correo ya está registrado
+                return null;
+            }
+
+            _context.Usuario.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            return usuario;
+        }
+
     }
 
 }
