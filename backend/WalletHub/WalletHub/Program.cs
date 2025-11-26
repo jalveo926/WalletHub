@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WalletHub.Data;
+using WalletHub.Services;
 using WalletHub.Data.Interface;
 using WalletHub.Data.Repository;
 
@@ -21,6 +22,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITransaccionRepository, TransaccionRepository>();
 //Servicios
 builder.Services.AddScoped<ITransaccionService, TransaccionService>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+//Servicios
+builder.Services.AddScoped<ITransaccionService, TransaccionService>();
+builder.Services.AddScoped<LoginService>();
 
 var app = builder.Build();
 
