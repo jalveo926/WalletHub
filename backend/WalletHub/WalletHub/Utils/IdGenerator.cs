@@ -16,7 +16,7 @@ namespace WalletHub.Utils
         /// <param name="maxLength"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static async Task<string> GenerateIdAsync<T>( // Metodo de generacion de IDs con prefijos
+        public static async Task<string> GenerateIdAsync<T>( // Método de generacion de IDs con prefijos
         DbSet<T> dbSet,
         string prefijo, // "US", "CA", "TR", "RE"
         string idEntidad, // "idUsuario", "idCategoria", "idTransaccion", "idReporte"
