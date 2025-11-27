@@ -19,7 +19,7 @@ namespace WalletHub.Controllers
 
         [HttpPost]
 
-        public async Task<IActionResult> Login([FromBody] LoginDto dto) //Recomendable usar dto en vez del modelo
+        public async Task<IActionResult> Login([FromBody] LoginDTO dto) //Recomendable usar dto en vez del modelo
         {
             if (string.IsNullOrEmpty(dto.correoUsu) || string.IsNullOrEmpty(dto.Contrasena))
                 return BadRequest(new
