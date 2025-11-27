@@ -10,3 +10,4 @@ function cargarLayout(id, url) { /*Recibe como parámetros el id y la dirección
         })
         .catch(err => console.error("Error cargando ${id}:", err)); 
 }
+

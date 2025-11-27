@@ -1,20 +1,26 @@
 <!--Header de todas las pantallas-->
 <header>
-    <div>LOGO</div>
-    <div>WALLETHUB</div>
-    <div>
-        <div>IG</div>
-        <div>GG</div>
-    </div>
+    <section class="encabezado">
+        <div class="logo"><img src="../assets/images/WalletHub_WhiteBG.png" alt="WalletHub Logo"></div>
+        <h1 class="WalletHub">WalletHub</h1>
+        <div class="icon-layout">
+            <div class="icons" onclick="window.location.href='https://www.google.com'"><img src="../assets/icons/search-white.svg" alt="Barra de búsqueda"></div>
+            <div class="icons"><img src="../assets/icons/instagram-white.svg" alt="Instagram"></div>
+        </div>
+    </section>
+    
     <hr>
+
     <!--Nav de todas las pantallas-->
     <nav>
         <ul>
             <!-- ../ significa subir un nivel en la estructura de carpetas.
             Desde components/layout.html subimos a FRONTEND/ y luego accedemos a pages/dashboard.html -->
+            <li><a href="../pages/home.html">HOME</a></li>
             <li><a href="../pages/dashboard.html">DASHBOARD</a></li> 
             <li><a href="../pages/transaccion.html">TRANSACCIONES</a></li> 
             <li><a href="../pages/reportes.html">REPORTES</a></li>
+            <li><a href="../pages/nosotros.html">SOBRE NOSOTROS</a></li>
         </ul>
     </nav>
 </header>

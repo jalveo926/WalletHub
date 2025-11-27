@@ -1,0 +1,77 @@
+/*Estilos del layout general: header, nav y footer*/
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;                    
+    padding: 0; 
+    font-family: "Nunito", sans-serif;
+}
+
+header {
+    background-color: #0A1F44;
+}
+
+.encabezado {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 10px 40px;
+}
+
+.WalletHub {
+    color: #FFFF;
+    font-size: 28px;
+    margin: 0;
+}
+
+/*Los dos íconos se ponen uno al lado del otro*/
+.icon-layout {
+    display: flex;
+    gap: 15px;
+}
+
+.logo img {
+    width: 70px;
+    border-radius: 50%;
+}
+
+.icons img {
+    width: 30px;
+    cursor: pointer;
+}
+
+nav a {
+    text-decoration: none;
+    color: #FFFF;
+}
+
+nav a:hover {
+    color: #16A085;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;        
+    align-items: center;  
+    padding: 0;    
+    margin: 0;                 
+    gap: 12%; 
+}
+
+footer {
+    background: #0A1F44;
+    padding: 10px;
+    text-align: center;
+}
+
+footer a {
+    color: #FFFF;
+}
+
+footer a:hover {
+    color: #16A085;
+}
