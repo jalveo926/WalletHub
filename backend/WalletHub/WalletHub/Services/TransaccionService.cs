@@ -38,7 +38,7 @@ namespace WalletHub.Services
         {
             try
             {
-                var todasTransacciones = await _transaccionRepository.GetAll();
+                var todasTransacciones = await _transaccionRepository.GetAllTransaccionAsync();
                 return todasTransacciones;
             }
             catch (ArgumentNullException ex) {

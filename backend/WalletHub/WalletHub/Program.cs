@@ -3,8 +3,6 @@ using WalletHub.Data;
 using WalletHub.Services;
 using WalletHub.Data.Interface;
 using WalletHub.Data.Repository;
-
-using WalletHub.Services;
 using WalletHub.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,24 +11,24 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+}); // Para que los enums se serialicen como strings en JSON
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//Repositorios
+// Repositorios
 builder.Services.AddScoped<ITransaccionRepository, TransaccionRepository>();
-//Servicios
-builder.Services.AddScoped<ITransaccionService, TransaccionService>();
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-//Servicios
+
+// Servicios
 builder.Services.AddScoped<ITransaccionService, TransaccionService>();
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<RegistrarUsuarioService>();
 builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
-
-//Servicios
-builder.Services.AddScoped<ITransaccionService, TransaccionService>();
 builder.Services.AddScoped<LoginService>();
 
 var app = builder.Build();

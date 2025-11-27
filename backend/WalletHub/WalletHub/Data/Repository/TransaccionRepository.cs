@@ -34,7 +34,7 @@ namespace WalletHub.Data.Repository
             return resultado;
         }
 
-        public async Task<IEnumerable<TransaccionDTO>> GetAll()
+        public async Task<IEnumerable<TransaccionDTO>> GetAllTransaccionAsync()
         {
             var resultado = await _context.Transaccion
                 .Include(t => t.Categoria)
