@@ -29,18 +29,6 @@ builder.Services.AddScoped<ITransaccionService, TransaccionService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<RegistrarUsuarioService>();
 builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-builder.Services.AddScoped<RegistrarUsuarioService>();
-builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
-
-//Servicios
-builder.Services.AddScoped<ITransaccionService, TransaccionService>();
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-builder.Services.AddScoped<RegistrarUsuarioService>();
-builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
-
-//Servicios
-builder.Services.AddScoped<ITransaccionService, TransaccionService>();
 builder.Services.AddScoped<LoginService>();
 
 var app = builder.Build();
