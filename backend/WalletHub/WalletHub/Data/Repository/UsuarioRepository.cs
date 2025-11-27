@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WalletHub.Data.Interface;
 using WalletHub.Models;
+using WalletHub.Utils;
 
 namespace WalletHub.Data.Repository
 {
@@ -41,6 +42,15 @@ namespace WalletHub.Data.Repository
                 // El correo ya está registrado
                 return null;
             }
+
+            // Generar ID para el nuevo usuario
+            usuario.idUsuario = await IdGenerator.GenerateIdAsync(
+                _context.Usuario,  
+                "US",              
+                "idUsuario",        
+                padding: 3,
+                maxLength: 5
+            );
 
             _context.Usuario.Add(usuario);
             await _context.SaveChangesAsync();
