@@ -7,8 +7,7 @@ namespace WalletHub.Data.Interface
     public interface ITransaccionRepository
         {
             public Task<IEnumerable<TransaccionDTO>> GetByCategoria(string categoria);
-            public Task<IEnumerable<TransaccionDTO>> GetAll();
-            public Task<TransaccionDTO> AddTransaccionAsync(RegistroTransaccionDTO dto, string idUsuario);
             public Task<IEnumerable<TransaccionDTO>> GetAllTransaccionAsync();
+            public Task<TransaccionDTO> AddTransaccionAsync(RegistroTransaccionDTO dto, string idUsuario);
     }
     }
