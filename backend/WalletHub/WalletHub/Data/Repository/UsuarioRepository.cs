@@ -58,16 +58,10 @@ namespace WalletHub.Data.Repository
             return usuario;
         }
 
-        public async Task<Usuario?> GetByCorreoAsync(string correo)
+        public async Task<Usuario?> GetUsuarioByCorreoAsync(string correo)
         {
-            if (string.IsNullOrEmpty(correo))
-                return null;
-
-            return await _context.Usuario
-                .FirstOrDefaultAsync(u => u.correoUsu == correo);
+            return await _context.Usuario.FirstOrDefaultAsync(u => u.correoUsu == correo);
         }
-
-
     }
 
 }
