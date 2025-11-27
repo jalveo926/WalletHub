@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WalletHub.Data.Interface;
 using WalletHub.Models;
+using WalletHub.Utils;
 
 namespace WalletHub.Data.Repository
 {
@@ -32,6 +33,40 @@ namespace WalletHub.Data.Repository
 
             return credencialesUsuario;
         }
+
+        public async Task<Usuario?> RegistrarUsuarioAsync(Usuario usuario)
+        {
+            var existeUsuario = await _context.Usuario.FirstOrDefaultAsync(u => u.correoUsu == usuario.correoUsu);
+            if (existeUsuario != null)
+            {
+                // El correo ya está registrado
+                return null;
+            }
+
+            // Generar ID para el nuevo usuario
+            usuario.idUsuario = await IdGenerator.GenerateIdAsync(
+                _context.Usuario,  
+                "US",              
+                "idUsuario",        
+                padding: 3,
+                maxLength: 5
+            );
+
+            _context.Usuario.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            return usuario;
+        }
+
+        public async Task<Usuario?> GetByCorreoAsync(string correo)
+        {
+            if (string.IsNullOrEmpty(correo))
+                return null;
+
+            return await _context.Usuario
+                .FirstOrDefaultAsync(u => u.correoUsu == correo);
+        }
+
 
     }
 
