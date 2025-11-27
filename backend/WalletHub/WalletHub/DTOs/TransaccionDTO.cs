@@ -1,5 +1,6 @@
 ﻿namespace WalletHub.DTOs
 {
+    // DTO para devolver datos de transacciones
     public class TransaccionDTO
     {
         public DateTime fechaTransac { get; set; }

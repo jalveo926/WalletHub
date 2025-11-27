@@ -31,7 +31,7 @@ namespace WalletHub.Utils
 
             if (lastEntity != null) // si existe una entidad previa
             {
-                string lastId = EF.Property<string>(lastEntity, idEntidad); // Obtiene dinámicamente el valor del ID en lugar de especificar "idUsuario" u otro
+                string lastId = (string)lastEntity.GetType().GetProperty(idEntidad).GetValue(lastEntity);
                 string numId = lastId.Substring(prefijo.Length);
                 siguienteNumId = int.Parse(numId) + 1;
             }
