@@ -27,7 +27,12 @@ namespace WalletHub.Controllers
                 return new OkObjectResult(new
                 {
                     mensaje = "Categorías obtenidas exitosamente",
-                    categorias
+                    categorias = categorias.Select(c => new
+                    {
+                        c.idCategoria,
+                        c.nombreCateg,
+                        c.tipoCateg
+                    })
                 });
             }
             catch (Exception)
@@ -179,7 +184,13 @@ namespace WalletHub.Controllers
                 return Ok(new
                 {
                     mensaje = "Categorías obtenidas exitosamente",
-                    categorias
+                    categorias = categorias.Select(c => new
+                    {
+                        c.idCategoria,
+                        c.nombreCateg,
+                        c.tipoCateg
+                    })
+
                 });
             }
             catch (Exception)
@@ -200,7 +211,12 @@ namespace WalletHub.Controllers
                 return Ok(new
                 {
                     mensaje = "Categorías obtenidas exitosamente",
-                    categorias
+                    categorias = categorias.Select(c => new
+                    {
+                        c.idCategoria,
+                        c.nombreCateg,
+                        c.tipoCateg
+                    })
                 });
             }
             catch (Exception)
