@@ -90,5 +90,16 @@ namespace WalletHub.Data.Repository
                 nombreCateg = categoria.nombreCateg
             };
         }
+
+        public async Task<bool> DeleteTransaccionAsync(string idTransaccion)
+        {
+            var transaccion = await _context.Transaccion.FindAsync(idTransaccion);
+
+            if (transaccion == null)
+                return false; 
+
+            _context.Transaccion.Remove(transaccion);
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }

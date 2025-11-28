@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using WalletHub.Data.Interface;
 using WalletHub.DTOs;
@@ -114,6 +115,28 @@ namespace WalletHub.Controllers
                 {
                     mensaje = ex.Message
                 });
+            }
+        }
+
+        ///<summary>
+        ///Elimina una transacción por su id.
+        ///</summary>
+        ///<param name="idTransaccion">ID de la transacción a eliminar</param>
+        [HttpDelete("{idTransaccion}")]
+        public async Task<IActionResult> EliminarTransaccion(string idTransaccion)
+        {
+            try
+            {
+                var resultado = await _transaccionService.EliminarTransaccionAsync(idTransaccion);
+
+                if (!resultado)
+                    return NotFound(new { mensaje = "Transacción no encontrada" });
+
+                return Ok(new { mensaje = "Transacción eliminada exitosamente" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { mensaje = "Error al eliminar la transacción: " + ex.Message });
             }
         }
     }

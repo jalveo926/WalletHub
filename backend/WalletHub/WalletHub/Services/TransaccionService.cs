@@ -79,5 +79,10 @@ namespace WalletHub.Services
                 throw new Exception("Error al registrar la transacción.", ex);
             }
         }
+
+        public async Task<bool> EliminarTransaccionAsync(string idTransaccion)
+        {
+            return await _transaccionRepository.DeleteTransaccionAsync(idTransaccion);
+        }
     }
 }
