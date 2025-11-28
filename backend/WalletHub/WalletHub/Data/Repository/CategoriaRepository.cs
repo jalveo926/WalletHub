@@ -35,26 +35,25 @@ namespace WalletHub.Data.Repository
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<CategoriaDTO>> GetAllCategoriaAsync()
+        public async Task<List<Categoria>> GetAllCategoriaAsync()
         {
             return await _context.Categoria
                 .Include(c => c.Usuario)
-                .Select(c => new CategoriaDTO
-                {
-                    idCategoria = c.idCategoria,
+                .Select(c => new Categoria
+                {   
+                    idCategoria = c.idCategoria,    
                     nombreCateg = c.nombreCateg,
                     tipoCateg = c.tipoCateg,
-                    correoUsu = c.Usuario != null ? c.Usuario.correoUsu : string.Empty
                 })
                 .ToListAsync();
         }
 
 
 
-        public async Task<bool> UpdateCategoriaAsync(CategoriaDTO actualizado)
+        public async Task<bool> UpdateCategoriaAsync(string idCategoria,CategoriaDTO actualizado)
         {
             var categoriaExistente = await _context.Categoria
-                .FirstOrDefaultAsync(c => c.idCategoria == actualizado.idCategoria);
+                .FirstOrDefaultAsync(c => c.idCategoria == idCategoria);
 
             if (categoriaExistente == null)
             {
@@ -68,7 +67,37 @@ namespace WalletHub.Data.Repository
             return await _context.SaveChangesAsync() > 0;
         }
 
+        public async Task<Categoria?> GetCategoriaByID(string idCategoria)
+        {
+            return await _context.Categoria
+                .FirstOrDefaultAsync(c => c.idCategoria == idCategoria);
+        }
 
+        public async Task<List<Categoria?>> GetCategoriasByUsuario(string idUsuario)
+        {
+            return await _context.Categoria
+                .Where(c => c.idUsuario == idUsuario)
+                .Select(c => new Categoria
+                {
+                    idCategoria = c.idCategoria,
+                    nombreCateg = c.nombreCateg,
+                    tipoCateg = c.tipoCateg,
+                })
+                .ToListAsync();
+        }
+
+        public async Task<List<Categoria>> GetCategoriasGlobales()
+        {
+            return await _context.Categoria
+                .Where(c => c.idUsuario == null)
+                .Select(c => new Categoria
+                {
+                    idCategoria = c.idCategoria,
+                    nombreCateg = c.nombreCateg,
+                    tipoCateg = c.tipoCateg,
+                })
+                .ToListAsync();
+        }
 
     }
 }

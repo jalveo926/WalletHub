@@ -6,8 +6,14 @@ namespace WalletHub.Data.Interface
     {
         public Task<string> AddCategoriaAsync(Categoria insertado);
         public Task<bool> DeleteCategoriaAsync(string idCategoria);
-        public Task<bool> UpdateCategoriaAsync(CategoriaDTO editado);
-        public Task<List<CategoriaDTO>> GetAllCategoriaAsync();
+        public Task<bool> UpdateCategoriaAsync(string idCategoria, CategoriaDTO actualizado);
+
+        public Task<Categoria?> GetCategoriaByID(string idCategoria); // Si entregas una categoria que no existe retorna null
+        
+        public Task<List<Categoria?>> GetCategoriasByUsuario(string idUsuario);
+        public Task<List<Categoria>> GetCategoriasGlobales();  //Las que tienen idUsuario null
+
+        public Task<List<Categoria>> GetAllCategoriaAsync();
 
       
        
