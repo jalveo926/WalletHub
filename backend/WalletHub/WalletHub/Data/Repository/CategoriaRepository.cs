@@ -73,5 +73,31 @@ namespace WalletHub.Data.Repository
                 .FirstOrDefaultAsync(c => c.idCategoria == idCategoria);
         }
 
+        public async Task<List<Categoria?>> GetCategoriasByUsuario(string idUsuario)
+        {
+            return await _context.Categoria
+                .Where(c => c.idUsuario == idUsuario)
+                .Select(c => new Categoria
+                {
+                    idCategoria = c.idCategoria,
+                    nombreCateg = c.nombreCateg,
+                    tipoCateg = c.tipoCateg,
+                })
+                .ToListAsync();
+        }
+
+        public async Task<List<Categoria>> GetCategoriasGlobales()
+        {
+            return await _context.Categoria
+                .Where(c => c.idUsuario == null)
+                .Select(c => new Categoria
+                {
+                    idCategoria = c.idCategoria,
+                    nombreCateg = c.nombreCateg,
+                    tipoCateg = c.tipoCateg,
+                })
+                .ToListAsync();
+        }
+
     }
 }

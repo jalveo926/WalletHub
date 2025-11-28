@@ -9,6 +9,10 @@ namespace WalletHub.Services.Interface
         public Task<bool> ActualizarCategoriaAsync(string idCategoria, CategoriaDTO actualizado);
 
         public Task<Categoria?> ObtenerCategoriaPorIdAsync(string idCategoria);
+
+        public Task<List<Categoria?>> ObtenerCategoriasPorUsuario(string idCategoria);
+
+        public Task<List<Categoria>> ObtenerCategoriasGlobales();
         public Task<List<Categoria>> ObtenerTodasCategoriasAsync();
        
     }

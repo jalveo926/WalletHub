@@ -13,21 +13,79 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//Configuracion para la JWT
+// Configuración para la JWT
 var key = builder.Configuration["Jwt:Key"];
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        ValidateIssuer = false,//Validará el usuario que envía el token
-        ValidateAudience = false,//Validará el destinatario del token
-        ValidateLifetime = true,//Validará que el token no haya expirado
-        ValidateIssuerSigningKey = true,//Validará la firma del token
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)) //le pasamos la llave privada
-    };
-});
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+        };
+
+        // EVENTOS PERSONALIZADOS 
+        //Esto es para que cuando intentes hacer cosas sin estar autenticado o autorizado te mande errores personalizados al front
+        options.Events = new JwtBearerEvents
+        {
+            // No autenticado 401
+            OnChallenge = context =>
+            {
+                context.HandleResponse(); // Evita la respuesta automática
+
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.ContentType = "application/json";
+
+                var respuesta = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    mensaje = "Debes iniciar sesión para acceder a este recurso.",
+                    error = "Token no enviado, inválido o expirado."
+                });
+
+                return context.Response.WriteAsync(respuesta);
+            },
+
+            // Token válido pero sin permisos 403
+            OnForbidden = context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                context.Response.ContentType = "application/json";
+
+                var respuesta = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    mensaje = "No tienes permisos para ejecutar esta acción.",
+                    error = "Acceso denegado."
+                });
+
+                return context.Response.WriteAsync(respuesta);
+            },
+
+            // Error de autenticación (token expirado o corrupto)
+            OnAuthenticationFailed = context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.ContentType = "application/json";
+
+                string mensaje = context.Exception is SecurityTokenExpiredException
+                    ? "Tu sesión ha expirado. Por favor inicia sesión nuevamente."
+                    : "El token enviado no es válido.";
+
+                var respuesta = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    mensaje,
+                    error = context.Exception.Message
+                });
+
+                return context.Response.WriteAsync(respuesta);
+            }
+        };
+    });
 
 //Personalización de SWAGGER para probar los tokens JWT
 builder.Services.AddSwaggerGen(c =>
@@ -90,6 +148,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
