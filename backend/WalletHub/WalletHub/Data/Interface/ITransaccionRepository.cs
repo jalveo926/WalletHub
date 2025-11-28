@@ -11,5 +11,7 @@ namespace WalletHub.Data.Interface
             public Task<TransaccionDTO> AddTransaccionAsync(RegistroTransaccionDTO dto, string idUsuario);
 
             public Task<bool> DeleteTransaccionAsync(string idTransaccion);
+
+            public Task<bool> UpdateTransaccionAsync(ActualizarTransaccionDTO editado, string idUsuario);
     }
     }

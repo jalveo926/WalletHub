@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WalletHub.Data.Interface;
+using WalletHub.Data.Repository;
 using WalletHub.DTOs;
 using WalletHub.Models;
 using WalletHub.Services.Interface;
@@ -83,6 +84,14 @@ namespace WalletHub.Services
         public async Task<bool> EliminarTransaccionAsync(string idTransaccion)
         {
             return await _transaccionRepository.DeleteTransaccionAsync(idTransaccion);
+        }
+
+        public async Task<bool> ActualizarTransaccionAsync(ActualizarTransaccionDTO editado, string idUsuario)
+        {
+            if (editado.montoTransac.HasValue && editado.montoTransac <= 0)
+                throw new ArgumentException("El monto debe ser mayor que 0.", nameof(editado.montoTransac));
+
+            return await _transaccionRepository.UpdateTransaccionAsync(editado, idUsuario);
         }
     }
 }

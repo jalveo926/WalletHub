@@ -139,5 +139,37 @@ namespace WalletHub.Controllers
                 return StatusCode(500, new { mensaje = "Error al eliminar la transacción: " + ex.Message });
             }
         }
+
+        [HttpPut("ActualizarTransaccion")]
+        public async Task<IActionResult> ActualizarTransaccion([FromBody] ActualizarTransaccionDTO transaccionDTO, string idUsuario)
+        {
+            try
+            {
+                var actualizado = await _transaccionService.ActualizarTransaccionAsync(transaccionDTO, idUsuario);
+                if (!actualizado)
+                {
+                    return new NotFoundObjectResult(new
+                    {
+                        mensaje = "La transacción no fue encontrada para actualizar."
+                    });
+                }
+
+                return new OkObjectResult(new
+                {
+                    mensaje = "Transacción actualizada exitosamente",
+                    actualizado = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return new ObjectResult(new
+                {
+                    mensaje = "Ocurrió un error al actualizar la transacción.",
+                })
+                {
+                    StatusCode = 500
+                };
+            }
+        }
     }
 }

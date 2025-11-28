@@ -101,5 +101,48 @@ namespace WalletHub.Data.Repository
             _context.Transaccion.Remove(transaccion);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<bool> UpdateTransaccionAsync(ActualizarTransaccionDTO actualizado, string idUsuario)
+        {
+            //Verifica si la transacción existe
+            var transaccionExistente = await _context.Transaccion
+                .FirstOrDefaultAsync(c => c.idTransaccion == actualizado.idTransaccion);
+
+            if (transaccionExistente == null)
+            {
+                return false;
+            }
+            
+            //Cambia los valores de los campos editados por el usuario
+            if (actualizado.montoTransac.HasValue)
+            {
+                transaccionExistente.montoTransac = actualizado.montoTransac.Value;
+            }
+
+            if (!string.IsNullOrWhiteSpace(actualizado.descripcionTransac))
+            {
+                transaccionExistente.descripcionTransac = actualizado.descripcionTransac;
+            }
+
+            if (actualizado.fechaTransac.HasValue)
+            {
+                transaccionExistente.fechaTransac = actualizado.fechaTransac.Value;
+            }
+
+            //Verifica si la categoria existe
+            if (!string.IsNullOrEmpty(actualizado.nombreCateg))
+            {
+                var categoria = await _context.Categoria
+                    .FirstOrDefaultAsync(c => c.nombreCateg == actualizado.nombreCateg
+                                           && (c.idUsuario == idUsuario || string.IsNullOrEmpty(c.idUsuario)));
+
+                if (categoria == null)
+                    throw new ArgumentException($"La categoría '{actualizado.nombreCateg}' no existe para este usuario.");
+
+                transaccionExistente.idCategoria = categoria.idCategoria;
+            }
+
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }
