@@ -50,6 +50,27 @@ namespace WalletHub.Data.Repository
             return resultado;
         }
 
+        public async Task<IEnumerable<TransaccionDTO>> GetTransaccionesPorUsuarioAsync(string idUsuario)
+        {
+            if (string.IsNullOrWhiteSpace(idUsuario))
+                throw new ArgumentException("El idUsuario no puede estar vacío.");
+
+            var resultado = await _context.Transaccion
+                .Include(t => t.Categoria)
+                .Where(t => t.idUsuario == idUsuario)
+                .OrderByDescending(t => t.fechaTransac)
+                .Select(t => new TransaccionDTO(t.Categoria.nombreCateg)
+                {
+                    fechaTransac = t.fechaTransac,
+                    montoTransac = t.montoTransac,
+                    descripcionTransac = t.descripcionTransac,
+                    nombreCateg = t.Categoria.nombreCateg
+                })
+                .ToListAsync();
+
+            return resultado;
+        }
+
         public async Task<TransaccionDTO> AddTransaccionAsync(RegistroTransaccionDTO dto, string idUsuario)
         {
             // 1. Buscar categoría del usuario por nombre
@@ -67,11 +88,13 @@ namespace WalletHub.Data.Repository
                 idEntidad: "idTransaccion"
             );
 
-            // 3. Crear transacción
+            // 3. Crear fecha y transacción
+            var fechaConHora = dto.fechaTransac.ToDateTime(TimeOnly.MinValue);
+
             var transaccion = new Transaccion
             {
                 idTransaccion = nuevoId,
-                fechaTransac = DateTime.Now,
+                fechaTransac = fechaConHora,
                 montoTransac = dto.montoTransac,
                 descripcionTransac = dto.descripcionTransac,
                 idUsuario = idUsuario,

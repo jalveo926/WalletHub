@@ -52,6 +52,24 @@ namespace WalletHub.Services
             }
         }
 
+        public async Task<IEnumerable<TransaccionDTO>> ObtenerMisTransaccionesAsync(string idUsuario)
+        {
+            try
+            {
+                var todasTransacciones = await _transaccionRepository.GetTransaccionesPorUsuarioAsync(idUsuario);
+                return todasTransacciones;
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception("No hay registros que mostrar.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores, logging, etc.
+                throw new Exception("Error al obtener todas las transacciones.", ex);
+            }
+        }
+
         public async Task<TransaccionDTO> RegistrarTransaccion(RegistroTransaccionDTO dto, string idUsuario)
         {
             // VALIDACIONES PREVIAS
@@ -69,6 +87,13 @@ namespace WalletHub.Services
 
             if (string.IsNullOrWhiteSpace(idUsuario))
                 throw new ArgumentException("El ID del usuario es obligatorio.", nameof(idUsuario));
+
+            if (dto.fechaTransac == default)
+                throw new ArgumentException("La fecha de la transacción es obligatoria.");
+
+            if (dto.fechaTransac > DateOnly.FromDateTime(DateTime.Now))
+                throw new ArgumentException("La fecha de la transacción no puede ser una fecha futura.");
+
             try
             {
                 var nuevaTransaccion = await _transaccionRepository.AddTransaccionAsync(dto, idUsuario);

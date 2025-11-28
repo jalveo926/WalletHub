@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace WalletHub.Controllers
             _transaccionService = transaccionService;
         }
 
-        [HttpGet("categoria")]
+        [HttpGet("PorCategoria")]
         public async Task<IActionResult> FiltrarCategoria(string categoria)
         {
 
@@ -31,8 +32,6 @@ namespace WalletHub.Controllers
                    mensaje =  "La categoría no puede ser nula o vacía."
                 });
             }
-
-            
 
             try
                 {
@@ -59,7 +58,7 @@ namespace WalletHub.Controllers
                 }
         }
 
-        [HttpGet]
+        [HttpGet("TodasTransacciones")]
         public async Task<IActionResult> ObtenerTodasTransacciones()
         {
             try
@@ -88,13 +87,57 @@ namespace WalletHub.Controllers
             }
         }
 
-        [HttpPost]
+        [Authorize]
+        [HttpGet("MisTransacciones")]
+        public async Task<IActionResult> ObtenerMisTransacciones()
+        {
+            try
+            {
+                // 1. Obtener el ID del usuario desde el JWT
+                var idUsuario = User.FindFirst("idUsuario")?.Value;
+
+                if (string.IsNullOrEmpty(idUsuario))
+                {
+                    return Unauthorized(new
+                    {
+                        mensaje = "No se pudo obtener el usuario autenticado."
+                    });
+                }
+
+                // 2. Obtener las transacciones de ese usuario
+                var transacciones = await _transaccionService.ObtenerMisTransaccionesAsync(idUsuario);
+
+                if (transacciones == null)
+                {
+                    return NotFound(new
+                    {
+                        mensaje = "No hay transacciones registradas para este usuario."
+                    });
+                }
+
+                // 3. Respuesta OK
+                return Ok(new
+                {
+                    mensaje = "Transacciones obtenidas exitosamente.",
+                    transacciones
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    mensaje = "Error al obtener las transacciones.",
+                    detalle = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("RegistrarTransaccion")]
         public async Task<IActionResult> RegistrarTransaccion([FromBody]RegistroTransaccionDTO dto)
         {
             try
             {
-                // Aquí deberías obtener el idUsuario del contexto de autenticación
-                string idUsuario = "US001"; // Reemplaza esto con la lógica real para obtener el ID del usuario autenticado
+                string idUsuario = User.Claims.First(c => c.Type == "idUsuario").Value; 
                 var nuevaTransaccion = await _transaccionService.RegistrarTransaccion(dto, idUsuario);
                 return Ok(new
                 {

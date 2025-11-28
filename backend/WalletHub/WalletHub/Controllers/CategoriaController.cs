@@ -18,7 +18,7 @@ namespace WalletHub.Controllers
             _categoriaService = categoriaService;
         }
 
-        [HttpGet("todas")]
+        [HttpGet("TodasLasCategorias")]
         public async Task<IActionResult> ObtenerTodasCategorias()
         {
             try
