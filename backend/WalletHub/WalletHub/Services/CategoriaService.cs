@@ -34,6 +34,15 @@ namespace WalletHub.Services
         {
             return await _categoriaRepository.GetAllCategoriaAsync();
         }
-      
+
+        public async Task<List<Categoria>> ObtenerCategoriasPorUsuario(string idUsuario) { 
+            return await _categoriaRepository.GetCategoriasByUsuario(idUsuario);
+        }
+
+        public async Task<List<Categoria>> ObtenerCategoriasGlobales()
+        {
+            return await _categoriaRepository.GetCategoriasGlobales();
+        }
+
     }
 }
