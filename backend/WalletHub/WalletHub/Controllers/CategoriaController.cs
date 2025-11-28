@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WalletHub.Services.Interface;
 using WalletHub.DTOs;
+using WalletHub.Models;
+using WalletHub.Services.Interface;
 namespace WalletHub.Controllers
 {
     [Route("api/[controller]")]
@@ -38,10 +39,10 @@ namespace WalletHub.Controllers
             }
         }
 
-        [HttpPut("ActualizarCategoria")]
-        public async Task<IActionResult> ActualizarCategoria([FromBody] CategoriaDTO categoriaDto)
+        [HttpPut("ActualizarCategoria/{idCategoria}")]
+        public async Task<IActionResult> ActualizarCategoria(string idCategoria,[FromBody] CategoriaDTO categoriaDto)
         {
-            if (categoriaDto == null || string.IsNullOrEmpty(categoriaDto.nombreCateg) || string.IsNullOrEmpty(categoriaDto.idCategoria))
+            if (categoriaDto == null || string.IsNullOrEmpty(categoriaDto.nombreCateg))
             {
                 return new BadRequestObjectResult(new
                 {
@@ -50,7 +51,7 @@ namespace WalletHub.Controllers
             }
             try
             {
-                var actualizado = await _categoriaService.ActualizarCategoriaAsync(categoriaDto);
+                var actualizado = await _categoriaService.ActualizarCategoriaAsync(idCategoria,categoriaDto);
                 if (!actualizado)
                 {
                     return new NotFoundObjectResult(new
@@ -76,5 +77,74 @@ namespace WalletHub.Controllers
                 };
             }
         }
+
+        [HttpPost("AgregarCategoria")]
+        public async Task<IActionResult> AgregarCategoriaAsync([FromBody] CategoriaDTO insertado)
+        {
+            var categoriaCompleta = new Categoria
+            {
+                idCategoria = "1123",//Aquí hay que poner el método que genera el id
+                idUsuario = User.Claims.First(c => c.Type == "idUsuario").Value, //Aquí hay que poner el id del usuario logueado (JWT)
+                nombreCateg = insertado.nombreCateg,
+                tipoCateg = insertado.tipoCateg
+            };
+            //Devuelve el id de la categoria que se ingresó
+
+
+            string nuevoID = await _categoriaService.AgregarCategoriaAsync(categoriaCompleta);
+
+            return Ok(new
+            {
+                mensaje = "Categoría agregada exitosamente",
+                idCategoria = nuevoID
+            });
+
+        }
+
+        [HttpDelete("EliminarCategoria/{idCategoria}")]
+        public async Task<IActionResult> EliminarCategoria(string idCategoria)
+        {
+            try
+            {
+                var idUsuarioToken = User.Claims.First(c => c.Type == "idUsuario").Value;
+
+                // Buscar categoría en BD
+                var categoria = await _categoriaService.ObtenerCategoriaPorIdAsync(idCategoria);
+
+                if (categoria == null)
+                {
+                    return NotFound(new
+                    {
+                        mensaje = "La categoría no existe."
+                    });
+                }
+
+                // Verificar que el usuario dueño coincide con el del JWT
+                if (categoria.idUsuario != idUsuarioToken)
+                {
+                    return StatusCode(403, new
+                    { //403 Forbidden no tiene permisos
+                        mensaje = "No tienes permiso para eliminar esta categoría." });
+
+                } 
+
+                // Si coincide, sí puede eliminarla
+                await _categoriaService.EliminarCategoriaAsync(idCategoria);
+
+                return Ok(new
+                {
+                    mensaje = "Categoría eliminada exitosamente",
+                    eliminado = true
+                });
+            }
+            catch
+            {
+                return StatusCode(500, new
+                {
+                    mensaje = "Ocurrió un error al eliminar la categoría"
+                });
+            }
+        }
+
     }
 }
