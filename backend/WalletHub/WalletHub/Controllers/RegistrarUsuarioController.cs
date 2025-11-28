@@ -20,7 +20,7 @@ namespace WalletHub.Controllers
             _passwordHashService = passwordHashService;
         }
 
-        [HttpPost]
+        [HttpPost("RegistrarUsuario")]
         public async Task<IActionResult> Registrar([FromBody] RegistrarDTO dto)
         {
             if (string.IsNullOrEmpty(dto.correoUsu) ||
