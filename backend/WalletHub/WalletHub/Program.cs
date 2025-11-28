@@ -97,7 +97,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Token JWT. Escribe: Bearer {tu token}",
+        Description = "Token JWT. Escribe: Bearer {tu token}", //Este mensaje sale en la pestaña arriba de los controladores en Swagger no es chatgpt >:c
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
