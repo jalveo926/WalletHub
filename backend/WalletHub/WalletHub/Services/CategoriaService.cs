@@ -14,15 +14,15 @@ namespace WalletHub.Services
             _categoriaRepository = categoriaRepository;
         }
 
-        public async Task<string> AgregarCategoriaAsync(Categoria insertado)
+        public async Task<string> AgregarCategoriaAsync(CategoriaDTO dto, string idUsuario)
         {
-            if (insertado == null)
-                throw new ArgumentNullException(nameof(insertado), "La categoría no puede ser nula.");
-
-            if (string.IsNullOrWhiteSpace(insertado.nombreCateg))
+            if (string.IsNullOrWhiteSpace(dto.nombreCateg))
                 throw new ArgumentException("El nombre de la categoría es obligatorio.");
 
-            return await _categoriaRepository.AddCategoriaAsync(insertado);
+            if (!Enum.IsDefined(typeof(TipoCategoria), dto.tipoCateg))
+                throw new ArgumentException("El tipo de categoría enviado no es válido.");
+
+            return await _categoriaRepository.AddCategoriaAsync(dto, idUsuario);
         }
 
         public async Task<bool> EliminarCategoriaAsync(string idCategoria)

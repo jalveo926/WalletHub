@@ -2,8 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using WalletHub.Data;
 using WalletHub.Data.Interface;
-using WalletHub.Models;
 using WalletHub.DTOs;
+using WalletHub.Models;
+using WalletHub.Utils;
 namespace WalletHub.Data.Repository
 {
     public class CategoriaRepository : ICategoriaRepository
@@ -16,11 +17,29 @@ namespace WalletHub.Data.Repository
             _context = context;
           
         }
-        public async Task<string> AddCategoriaAsync(Categoria insertado)
+        public async Task<string> AddCategoriaAsync(CategoriaDTO dto, string idUsuario)
         {
-            _context.Categoria.Add(insertado);
+            // 1. Generar ID
+            string nuevoId = await IdGenerator.GenerateIdAsync(
+                _context.Categoria,
+                "CA",
+                "idCategoria"
+            );
+
+            // 2. Armar la entidad completa
+            var categoria = new Categoria
+            {
+                idCategoria = nuevoId,
+                idUsuario = idUsuario,
+                nombreCateg = dto.nombreCateg,
+                tipoCateg = dto.tipoCateg
+            };
+
+            // 3. Persistir
+            _context.Categoria.Add(categoria);
             await _context.SaveChangesAsync();
-            return insertado.idCategoria; //ID generado
+
+            return nuevoId;
         }
 
 
