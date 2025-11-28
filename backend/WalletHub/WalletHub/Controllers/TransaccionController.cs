@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
 using WalletHub.Data.Interface;
+using WalletHub.DTOs;
 using WalletHub.Models;
 using WalletHub.Services;
 using WalletHub.Services.Interface;
@@ -83,6 +84,36 @@ namespace WalletHub.Controllers
                     mensaje = "Error al obtener todas las transacciones.",
 
                 } );
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegistrarTransaccion([FromBody]RegistroTransaccionDTO dto)
+        {
+            try
+            {
+                // Aquí deberías obtener el idUsuario del contexto de autenticación
+                string idUsuario = "US001"; // Reemplaza esto con la lógica real para obtener el ID del usuario autenticado
+                var nuevaTransaccion = await _transaccionService.RegistrarTransaccion(dto, idUsuario);
+                return Ok(new
+                {
+                    mensaje = "Transacción registrada exitosamente",
+                    transaccion = nuevaTransaccion
+                });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new
+                {
+                    mensaje = ex.Message
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    mensaje = ex.Message
+                });
             }
         }
     }
