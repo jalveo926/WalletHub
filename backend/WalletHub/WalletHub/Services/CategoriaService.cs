@@ -21,12 +21,16 @@ namespace WalletHub.Services
             return await _categoriaRepository.DeleteCategoriaAsync(idCategoria);
         }
 
-        public async Task<bool> ActualizarCategoriaAsync(CategoriaDTO editado)
+        public async Task<bool> ActualizarCategoriaAsync(string idCategoria,CategoriaDTO editado)
         {
-            return await _categoriaRepository.UpdateCategoriaAsync(editado);
+            return await _categoriaRepository.UpdateCategoriaAsync(idCategoria,editado);
         }
 
-        public async Task<List<CategoriaDTO>> ObtenerTodasCategoriasAsync()
+        public async Task<Categoria?> ObtenerCategoriaPorIdAsync(string idCategoria)
+        {
+            return await _categoriaRepository.GetCategoriaByID(idCategoria);
+        }
+        public async Task<List<Categoria>> ObtenerTodasCategoriasAsync()
         {
             return await _categoriaRepository.GetAllCategoriaAsync();
         }
