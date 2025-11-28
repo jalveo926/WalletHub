@@ -87,37 +87,31 @@ namespace WalletHub.Controllers
         }
 
         [HttpPost("AgregarCategoria")]
-        public async Task<IActionResult> AgregarCategoriaAsync([FromBody] CategoriaDTO insertado)
+        public async Task<IActionResult> AgregarCategoriaAsync([FromBody] CategoriaDTO dto)
         {
-            if (insertado == null)
+            if (dto == null)
                 return BadRequest(new { mensaje = "Los datos enviados están vacíos." });
 
-            // Validar campos obligatorios
-            if (string.IsNullOrWhiteSpace(insertado.nombreCateg)) 
-                return BadRequest(new { mensaje = "El nombre y tipo de categoría son obligatorios." });
-            
-
-            if (!Enum.IsDefined(typeof(TipoCategoria), insertado.tipoCateg))
-                return BadRequest(new { mensaje = "El tipo de categoría enviado no es válido." });
-
-
-            var categoriaCompleta = new Categoria
+            try
             {
-                idCategoria = "1123",//Aquí hay que poner el método que genera el id
-                idUsuario = User.Claims.First(c => c.Type == "idUsuario").Value, //Aquí hay que poner el id del usuario logueado (JWT)
-                nombreCateg = insertado.nombreCateg,
-                tipoCateg = insertado.tipoCateg
-            };
-            //Devuelve el id de la categoria que se ingresó
+                string idUsuario = User.Claims.First(c => c.Type == "idUsuario").Value;
 
+                string nuevoId = await _categoriaService.AgregarCategoriaAsync(dto, idUsuario);
 
-            string nuevoID = await _categoriaService.AgregarCategoriaAsync(categoriaCompleta);
-
-            return Ok(new
+                return Ok(new
+                {
+                    mensaje = "Categoría agregada exitosamente",
+                    idCategoria = nuevoId
+                });
+            }
+            catch (ArgumentException ex)
             {
-                mensaje = "Categoría agregada exitosamente",
-                idCategoria = nuevoID
-            });
+                return BadRequest(new { mensaje = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { mensaje = "Error interno al agregar la categoría" });
+            }
 
         }
 

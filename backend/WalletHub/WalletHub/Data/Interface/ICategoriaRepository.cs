@@ -4,7 +4,7 @@ namespace WalletHub.Data.Interface
 {
     public interface ICategoriaRepository
     {
-        public Task<string> AddCategoriaAsync(Categoria insertado);
+        public Task<string> AddCategoriaAsync(CategoriaDTO dto, string idUsuario);
         public Task<bool> DeleteCategoriaAsync(string idCategoria);
         public Task<bool> UpdateCategoriaAsync(string idCategoria, CategoriaDTO actualizado);
 
