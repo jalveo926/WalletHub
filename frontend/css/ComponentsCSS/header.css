@@ -1,41 +1,48 @@
+/* CONTENEDOR PRINCIPAL DEL HEADER */
 .encabezado {
   display: flex;
-  justify-content: space-between;  /* SEPARA izquierda y derecha */
+  justify-content: space-between;
   align-items: center;
-  overflow: hidden;
   background-color: #0A1F44;
-  padding: 10px;
-  padding-right: 30px;
+  padding: 10px 30px;
+  
 }
 
-
-.encabezado .logo-izquierda {
-  float : left;
-  color: black;
-  border-radius: 4px;
+/* LOGO IZQUIERDA */
+.logo-izquierda {
+  display: flex;
+  align-items: center;
 }
 
-.encabezado .logo-izquierda .WalletHubLogo{
-  width: 100px;
+.WalletHubLogo {
+  width: 180px;
+  max-width: 30vw; /* Ajuste responsivo */
   height: auto;
-  margin-left: 10%;
 }
 
+/* NAV DERECHA COMPLETA */
+.encabezado-derecha {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+/* LISTA DE LINKS */
 .listaLinks {
   display: flex;
-  gap: 10px;
-  list-style-type: none;
-  margin: 0;
+  gap: 15px;
   padding: 0;
-  overflow: hidden;
+  margin: 0;
+  list-style: none;
 }
 
 .listaLinks li a {
-  display: block;
   color: white;
-  text-align: center;
-  padding: 14px 16px;
   text-decoration: none;
+  padding: 10px 12px;
+  font-weight: 600;
+  transition: 0.2s;
 }
 
 .listaLinks li a:hover {
@@ -44,39 +51,47 @@
   border-radius: 4px;
 }
 
-.encabezado-derecha {
-  margin-left: auto;  /* Empuja el bloque hacia la derecha */
+/* ICONOS A LA DERECHA */
+.icon-layout {
   display: flex;
+  flex-direction: row;
   gap: 15px;
   align-items: center;
 }
 
-.iconLayout {
-    display: flex;
+.icons {
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.icons img {
+  width: 100%;
+  height: 100%;
+}
+
+.icons:hover {
+  transform: scale(1.2);
+  opacity: 0.8;
+}
+
+
+/* RESPONSIVE */
+@media screen and (max-width: 600px) {
+  .encabezado {
     flex-direction: column;
-    width: 30px;
-    height: auto;
-    cursor: pointer;
-    margin-right: 40px;
-}
-
-.iconLayout .icons {
-    height: 4px;
-    background-color: white;
-    margin: 4px 0;
-    border-radius: 2px;
-    cursor: pointer;
-}
-
-
-@media screen and (max-width: 500px) {
-  .encabezado a {
-    float: none;
-    display: block;
-    text-align: left;
+    align-items: flex-start;
+    gap: 15px;
   }
-  
+
   .encabezado-derecha {
-    float: none;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .listaLinks {
+    flex-wrap: wrap;
+    gap: 10px;
   }
 }
