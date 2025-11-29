@@ -13,3 +13,19 @@ document.getElementById('mostrar-login').addEventListener('click', () => {
     regCont.classList.add('oculto'); //Oculta el registro
     loginCont.classList.remove('oculto'); //Muestra el login
 });
+
+
+//Toggle para mostrar la contraseña y ocultarla 
+document.querySelectorAll(".toggle-password").forEach(icon => {
+    icon.addEventListener("click", () => {
+        const inputId = icon.getAttribute("data-target");
+        const input = document.getElementById(inputId);
+
+        const showing = input.type === "text"; 
+        input.type = showing ? "password" : "text"; //Si showing es true, cambia a password. Si es false, cambia a text
+
+        icon.style.backgroundImage = showing
+            ? "url('../assets/icons/eye-off.svg')" //Si showing es true, muestra el ojo cerrado cuando se oculta la contraseña
+            : "url('../assets/icons/eye.svg')"; //Si showing es false, muestra el ojo abierto cuando se muestra la contraseña
+    });
+});

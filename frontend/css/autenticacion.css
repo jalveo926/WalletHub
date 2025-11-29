@@ -13,7 +13,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: #F4F6F8
+    background: linear-gradient(to top, #0A1F44, #16A085)
 }
 
 /*Formulario en columna*/
@@ -58,7 +58,7 @@ form input {
     margin: 10px 0;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid #95A1B0;
     font-size: 14px;
 }
 
@@ -91,7 +91,7 @@ form button:hover {
 }
 
 img {
-    width: 200px;
+    width: 100px;
     margin-bottom: 10px;
 }
 
@@ -126,3 +126,33 @@ a:hover {
     color: #3A7BD5;
 }
 
+/*Contenedor del input con icono*/
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/*Estilo del input*/
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px; /*Espacio para el icono*/
+}
+
+/*Ícono dentro del input*/
+.toggle-password {
+    position: absolute;
+    right: 12px; /*Distancia al borde derecho del input*/
+    top: 50%; /*Posiciona verticalmente en la mitad del contenedor.*/
+    transform: translateY(-50%); /*Ajusta el <span> para que quede centrado verticalmente*/
+    width: 22px;
+    height: 22px;
+    background-image: url("../assets/icons/eye-off.svg"); /*Ícono del ojo cerrado por defecto*/
+    background-repeat: no-repeat; 
+    background-size: contain; /*Ajusta la imagen para que cabe completamente dentro del span sin deformarse.*/
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.toggle-password:hover {
+    opacity: 1;
+}
