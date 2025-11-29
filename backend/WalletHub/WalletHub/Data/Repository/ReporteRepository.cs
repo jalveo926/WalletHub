@@ -29,22 +29,46 @@ public class ReporteRepository : IReporteRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Reporte>> GetReportesAsync(string idUsuario)
+    public async Task<IEnumerable<ReporteDTO>> GetReportesAsync(string idUsuario)
     {
         return await _context.Reporte
             .Where(r => r.idUsuario == idUsuario)
+            .Select(r => new ReporteDTO
+            {
+                IdReporte = r.idReporte,
+                UrlArchivo = r.rutaArchivoRepo,    // La ruta que tengas guardada
+                TipoArchivo = r.tipoArchivoRepo.ToString(),
+                FechaCreacion = r.fechaCreacionRepo,
+                InicioPeriodo = r.inicioPeriodo,
+                FinalPeriodo = r.finalPeriodo
+            })
             .ToListAsync();
     }
 
-    public async Task<Reporte?> GetReporteByIdAsync(string idReporte, string idUsuario)
+    public async Task<ReporteDTO?> GetReporteByIdAsync(string idReporte, string idUsuario)
     {
+        return await _context.Reporte
+            .Where(r => r.idReporte == idReporte && r.idUsuario == idUsuario)
+            .Select(r => new ReporteDTO
+            {
+                IdReporte = r.idReporte,
+                UrlArchivo = r.rutaArchivoRepo,
+                TipoArchivo = r.tipoArchivoRepo.ToString(),
+                FechaCreacion = r.fechaCreacionRepo,
+                InicioPeriodo = r.inicioPeriodo,
+                FinalPeriodo = r.finalPeriodo
+            })
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<Reporte?> GetReporteByIdInterno(string idReporte, string idUsuario) {
         return await _context.Reporte
             .FirstOrDefaultAsync(r => r.idReporte == idReporte && r.idUsuario == idUsuario);
     }
 
     public async Task<bool> DeleteReporteAsync(string idReporte, string idUsuario)
     {
-        var reporte = await GetReporteByIdAsync(idReporte, idUsuario);
+        var reporte = await GetReporteByIdInterno(idReporte, idUsuario); //Utilizamos este método de forma interna para eliminar, no está en la interfaz
 
         if (reporte == null)
             return false;

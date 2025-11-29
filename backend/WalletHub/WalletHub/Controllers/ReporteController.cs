@@ -25,15 +25,31 @@ namespace WalletHub.Controllers
                     mensaje = "Especifique los datos correspondientes."
                 });
             }
+
+            // VALIDACIÓN ENUM tipoPeriodo
+            if (!Enum.TryParse<ReporteSolicitadoDTO.TipoPeriodo>(
+                    dto.tipoPeriodo.ToString(),
+                    ignoreCase: true,
+                    out var tipoValido))
+            {
+                return new BadRequestObjectResult(new
+                {
+                    mensaje = "El tipo de periodo no es válido. Debe ser: semana, mes o año."
+                });
+            }
+
+            dto.tipoPeriodo = tipoValido;
+
             try
             {
-                // Obtener el idUsuario del token JWT
                 var idUsuario = User.Claims.FirstOrDefault(c => c.Type == "idUsuario")?.Value;
                 if (string.IsNullOrEmpty(idUsuario))
                 {
                     return new UnauthorizedResult();
                 }
+
                 var nuevoIdReporte = await _reporteServicio.CrearReporteAsync(dto, idUsuario);
+
                 return new OkObjectResult(new
                 {
                     mensaje = "Reporte creado exitosamente",
@@ -51,6 +67,7 @@ namespace WalletHub.Controllers
                 };
             }
         }
+
 
         [HttpDelete("EliminarReporte/{idReporte}")]
         public async Task<IActionResult> EliminarReporte(string idReporte)
@@ -97,8 +114,23 @@ namespace WalletHub.Controllers
                 {
                     return new UnauthorizedResult();
                 }
+
                 var reportes = await _reporteServicio.ObtenerReportesPorUsuarioAsync(idUsuario);
-                return new OkObjectResult(reportes);
+
+                if (reportes == null || !reportes.Any())
+                {
+                    return new OkObjectResult(new
+                    {
+                        mensaje = "No se encontraron reportes para este usuario.",
+                        reportes = new List<object>() // []
+                    });
+                }
+
+                return new OkObjectResult(new
+                {
+                    mensaje = "Reportes obtenidos exitosamente",
+                    reportes
+                });
             }
             catch (Exception)
             {
@@ -111,6 +143,7 @@ namespace WalletHub.Controllers
                 };
             }
         }
+
 
         [HttpGet("ObtenerReporteUnico/{idReporte}")]
         public async Task<IActionResult> ObtenerReportePorId(string idReporte)

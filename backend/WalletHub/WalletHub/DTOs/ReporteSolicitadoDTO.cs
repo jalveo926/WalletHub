@@ -9,9 +9,9 @@ namespace WalletHub.DTOs
 
         public enum TipoPeriodo
         {
-            Semana,
-            Mes,
-            Año
+            semana,
+            mes,
+            año
         }
     }
 }
