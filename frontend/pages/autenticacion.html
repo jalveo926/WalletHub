@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/autenticacion.css">
+    <title>Inicio de Sesión</title>
+</head>
+<body>
+   <body>
+    <main>
+        <div class="contenedor">
+            <a href="../pages/home.html">X</a>
+            <!--Formulario para el inicio de sesión-->
+            <div class="login-contenedor">
+                <h1 class="titulo">Inicio de Sesión</h1>
+                <form id="form-login">
+                    <label for="correo">Correo</label>
+                    <input type="text" id="correo-login" placeholder="Ingresa tu correo">
+
+                    <label for="contrasena">Contraseña</label>
+                    <input type="password" id="contrasena-login" placeholder="Ingresa tu contraseña" minlength="10" required>
+
+                    <button type="submit">Iniciar sesión</button>
+                </form>
+                 <button id="mostrar-registro">¿No tienes cuenta? Regístrate</button>
+            </div>
+
+            <!--Formulario para registrarse-->
+            <div class="registro-contenedor oculto"> <!--El espacio significa que tiene otro nombre de clase-->
+                <h1 class="titulo">Registrarte</h1>
+                <form id="form-reg">
+                    <label for="usuario">Usuario</label>
+                    <input type="text" id="usuario-reg" placeholder="Ingresa tu usuario">
+
+                    <label for="correo">Correo</label>
+                    <input type="text" id="correo-reg" placeholder="Ingresa tu correo">
+
+                    <label for="contrasena">Contraseña</label>
+                    <input type="password" id="contrasena-reg" placeholder="Ingresa tu contraseña" minlength="10" required>
+
+                    <button type="submit">Registrarte</button>
+                </form>
+                <button id="mostrar-login">¿Ya tienes cuenta? Inicia sesión</button>
+            </div>
+
+            <div class="panel-bienvenida">
+                <img src="../assets/images/WalletHub_transparent_small.png" alt="WalletHub logo">
+                <h1>Bienvenido a WalletHub</h1>
+                <p>Gestiona tus finanzas de manera sencilla y segura.</p>
+            </div>
+        </div> 
+    </main>
+
+    <script src="../js/autenticacion.js"></script>
+</body>
+</html>

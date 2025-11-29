@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+/*Estilos globales para todos los elementos*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+    font-family: "Nunito", sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #F4F6F8
+}
+
+/*Formulario en columna*/
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/*Espacio inferior entre el título y el formulario*/
+.titulo {
+    padding-bottom: 15px;
+}
+
+/*Contenedor principal que abarca los formularios y el panel de bienvenida*/
+.contenedor {
+    display: flex;
+    width: 850px;
+    height: 500px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    position: relative; 
+}
+
+/*Estilos para los formularios de inicio de sesión y registro*/
+.login-contenedor,
+.registro-contenedor {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50%; /*Ocupa la mitad del contenedor*/
+    padding: 50px;
+}
+
+/*Hace que el elemento oculto no se muestre*/
+.oculto {
+    display: none;
+}
+
+/*Estilos de los elementos del formulario*/
+form input {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+form button {
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #16A085;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+form button:hover {
+    background-color: #3A7BD5;
+}
+
+/*Panel de bienvenida*/
+.panel-bienvenida {
+    width: 50%;
+    background: linear-gradient(to bottom, #0A1F44, #16A085);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+}
+
+img {
+    width: 200px;
+    margin-bottom: 10px;
+}
+
+/*Estilo del enlace para cerrar el formulario*/
+a {
+    text-decoration: none;
+    color: #fff;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+a:hover {
+    color: #95A1B0;
+}
+
+/*Estilo de los botones para cambiar entre registros*/
+#mostrar-registro,
+#mostrar-login {
+    margin-top: 20px;
+    background: none;
+    border: none;
+    color: #2da0a8;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#mostrar-registro:hover,
+#mostrar-login:hover {
+    color: #3A7BD5;
+}
+
