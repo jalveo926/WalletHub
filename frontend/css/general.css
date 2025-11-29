@@ -11,16 +11,4 @@ body {
     font-weight: bolder;
 }
 
-footer {
-    background: #0A1F44;
-    padding: 10px;
-    text-align: center;
-}
 
-footer a {
-    color: #FFFF;
-}
-
-footer a:hover {
-    color: #16A085;
-}
