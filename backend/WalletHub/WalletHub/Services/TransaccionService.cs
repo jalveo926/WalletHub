@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WalletHub.Data.Interface;
+using WalletHub.Data.Repository;
 using WalletHub.DTOs;
 using WalletHub.Models;
 using WalletHub.Services.Interface;
@@ -51,6 +52,24 @@ namespace WalletHub.Services
             }
         }
 
+        public async Task<IEnumerable<TransaccionDTO>> ObtenerMisTransaccionesAsync(string idUsuario)
+        {
+            try
+            {
+                var todasTransacciones = await _transaccionRepository.GetTransaccionesPorUsuarioAsync(idUsuario);
+                return todasTransacciones;
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception("No hay registros que mostrar.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores, logging, etc.
+                throw new Exception("Error al obtener todas las transacciones.", ex);
+            }
+        }
+
         public async Task<TransaccionDTO> RegistrarTransaccion(RegistroTransaccionDTO dto, string idUsuario)
         {
             // VALIDACIONES PREVIAS
@@ -68,6 +87,13 @@ namespace WalletHub.Services
 
             if (string.IsNullOrWhiteSpace(idUsuario))
                 throw new ArgumentException("El ID del usuario es obligatorio.", nameof(idUsuario));
+
+            if (dto.fechaTransac == default)
+                throw new ArgumentException("La fecha de la transacción es obligatoria.");
+
+            if (dto.fechaTransac > DateOnly.FromDateTime(DateTime.Now))
+                throw new ArgumentException("La fecha de la transacción no puede ser una fecha futura.");
+
             try
             {
                 var nuevaTransaccion = await _transaccionRepository.AddTransaccionAsync(dto, idUsuario);
@@ -78,6 +104,45 @@ namespace WalletHub.Services
                 // Manejo de errores, logging, etc.
                 throw new Exception("Error al registrar la transacción.", ex);
             }
+        }
+
+        public async Task<bool> EliminarTransaccionAsync(string idTransaccion, string idUsuario)
+        {
+            if (string.IsNullOrWhiteSpace(idTransaccion))
+                throw new ArgumentException("El ID de la transacción es obligatorio.", nameof(idTransaccion));
+
+            try
+            {
+                // Llamada al repositorio
+                var resultado = await _transaccionRepository.DeleteTransaccionAsync(idTransaccion, idUsuario);
+
+                if (!resultado)
+                {
+                    // Puede ser porque:
+                    // - No existe la transacción
+                    // - No pertenece al usuario actual
+                    throw new InvalidOperationException("No se pudo eliminar la transacción. " +
+                                                        "Es posible que no exista o no pertenezca al usuario actual.");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al intentar eliminar la transacción.", ex);
+            }
+        }
+
+        public async Task<bool> ActualizarTransaccionAsync(string idTransaccion, ActualizarTransaccionDTO editado, string idUsuario)
+        {
+            if (string.IsNullOrWhiteSpace(idTransaccion))
+                throw new ArgumentException("El ID de la transacción es obligatorio.");
+
+            if (editado.montoTransac.HasValue && editado.montoTransac <= 0)
+                throw new ArgumentException("El monto debe ser mayor que 0.");
+
+            // Llamar al repositorio
+            return await _transaccionRepository.UpdateTransaccionAsync(idTransaccion, editado, idUsuario);
         }
     }
 }
