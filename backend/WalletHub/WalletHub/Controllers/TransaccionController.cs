@@ -11,6 +11,7 @@ using WalletHub.Services.Interface;
 
 namespace WalletHub.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TransaccionController : ControllerBase
@@ -87,7 +88,6 @@ namespace WalletHub.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet("MisTransacciones")]
         public async Task<IActionResult> ObtenerMisTransacciones()
         {
@@ -165,17 +165,23 @@ namespace WalletHub.Controllers
         ///Elimina una transacción por su id.
         ///</summary>
         ///<param name="idTransaccion">ID de la transacción a eliminar</param>
-        [HttpDelete("{idTransaccion}")]
+        [HttpDelete("EliminarTransaccion/{idTransaccion}")]
         public async Task<IActionResult> EliminarTransaccion(string idTransaccion)
         {
             try
             {
-                var resultado = await _transaccionService.EliminarTransaccionAsync(idTransaccion);
+                string idUsuario = User.Claims.First(c => c.Type == "idUsuario").Value;
+                var resultado = await _transaccionService.EliminarTransaccionAsync(idTransaccion, idUsuario);
 
                 if (!resultado)
                     return NotFound(new { mensaje = "Transacción no encontrada" });
 
                 return Ok(new { mensaje = "Transacción eliminada exitosamente" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Error esperado por reglas de negocio
+                return BadRequest(new { mensaje = ex.Message });
             }
             catch (Exception ex)
             {
@@ -183,35 +189,49 @@ namespace WalletHub.Controllers
             }
         }
 
-        [HttpPut("ActualizarTransaccion")]
-        public async Task<IActionResult> ActualizarTransaccion([FromBody] ActualizarTransaccionDTO transaccionDTO, string idUsuario)
+        [HttpPut("ActualizarTransaccion/{idTransaccion}")]
+        public async Task<IActionResult> ActualizarTransaccion(string idTransaccion, [FromBody] ActualizarTransaccionDTO transaccionDTO)
         {
             try
             {
-                var actualizado = await _transaccionService.ActualizarTransaccionAsync(transaccionDTO, idUsuario);
+                string idUsuario = User.Claims.First(c => c.Type == "idUsuario").Value;
+
+                var actualizado = await _transaccionService.ActualizarTransaccionAsync(idTransaccion, transaccionDTO, idUsuario);
+
                 if (!actualizado)
                 {
-                    return new NotFoundObjectResult(new
+                    return NotFound(new
                     {
-                        mensaje = "La transacción no fue encontrada para actualizar."
+                        mensaje = "La transacción no fue encontrada o no pertenece al usuario actual."
                     });
                 }
 
-                return new OkObjectResult(new
+                return Ok(new
                 {
                     mensaje = "Transacción actualizada exitosamente",
                     actualizado = true
                 });
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                return new ObjectResult(new
+                return BadRequest(new
                 {
-                    mensaje = "Ocurrió un error al actualizar la transacción.",
-                })
+                    mensaje = ex.Message
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new
                 {
-                    StatusCode = 500
-                };
+                    mensaje = ex.Message
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new
+                {
+                    mensaje = "Ocurrió un error al actualizar la transacción."
+                });
             }
         }
     }

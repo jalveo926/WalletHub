@@ -106,17 +106,43 @@ namespace WalletHub.Services
             }
         }
 
-        public async Task<bool> EliminarTransaccionAsync(string idTransaccion)
+        public async Task<bool> EliminarTransaccionAsync(string idTransaccion, string idUsuario)
         {
-            return await _transaccionRepository.DeleteTransaccionAsync(idTransaccion);
+            if (string.IsNullOrWhiteSpace(idTransaccion))
+                throw new ArgumentException("El ID de la transacción es obligatorio.", nameof(idTransaccion));
+
+            try
+            {
+                // Llamada al repositorio
+                var resultado = await _transaccionRepository.DeleteTransaccionAsync(idTransaccion, idUsuario);
+
+                if (!resultado)
+                {
+                    // Puede ser porque:
+                    // - No existe la transacción
+                    // - No pertenece al usuario actual
+                    throw new InvalidOperationException("No se pudo eliminar la transacción. " +
+                                                        "Es posible que no exista o no pertenezca al usuario actual.");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al intentar eliminar la transacción.", ex);
+            }
         }
 
-        public async Task<bool> ActualizarTransaccionAsync(ActualizarTransaccionDTO editado, string idUsuario)
+        public async Task<bool> ActualizarTransaccionAsync(string idTransaccion, ActualizarTransaccionDTO editado, string idUsuario)
         {
-            if (editado.montoTransac.HasValue && editado.montoTransac <= 0)
-                throw new ArgumentException("El monto debe ser mayor que 0.", nameof(editado.montoTransac));
+            if (string.IsNullOrWhiteSpace(idTransaccion))
+                throw new ArgumentException("El ID de la transacción es obligatorio.");
 
-            return await _transaccionRepository.UpdateTransaccionAsync(editado, idUsuario);
+            if (editado.montoTransac.HasValue && editado.montoTransac <= 0)
+                throw new ArgumentException("El monto debe ser mayor que 0.");
+
+            // Llamar al repositorio
+            return await _transaccionRepository.UpdateTransaccionAsync(idTransaccion, editado, idUsuario);
         }
     }
 }

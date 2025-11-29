@@ -114,9 +114,10 @@ namespace WalletHub.Data.Repository
             };
         }
 
-        public async Task<bool> DeleteTransaccionAsync(string idTransaccion)
+        public async Task<bool> DeleteTransaccionAsync(string idTransaccion, string idUsuario)
         {
-            var transaccion = await _context.Transaccion.FindAsync(idTransaccion);
+            var transaccion = await _context.Transaccion
+                .FirstOrDefaultAsync(t => t.idTransaccion == idTransaccion && t.idUsuario == idUsuario);
 
             if (transaccion == null)
                 return false; 
@@ -125,11 +126,11 @@ namespace WalletHub.Data.Repository
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> UpdateTransaccionAsync(ActualizarTransaccionDTO actualizado, string idUsuario)
+        public async Task<bool> UpdateTransaccionAsync(string idTransaccion, ActualizarTransaccionDTO actualizado, string idUsuario)
         {
             //Verifica si la transacción existe
             var transaccionExistente = await _context.Transaccion
-                .FirstOrDefaultAsync(c => c.idTransaccion == actualizado.idTransaccion);
+                .FirstOrDefaultAsync(t => t.idTransaccion == idTransaccion && t.idUsuario == idUsuario);
 
             if (transaccionExistente == null)
             {
@@ -149,15 +150,14 @@ namespace WalletHub.Data.Repository
 
             if (actualizado.fechaTransac.HasValue)
             {
-                transaccionExistente.fechaTransac = actualizado.fechaTransac.Value;
+                transaccionExistente.fechaTransac = actualizado.fechaTransac.Value.ToDateTime(TimeOnly.MinValue);
             }
 
             //Verifica si la categoria existe
             if (!string.IsNullOrEmpty(actualizado.nombreCateg))
             {
                 var categoria = await _context.Categoria
-                    .FirstOrDefaultAsync(c => c.nombreCateg == actualizado.nombreCateg
-                                           && (c.idUsuario == idUsuario || string.IsNullOrEmpty(c.idUsuario)));
+                    .FirstOrDefaultAsync(c => c.nombreCateg == actualizado.nombreCateg && (c.idUsuario == idUsuario || c.idUsuario == null));
 
                 if (categoria == null)
                     throw new ArgumentException($"La categoría '{actualizado.nombreCateg}' no existe para este usuario.");
