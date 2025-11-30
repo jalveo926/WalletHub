@@ -3,6 +3,10 @@ main {
     padding: 20px 200px;
 }
 
+.integranteInfo h1 {
+    color: #0A1F44;
+}
+
 .integranteInfo {
     display: flex;
     flex-direction: row;
