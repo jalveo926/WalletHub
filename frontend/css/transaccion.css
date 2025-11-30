@@ -3,13 +3,27 @@ main {
     padding: 20px 200px; /* Para dar espacio a los botones */
 }
 
+/* Estilo de los botones de crear categoria/transaccion */
+.botonesMain {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+
+
 /* Estilo del encabezado antes de la lista */
 .transacciones-options {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    gap: 10px ;
     color: #0A1F44;
+}
+
+.transacciones-options h1 {
+    margin-right: auto;
 }
 
 .tituloFiltro {
@@ -37,6 +51,18 @@ main {
   color: #0A1F44;
 }
 
+.item.ingreso {
+  border-left: 6px solid #2ecc71; /* Me ayuda a aplicarlo solo a un borde */
+  color: #2e7d32;
+  background-color: #E8F8F2;
+}
+
+.item.gasto {
+  border-left: 6px solid #e74c3c; 
+  color: #c0392b;
+  background-color: #FDEDEC;
+}
+
 .item-encabezado {
   display: flex;
   justify-content: space-between;
@@ -48,6 +74,19 @@ main {
 
 .item h3 {
  margin: 0;
+}
+
+.fecha-filtros {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.fechaInput {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: #0A1F44;
 }
 
 /* Estilo del boton de opciones en cada item */
@@ -63,4 +102,21 @@ main {
 .btn-opciones:hover {
     background-color: #E0E0E0;
     border-radius: 10px;
+}
+
+/* Estilo del slider de monto maximo */
+.monto-slider {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#montoMax {
+    font-weight: bold;
+    color: #333;
+}
+
+input[type="range"] {
+    width: 250px;
 }
