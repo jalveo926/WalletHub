@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WalletHub.DTOs;
 using WalletHub.Services.Interface;
+
 namespace WalletHub.Controllers
 {
     [Authorize]
@@ -10,9 +11,13 @@ namespace WalletHub.Controllers
     public class ReporteController : ControllerBase
     {
         private readonly IReporteService _reporteServicio;
-        public ReporteController(IReporteService reporteServicio)
+        private readonly IReportePDFService _reportePdfServicio;
+
+        public ReporteController(IReporteService reporteServicio,
+                                 IReportePDFService reportePdfServicio)
         {
             _reporteServicio = reporteServicio;
+            _reportePdfServicio = reportePdfServicio;
         }
 
         [HttpPost("AgregarReporte")]
@@ -26,7 +31,6 @@ namespace WalletHub.Controllers
                 });
             }
 
-            // VALIDACIÓN ENUM tipoPeriodo
             if (!Enum.TryParse<ReporteSolicitadoDTO.TipoPeriodo>(
                     dto.tipoPeriodo.ToString(),
                     ignoreCase: true,
@@ -68,7 +72,6 @@ namespace WalletHub.Controllers
             }
         }
 
-
         [HttpDelete("EliminarReporte/{idReporte}")]
         public async Task<IActionResult> EliminarReporte(string idReporte)
         {
@@ -79,14 +82,16 @@ namespace WalletHub.Controllers
                 {
                     return new UnauthorizedResult();
                 }
+
                 var eliminado = await _reporteServicio.EliminarReporteAsync(idReporte, idUsuario);
-                if (!eliminado) //Si no encuentra nada se ejecuta esto
+                if (!eliminado)
                 {
                     return new NotFoundObjectResult(new
                     {
                         mensaje = "El reporte no existe."
                     });
                 }
+
                 return new OkObjectResult(new
                 {
                     mensaje = "Reporte eliminado exitosamente."
@@ -122,7 +127,7 @@ namespace WalletHub.Controllers
                     return new OkObjectResult(new
                     {
                         mensaje = "No se encontraron reportes para este usuario.",
-                        reportes = new List<object>() // []
+                        reportes = new List<object>()
                     });
                 }
 
@@ -144,7 +149,6 @@ namespace WalletHub.Controllers
             }
         }
 
-
         [HttpGet("ObtenerReporteUnico/{idReporte}")]
         public async Task<IActionResult> ObtenerReportePorId(string idReporte)
         {
@@ -155,6 +159,7 @@ namespace WalletHub.Controllers
                 {
                     return new UnauthorizedResult();
                 }
+
                 var reporte = await _reporteServicio.ObtenerReportePorIdAsync(idReporte, idUsuario);
                 if (reporte == null)
                 {
@@ -163,6 +168,7 @@ namespace WalletHub.Controllers
                         mensaje = "El reporte no existe."
                     });
                 }
+
                 return new OkObjectResult(reporte);
             }
             catch (Exception)
@@ -170,6 +176,42 @@ namespace WalletHub.Controllers
                 return new ObjectResult(new
                 {
                     mensaje = "Ocurrió un error al obtener el reporte"
+                })
+                {
+                    StatusCode = 500
+                };
+            }
+        }
+
+        [HttpGet("DescargarPdf/{idReporte}")]
+        public async Task<IActionResult> DescargarPdf(string idReporte)
+        {
+            try
+            {
+                var idUsuario = User.Claims.FirstOrDefault(c => c.Type == "idUsuario")?.Value;
+                if (string.IsNullOrEmpty(idUsuario))
+                {
+                    return new UnauthorizedResult();
+                }
+
+                var pdfBytes = await _reportePdfServicio.GenerarReportePdfAsync(idReporte, idUsuario);
+
+                if (pdfBytes == null || pdfBytes.Length == 0)
+                {
+                    return new NotFoundObjectResult(new
+                    {
+                        mensaje = "No fue posible generar el PDF para este reporte."
+                    });
+                }
+
+                var nombreArchivo = $"Reporte_{idReporte}.pdf";
+                return File(pdfBytes, "application/pdf", nombreArchivo);
+            }
+            catch (Exception)
+            {
+                return new ObjectResult(new
+                {
+                    mensaje = "Ocurrió un error al generar o descargar el PDF del reporte"
                 })
                 {
                     StatusCode = 500

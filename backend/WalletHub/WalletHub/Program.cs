@@ -2,12 +2,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using QuestPDF.Infrastructure;
 using System.Text;
 using WalletHub.Data;
 using WalletHub.Data.Interface;
 using WalletHub.Data.Repository;
 using WalletHub.Services;
 using WalletHub.Services.Interface;
+
+//Licencia para poder generar los PDFs
+QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -149,6 +153,7 @@ builder.Services.AddScoped<RegistrarUsuarioService>();
 builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
 builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<IReporteService, ReporteService>();
+builder.Services.AddScoped<IReportePDFService, ReportePDFService>();
 
 builder.Services.AddCors(options =>
 {
