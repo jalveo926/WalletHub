@@ -1,45 +1,10 @@
-const API_URL = 'https://localhost:7258/api'; // Cambiar cuando uses fetch real
 
-const data = {
-  mensaje: "Transacciones obtenidas exitosamente.",
-  transacciones: [
-    {
-      fechaTransac: "2025-01-31T00:00:00",
-      montoTransac: 2000,
-      descripcionTransac: "Pago de salario mensual",
-      nombreCateg: "Salario",
-      tipoCategoria: "Ingreso"
-    },
-    {
-      fechaTransac: "2025-01-15T00:00:00",
-      montoTransac: 150.75,
-      descripcionTransac: "Compra de supermercado",
-      nombreCateg: "Alimentación",
-      tipoCategoria: "Gasto"
-    },
-    {
-      fechaTransac: "2024-01-15T00:00:00",
-      montoTransac: 150.75,
-      descripcionTransac: "Compra de supermercado",
-      nombreCateg: "Alimentación",
-      tipoCategoria: "Gasto"
-    },
-    {
-      fechaTransac: "2025-01-31T00:00:00",
-      montoTransac: 3000,
-      descripcionTransac: "Pago de salario mensual",
-      nombreCateg: "Salario",
-      tipoCategoria: "Ingreso"
-    },
-    {
-      fechaTransac: "2025-01-31T00:00:00",
-      montoTransac: 3000.23,
-      descripcionTransac: "Pago de salario mensual",
-      nombreCateg: "Salario",
-      tipoCategoria: "Ingreso"
-    }
-  ]
-};
+
+// Variable global para almacenar las transacciones cargadas desde la API
+let data = {
+    mensaje: "",
+    transacciones: []
+}; 
 
 
 // ------------------ CARGAR CATEGORÍAS ------------------
@@ -163,43 +128,44 @@ function resetearFiltros() {
 
 }
 
+// Configurar el slider de monto máximo según las transacciones cargadas
+function configurarSlider() {
+    const slider = document.getElementById("filtroMontoMax");
+    const valorSlider = document.getElementById("valorMontoMax");
+
+    if (data.transacciones.length === 0) return;
+
+    const maxMonto = Math.max(...data.transacciones.map(t => t.montoTransac));
+
+    slider.max = maxMonto;
+    slider.value = maxMonto;
+    valorSlider.textContent = maxMonto.toFixed(2);
+}
+
+
+
 // ------------------ EVENTOS ------------------
 // Cargar categorías y mostrar transacciones al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
-
-  // Configurar slider según el monto máximo real
-  const maxMonto = Math.max(...data.transacciones.map(t => t.montoTransac));
-  const slider = document.getElementById("filtroMontoMax");
-  const valorSlider = document.getElementById("valorMontoMax");
-
-  slider.max = maxMonto;
-  slider.value = maxMonto;
-  valorSlider.textContent = maxMonto.toFixed(2);
-
-   // Actualizar valor del slider en tiempo real
-  slider.addEventListener("input", () => {
-      const v = Number(slider.value);
-      valorSlider.textContent = v.toFixed(2);
-      aplicarFiltros();
-  });
-
 
   // Bloquear fechas futuras
   const hoy = new Date().toISOString().split("T")[0];
   document.getElementById("filtroFechaDesde").setAttribute("max", hoy);
   document.getElementById("filtroFechaHasta").setAttribute("max", hoy);
 
-  // Filtros automáticos (tipo y categoría)
+  // Cargar datos desde API
+  cargarTransaccionesDesdeAPI();
+
+  // Slider cambia en tiempo real
+  document.getElementById("filtroMontoMax").addEventListener("input", aplicarFiltros);
+
+  // Filtros automáticos
   document.getElementById("filtroTipo").addEventListener("change", aplicarFiltros);
   document.getElementById("filtroCategoria").addEventListener("change", aplicarFiltros);
 
-  // Filtros manuales (solo fechas)
+  // Filtros manuales (fechas)
   document.getElementById("aplicarFiltrosBtn").addEventListener("click", aplicarFiltros);
 
+  // Resetear filtros
   document.getElementById("limpiarBtn").addEventListener("click", resetearFiltros);
-
-  // Cargar categorías y transacciones iniciales
-  
-  cargarCategorias();
-  mostrarTransacciones(data.transacciones);
 });
