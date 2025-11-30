@@ -8,10 +8,7 @@
         public string descripcionTransac { get; set; }
         public string nombreCateg { get; set; }
 
-        public TransaccionDTO(string categoria) { 
-            nombreCateg = categoria;
-        }
-
-        public TransaccionDTO() { }
+        public string tipoCategoria { get; set; }
+       
     }
 }
