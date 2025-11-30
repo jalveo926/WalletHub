@@ -34,38 +34,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         //Esto es para que cuando intentes hacer cosas sin estar autenticado o autorizado te mande errores personalizados al front
         options.Events = new JwtBearerEvents
         {
-            // No autenticado 401
-            OnChallenge = context =>
-            {
-                context.HandleResponse(); // Evita la respuesta automática
-
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                context.Response.ContentType = "application/json";
-
-                var respuesta = System.Text.Json.JsonSerializer.Serialize(new
-                {
-                    mensaje = "Debes iniciar sesión para acceder a este recurso.",
-                    error = "Token no enviado, inválido o expirado."
-                });
-
-                return context.Response.WriteAsync(respuesta);
-            },
-
-            // Token válido pero sin permisos 403
-            OnForbidden = context =>
-            {
-                context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                context.Response.ContentType = "application/json";
-
-                var respuesta = System.Text.Json.JsonSerializer.Serialize(new
-                {
-                    mensaje = "No tienes permisos para ejecutar esta acción.",
-                    error = "Acceso denegado."
-                });
-
-                return context.Response.WriteAsync(respuesta);
-            },
-
             // Error de autenticación (token expirado o corrupto)
             OnAuthenticationFailed = context =>
             {
@@ -83,8 +51,51 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 });
 
                 return context.Response.WriteAsync(respuesta);
+            },
+
+
+            // No autenticado 401
+            OnChallenge = context =>
+            {
+                // Si hay una excepción previa (como token expirado), NO vuelvas a escribir respuesta
+                if (context.AuthenticateFailure != null)
+                {
+                    context.HandleResponse(); // evita que OnChallenge procese
+                    return Task.CompletedTask;
+                }
+
+                context.HandleResponse(); // detiene respuesta por defecto
+
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.ContentType = "application/json";
+
+                var respuesta = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    mensaje = "Debes iniciar sesión para acceder a este recurso.",
+                    error = "Token no enviado, inválido o expirado."
+                });
+
+                return context.Response.WriteAsync(respuesta);
+            },
+
+
+            // Token válido pero sin permisos 403
+            OnForbidden = context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                context.Response.ContentType = "application/json";
+
+                var respuesta = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    mensaje = "No tienes permisos para ejecutar esta acción.",
+                    error = "Acceso denegado."
+                });
+
+                return context.Response.WriteAsync(respuesta);
             }
         };
+
+
     });
 
 //Personalización de SWAGGER para probar los tokens JWT
@@ -129,6 +140,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITransaccionRepository, TransaccionRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IReporteRepository, ReporteRepository>();
 
 // Servicios
 builder.Services.AddScoped<ITransaccionService, TransaccionService>();
@@ -136,8 +148,21 @@ builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<RegistrarUsuarioService>();
 builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
 builder.Services.AddScoped<LoginService>();
+builder.Services.AddScoped<IReporteService, ReporteService>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins( "http://127.0.0.1:5500") // Permitimos solo desde esta URL (LiveServer de VSCODE)
 
 
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -148,6 +173,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
