@@ -29,3 +29,24 @@ document.querySelectorAll(".toggle-password").forEach(icon => {
             : "url('../assets/icons/eye.svg')"; //Si showing es false, muestra el ojo abierto cuando se muestra la contraseña
     });
 });
+
+
+function GuardarToken(token, usuario) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('usuario', JSON.stringify(usuario));
+}
+
+function obtenerToken() {
+    return localStorage.getItem('token');
+}
+
+function estaLogueado() {
+    const token = obtenerToken();
+    return token !== null;
+}
+
+function cerrarSesion() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
+    window.location.href = '../pages/autenticacion.html';
+}

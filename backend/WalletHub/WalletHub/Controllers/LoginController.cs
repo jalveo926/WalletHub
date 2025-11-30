@@ -25,7 +25,7 @@ namespace WalletHub.Controllers
 
         public async Task<IActionResult> Login([FromBody] LoginDTO dto) //Recomendable usar dto en vez del modelo
         {
-            if (string.IsNullOrEmpty(dto.correoUsu) || string.IsNullOrEmpty(dto.Contrasena))
+            if (string.IsNullOrEmpty(dto.correoUsu) || string.IsNullOrEmpty(dto.contrasena))
                 return BadRequest(new
                 {
                     mensaje = "Los campos no pueden estar vacíos."
@@ -34,7 +34,7 @@ namespace WalletHub.Controllers
             try
             {          
                 //Valida en la capa servicios si los datos son correctos o existentes
-                var credencialesUsuario = await _loginServicio.VerificarCorreoContrasena(dto.correoUsu, dto.Contrasena);
+                var credencialesUsuario = await _loginServicio.VerificarCorreoContrasena(dto.correoUsu, dto.contrasena);
 
                 //Si no existe el usuario o la contraseña no coincide
                 if (credencialesUsuario == null)
