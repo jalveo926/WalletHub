@@ -7,12 +7,12 @@ namespace WalletHub.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RegistrarUsuarioController : ControllerBase
+    public class RegistroController : ControllerBase
     {
         private readonly RegistrarUsuarioService _registrarUsuarioService;
         private readonly IPasswordHashService _passwordHashService;
 
-        public RegistrarUsuarioController(
+        public RegistroController(
             RegistrarUsuarioService registrarUsuarioService,
             IPasswordHashService passwordHashService)
         {
@@ -24,7 +24,7 @@ namespace WalletHub.Controllers
         public async Task<IActionResult> Registrar([FromBody] RegistrarDTO dto)
         {
             if (string.IsNullOrEmpty(dto.correoUsu) ||
-                string.IsNullOrEmpty(dto.Contrasena) ||
+                string.IsNullOrEmpty(dto.contrasena) ||
                 string.IsNullOrEmpty(dto.nombreUsu))
             {
                 return BadRequest(new
@@ -36,7 +36,7 @@ namespace WalletHub.Controllers
             try
             {
                 // Hashea la contraseña antes de guardar
-                string hashedPassword = _passwordHashService.HashPassword(dto.Contrasena);
+                string hashedPassword = _passwordHashService.HashPassword(dto.contrasena);
 
                 var nuevoUsuario = new Models.Usuario
                 {

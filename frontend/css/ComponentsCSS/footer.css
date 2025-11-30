@@ -1,0 +1,89 @@
+footer {
+    width: 100%;
+    background-color: #0A1F44;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* <- AGREGADO: Centra los elementos hijos */
+    
+    font-family: "Nunito", sans-serif;
+}
+
+/* Lista de links */
+footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-weight: 600;
+}
+
+footer ul b li{ 
+    margin-bottom: 10px;
+}
+
+footer ul li a {
+    color: white;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+footer ul li a:hover {
+    color: #16A085;
+}
+
+/* Idioma select */
+footer select {
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: none;
+    background-color: white;
+    color: #0A1F44;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+footer label {
+    margin-right: 5px;
+}
+
+/* Textos inferiores */
+footer p {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* Link CERRAR SESIÓN  */
+footer .cerrar-sesion {
+    color: #11cca7;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 6px 12px;
+    display: inline-block;
+    border-radius: 4px;
+    transition: 0.2s;
+}
+
+footer .cerrar-sesion:hover {
+    color: white;
+    background-color: #16A08522;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    footer ul {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    footer {
+        gap: 18px;
+        padding: 35px 20px;
+    }
+}
