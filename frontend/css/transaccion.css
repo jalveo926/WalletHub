@@ -1,0 +1,66 @@
+main {
+    flex: 1;
+    padding: 20px 200px; /* Para dar espacio a los botones */
+}
+
+/* Estilo del encabezado antes de la lista */
+.transacciones-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    color: #0A1F44;
+}
+
+.tituloFiltro {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.botonesCrear button {
+    margin-left: 10px;
+}
+
+.lista-transacciones {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* Estilo de cada item de la lista de transacciones/categorias  */
+.item {
+  background-color: #F4F6F8;
+  border: 2px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+  color: #0A1F44;
+}
+
+.item-encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  gap: 10px;
+  
+}
+
+.item h3 {
+ margin: 0;
+}
+
+/* Estilo del boton de opciones en cada item */
+.btn-opciones {
+    width: 32px;
+    height: 32px;
+    background: url("../assets/icons/options.svg") no-repeat center;
+    background-size: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-opciones:hover {
+    background-color: #E0E0E0;
+    border-radius: 10px;
+}

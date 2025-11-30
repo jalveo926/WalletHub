@@ -4,17 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/transaccion.css">
     <title>Transacciones</title>
 </head>
 <body>
     <div id="header"></div>
 
     <main>
-        <h1>TRANSACCIONES</h1>
+        <div class = "transacciones-options">
+            <div class="tituloFiltro">
+                <h1>TRANSACCIONES</h1>
+                <button id = "filtrarBtn">Filtrar</button>
+            </div>
+            <div class = "botonesCrear" >
+                <button id = "crearCategoriaBtn">Nueva categoria</button>
+                <button id = "crearTransaccionBtn">Nueva transaccion</button>
+            </div>
+        </div>
+
+        <!-- Esto se rellena dinamicamente con JS -->
+        <div id="lista-transacciones" class="lista-transacciones"></div> 
+
     </main>
 
     <div id="footer"></div>
 
     <script src="../js/CargaLayoutGeneral.js"></script>
+    <script src="../js/PagesJS/transacciones.js"></script>
 </body>
 </html>
