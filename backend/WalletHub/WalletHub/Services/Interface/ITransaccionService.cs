@@ -1,0 +1,16 @@
+﻿using WalletHub.DTOs;
+using WalletHub.Models;
+
+namespace WalletHub.Services.Interface
+{
+    public interface ITransaccionService
+    {
+        public Task<IEnumerable<TransaccionDTO>> FiltrarCategoriaAsync(string categoria);
+        public Task<IEnumerable<TransaccionDTO>> ObtenerTodasTransaccionesAsync();
+        public Task<IEnumerable<TransaccionDTO>> ObtenerMisTransaccionesAsync(string idUsuario);
+        public Task<TransaccionDTO> RegistrarTransaccion(RegistroTransaccionDTO dto, string idUsuario);
+
+        public Task<bool> EliminarTransaccionAsync(string idTransaccion, string idUsuario);
+        public Task<bool> ActualizarTransaccionAsync(string idTransaccion, ActualizarTransaccionDTO editado, string idUsuario);
+    }
+}
