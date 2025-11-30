@@ -5,8 +5,7 @@ namespace WalletHub.Services.Interface
 {
     public interface ITransaccionService
     {
-        public Task<IEnumerable<TransaccionDTO>> FiltrarCategoriaAsync(string categoria);
-        public Task<IEnumerable<TransaccionDTO>> ObtenerTodasTransaccionesAsync();
+        public Task<IEnumerable<TransaccionDTO>> FiltrarCategoriaAsync(string categoria,string idUsuario);
         public Task<IEnumerable<TransaccionDTO>> ObtenerMisTransaccionesAsync(string idUsuario);
         public Task<TransaccionDTO> RegistrarTransaccion(RegistroTransaccionDTO dto, string idUsuario);
 
