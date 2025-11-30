@@ -36,7 +36,8 @@ namespace WalletHub.Controllers
 
             try
                 {
-                    var transaccionesFiltradas = await _transaccionService.FiltrarCategoriaAsync(categoria);
+                string idUsuario = User.Claims.First(c => c.Type == "idUsuario").Value;
+                var transaccionesFiltradas = await _transaccionService.FiltrarCategoriaAsync(categoria,idUsuario);
                 if (transaccionesFiltradas.IsNullOrEmpty()) {
                     return BadRequest(new
                     {
@@ -57,35 +58,6 @@ namespace WalletHub.Controllers
                         mensaje = "Ocurrio un error inesperado"
                     } );
                 }
-        }
-
-        [HttpGet("TodasTransacciones")]
-        public async Task<IActionResult> ObtenerTodasTransacciones()
-        {
-            try
-            {
-                var todasTransacciones = await _transaccionService.ObtenerTodasTransaccionesAsync();
-                if (todasTransacciones.IsNullOrEmpty())
-                {
-                    return BadRequest(new
-                    {
-                        mensaje = "No hay transacciones por mostrar este filtro"
-                    });
-                }
-
-                return Ok(new { 
-                    mensaje = "Transacciones obtenidas exitosamente",
-                    todasTransacciones
-                
-                });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500,new { 
-                    mensaje = "Error al obtener todas las transacciones.",
-
-                } );
-            }
         }
 
         [HttpGet("MisTransacciones")]
