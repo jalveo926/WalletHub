@@ -15,11 +15,11 @@ namespace WalletHub.Services
         }
         // Aquí irían los métodos para manejar la lógica de negocio relacionada con las transacciones
 
-        public async Task<IEnumerable<TransaccionDTO>> FiltrarCategoriaAsync(string categoria)
+        public async Task<IEnumerable<TransaccionDTO>> FiltrarCategoriaAsync(string categoria,string idUsuario)
         {
             try
             {
-                var transaccionesFiltradas = await _transaccionRepository.GetByCategoria(categoria);
+                var transaccionesFiltradas = await _transaccionRepository.GetByCategoria(categoria,idUsuario);
                 return transaccionesFiltradas;
             }
             catch (ArgumentNullException ex)
@@ -35,22 +35,7 @@ namespace WalletHub.Services
             }
         }
 
-        public async Task<IEnumerable<TransaccionDTO>> ObtenerTodasTransaccionesAsync()
-        {
-            try
-            {
-                var todasTransacciones = await _transaccionRepository.GetAllTransaccionAsync();
-                return todasTransacciones;
-            }
-            catch (ArgumentNullException ex) {
-                throw new Exception("No hay registros que mostrar.", ex);
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores, logging, etc.
-                throw new Exception("Error al obtener todas las transacciones.", ex);
-            }
-        }
+       
 
         public async Task<IEnumerable<TransaccionDTO>> ObtenerMisTransaccionesAsync(string idUsuario)
         {
@@ -98,6 +83,10 @@ namespace WalletHub.Services
             {
                 var nuevaTransaccion = await _transaccionRepository.AddTransaccionAsync(dto, idUsuario);
                 return nuevaTransaccion;
+            }catch (ArgumentException ex)
+            {
+                // Manejo de errores, logging, etc.
+                throw new ArgumentException("No tienes esta categoría, ¿Quieres crearla?.", ex);
             }
             catch (Exception ex)
             {
