@@ -21,6 +21,11 @@ public class CalculosController : ControllerBase
         [FromQuery] DateTime fin)
     {
         var resumen = await _calculosService.ObtenerResumenAsync(idUsuario, inicio, fin);
-        return Ok(resumen);
+        return Ok(new
+        {
+            exito = true,
+            mensaje = "Traído con éxito",
+            datos = resumen
+        });
     }
 }
