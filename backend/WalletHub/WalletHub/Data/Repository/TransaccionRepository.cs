@@ -16,34 +16,21 @@ namespace WalletHub.Data.Repository
             _context = context;
         }
 
+
+
         //Devuelve una lista de transacciones de la base de datos con el filtrado por categoría
-        public async Task<IEnumerable<TransaccionDTO>> GetByCategoria(string nombreCategoria)
+        public async Task<IEnumerable<TransaccionDTO>> GetByCategoria(string nombreCategoria, string idUsuario)
         {
             var resultado = await _context.Transaccion
                 .Include(t => t.Categoria)
-                .Where(t => t.Categoria.nombreCateg == nombreCategoria)
-                .Select(t => new TransaccionDTO(nombreCategoria)
+                .Where(t => t.idUsuario == idUsuario && t.Categoria.nombreCateg == nombreCategoria)
+                .Select(t => new TransaccionDTO()
                 {
                     fechaTransac = t.fechaTransac,
                     descripcionTransac = t.descripcionTransac,
                     montoTransac = t.montoTransac,
-                    nombreCateg = t.Categoria.nombreCateg
-                })
-                .ToListAsync();
-
-            return resultado;
-        }
-
-        public async Task<IEnumerable<TransaccionDTO>> GetAllTransaccionAsync()
-        {
-            var resultado = await _context.Transaccion
-                .Include(t => t.Categoria)
-                .Select(t => new TransaccionDTO(t.Categoria.nombreCateg)
-                {
-                    fechaTransac = t.fechaTransac,
-                    descripcionTransac = t.descripcionTransac,
-                    montoTransac = t.montoTransac,
-                    nombreCateg = t.Categoria.nombreCateg
+                    nombreCateg = t.Categoria.nombreCateg,
+                    tipoCategoria = t.Categoria.tipoCateg.ToString()
                 })
                 .ToListAsync();
 
@@ -59,12 +46,13 @@ namespace WalletHub.Data.Repository
                 .Include(t => t.Categoria)
                 .Where(t => t.idUsuario == idUsuario)
                 .OrderByDescending(t => t.fechaTransac)
-                .Select(t => new TransaccionDTO(t.Categoria.nombreCateg)
+                .Select(t => new TransaccionDTO()
                 {
                     fechaTransac = t.fechaTransac,
                     montoTransac = t.montoTransac,
                     descripcionTransac = t.descripcionTransac,
-                    nombreCateg = t.Categoria.nombreCateg
+                    nombreCateg = t.Categoria.nombreCateg,
+                    tipoCategoria = t.Categoria.tipoCateg.ToString()
                 })
                 .ToListAsync();
 
@@ -73,24 +61,27 @@ namespace WalletHub.Data.Repository
 
         public async Task<TransaccionDTO> AddTransaccionAsync(RegistroTransaccionDTO dto, string idUsuario)
         {
-            // 1. Buscar categoría del usuario por nombre
+            // 1. Buscar categoría del usuario o global
             var categoria = await _context.Categoria
-                .FirstOrDefaultAsync(c => c.nombreCateg == dto.nombreCateg
-                                       && (c.idUsuario == idUsuario || string.IsNullOrEmpty(c.idUsuario))); // Permite categorias creadas por el usuario o globales del sistema (null)
+                .FirstOrDefaultAsync(c =>
+                    c.nombreCateg.ToLower() == dto.nombreCateg.ToLower() &&
+                    (c.idUsuario == idUsuario || c.idUsuario == null)
+                );
 
             if (categoria == null)
                 throw new ArgumentException($"La categoría '{dto.nombreCateg}' no existe para este usuario.");
 
-            // 2. Generar ID de la transacción
+            // 2. Generar ID
             string nuevoId = await IdGenerator.GenerateIdAsync(
                 _context.Transaccion,
-                prefijo: "TR",
-                idEntidad: "idTransaccion"
+                "TR",
+                "idTransaccion"
             );
 
-            // 3. Crear fecha y transacción
+            // 3. Crear fecha con hora
             var fechaConHora = dto.fechaTransac.ToDateTime(TimeOnly.MinValue);
 
+            // 4. Crear transacción
             var transaccion = new Transaccion
             {
                 idTransaccion = nuevoId,
@@ -104,15 +95,17 @@ namespace WalletHub.Data.Repository
             _context.Transaccion.Add(transaccion);
             await _context.SaveChangesAsync();
 
-            // 4. Devolver DTO
-            return new TransaccionDTO(categoria.nombreCateg)
+            // 5. Respuesta DTO
+            return new TransaccionDTO()
             {
                 fechaTransac = transaccion.fechaTransac,
                 montoTransac = transaccion.montoTransac,
                 descripcionTransac = transaccion.descripcionTransac,
-                nombreCateg = categoria.nombreCateg
+                nombreCateg = categoria.nombreCateg,
+                tipoCategoria = categoria.tipoCateg.ToString()
             };
         }
+
 
         public async Task<bool> DeleteTransaccionAsync(string idTransaccion, string idUsuario)
         {
@@ -181,6 +174,25 @@ namespace WalletHub.Data.Repository
                          && t.fechaTransac >= inicio
                          && t.fechaTransac <= fin)
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<TransaccionDTO>> GetTransaccionesByIngresoGasto( TipoCategoria tipoCateg,string idUsuario)
+        {
+            var resultado = await _context.Transaccion
+                .Include(t => t.Categoria)
+                .Where(t => t.idUsuario == idUsuario
+                         && t.Categoria.tipoCateg == tipoCateg)
+                .Select(t => new TransaccionDTO()
+                {
+                    fechaTransac = t.fechaTransac,
+                    descripcionTransac = t.descripcionTransac,
+                    montoTransac = t.montoTransac,
+                    nombreCateg = t.Categoria.nombreCateg,
+                    tipoCategoria = t.Categoria.tipoCateg.ToString()
+                })
+                .ToListAsync();
+
+            return resultado;
         }
     }
 }
