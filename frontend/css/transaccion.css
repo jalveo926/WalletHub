@@ -1,25 +1,31 @@
-main {
-    flex: 1;
-    padding: 20px 200px; /* Para dar espacio a los botones */
-}
+
 
 /* Estilo de los botones de crear categoria/transaccion */
-.botonesMain {
+.botonesMainContainer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 10px;
+    margin-bottom: 20px;
   }
 
+/* Contenedor de los botones de filtrado*/
+.aplicarFiltrosContainer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
 
+
+ 
 
 /* Estilo del encabezado antes de la lista */
 .transacciones-options {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-bottom: 30px;
     gap: 10px ;
     color: #0A1F44;
+    margin-bottom: 10px;
 }
 
 .transacciones-options h1 {
@@ -104,12 +110,27 @@ main {
     border-radius: 10px;
 }
 
+.limpiarFiltroBtn {
+    width: 32px;
+    height: 32px;
+    background: url("../assets/icons/refresh-ccw.svg") no-repeat center;
+    background-size: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.limpiarFiltroBtn:hover {
+    background-color: #E0E0E0;
+    border-radius: 10px;
+}
+
 /* Estilo del slider de monto maximo */
 .monto-slider {
     margin-top: 10px;
     display: flex;
     flex-direction: column;
     gap: 5px;
+    margin-bottom: 20px;
 }
 
 #montoMax {

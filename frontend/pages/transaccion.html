@@ -12,14 +12,7 @@
 
     <main>
         <!-- Botones para crear categoria o transaccion -->
-            <div class = "botonesMain" >
-                
-                <div class="botonesCrear">
-                    <button id = "crearCategoriaBtn">Nueva categoria</button>
-                    <button id = "crearTransaccionBtn">Nueva transaccion</button>
-                </div>
-                
-            </div>
+            
 
         <div class = "transacciones-options">
             <h1>TRANSACCIONES</h1>
@@ -57,7 +50,18 @@
                  </div> 
         </div>
 
-        <button id="aplicarFiltrosBtn">Aplicar filtros</button>
+        <div class = "botonesMainContainer" >
+                <div class = "aplicarFiltrosContainer">
+                    <button id="aplicarFiltrosBtn">Aplicar filtros</button>
+                    <button id="limpiarBtn" class="limpiarFiltroBtn" ></button>
+                </div>
+
+                <div class="botonesCrear">
+                    <button id = "crearCategoriaBtn">Nueva categoria</button>
+                    <button id = "crearTransaccionBtn">Nueva transaccion</button>
+                </div>
+        </div>
+        
 
         <!-- Esto se rellena dinamicamente con JS -->
         <div id="lista-transacciones" class="lista-transacciones"></div> 

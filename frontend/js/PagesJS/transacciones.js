@@ -138,6 +138,30 @@ function aplicarFiltros() {
     mostrarTransacciones(filtradas);
 }
 
+function resetearFiltros() {
+    
+    // Resetear select de tipo
+    document.getElementById("filtroTipo").value = "Todos";
+
+    // Resetear select de categoría
+    document.getElementById("filtroCategoria").value = "";
+
+    // Resetear slider al máximo
+    const slider = document.getElementById("filtroMontoMax");
+    const valorSlider = document.getElementById("valorMontoMax");
+
+    const maxMonto = Math.max(...data.transacciones.map(t => t.montoTransac));
+    slider.value = maxMonto;
+    valorSlider.textContent = maxMonto;
+
+    // Resetear fechas
+    document.getElementById("filtroFechaDesde").value = "";
+    document.getElementById("filtroFechaHasta").value = "";
+
+    // Mostrar todas las transacciones
+    mostrarTransacciones(data.transacciones);
+
+}
 
 // ------------------ EVENTOS ------------------
 // Cargar categorías y mostrar transacciones al cargar la página
@@ -170,8 +194,11 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("filtroCategoria").addEventListener("change", aplicarFiltros);
 
   // Filtros manuales (solo fechas)
-  document.getElementById("aplicarFiltrosBtn")
-      .addEventListener("click", aplicarFiltros);
+  document.getElementById("aplicarFiltrosBtn").addEventListener("click", aplicarFiltros);
+
+  document.getElementById("limpiarBtn").addEventListener("click", resetearFiltros);
+
+  // Cargar categorías y transacciones iniciales
   
   cargarCategorias();
   mostrarTransacciones(data.transacciones);
