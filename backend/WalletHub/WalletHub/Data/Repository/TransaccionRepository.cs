@@ -166,6 +166,21 @@ namespace WalletHub.Data.Repository
             }
 
             return await _context.SaveChangesAsync() > 0;
+
+
+        }
+
+        public async Task<List<Transaccion>> ObtenerPorUsuarioYFechas(
+        string idUsuario,
+        DateTime inicio,
+        DateTime fin)
+        {
+            return await _context.Transaccion
+                .Include(t => t.Categoria)
+                .Where(t => t.idUsuario == idUsuario
+                         && t.fechaTransac >= inicio
+                         && t.fechaTransac <= fin)
+                .ToListAsync();
         }
     }
 }
