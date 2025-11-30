@@ -91,6 +91,7 @@ formRegistro.addEventListener('submit', async (e) => {
     }
 });
 
+
 // Redirigir al usuario si ya está logueado
 window.addEventListener('DOMContentLoaded', () => {
     if (estaLogueado()) {
