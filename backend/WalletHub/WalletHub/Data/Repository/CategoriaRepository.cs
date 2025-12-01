@@ -105,10 +105,10 @@ namespace WalletHub.Data.Repository
                 .ToListAsync();
         }
 
-        public async Task<List<Categoria>> GetCategoriasGlobales()
+        public async Task<List<Categoria>> GetCategoriasGlobales(string idUsuario)
         {
             return await _context.Categoria
-                .Where(c => c.idUsuario == null)
+                .Where(c => c.idUsuario == null || c.idUsuario == idUsuario)
                 .Select(c => new Categoria
                 {
                     idCategoria = c.idCategoria,
@@ -117,6 +117,7 @@ namespace WalletHub.Data.Repository
                 })
                 .ToListAsync();
         }
+
 
     }
 }

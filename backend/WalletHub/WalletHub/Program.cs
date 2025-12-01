@@ -149,6 +149,8 @@ builder.Services.AddScoped<RegistrarUsuarioService>();
 builder.Services.AddScoped<IPasswordHashService, PasswordHashService>();
 builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<IReporteService, ReporteService>();
+builder.Services.AddScoped<ICalculosService, CalculosService>();
+builder.Services.AddScoped<IEstadisticasService, EstadisticasService>();
 
 builder.Services.AddCors(options =>
 {

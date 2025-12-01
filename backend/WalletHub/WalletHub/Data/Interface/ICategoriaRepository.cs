@@ -11,7 +11,7 @@ namespace WalletHub.Data.Interface
         public Task<Categoria?> GetCategoriaByID(string idCategoria); // Si entregas una categoria que no existe retorna null
         
         public Task<List<Categoria?>> GetCategoriasByUsuario(string idUsuario);
-        public Task<List<Categoria>> GetCategoriasGlobales();  //Las que tienen idUsuario null
+        public Task<List<Categoria>> GetCategoriasGlobales(string idUsuario);  //Las que tienen idUsuario null
 
         public Task<List<Categoria>> GetAllCategoriaAsync();
 
