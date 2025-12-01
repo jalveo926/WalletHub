@@ -200,8 +200,8 @@ namespace WalletHub.Controllers
         public async Task<IActionResult> ObtenerCategoriasGlobales() {
             try
             {
-                
-                var categorias = await _categoriaService.ObtenerCategoriasGlobales();
+                var idUsuarioToken = User.Claims.First(c => c.Type == "idUsuario").Value;
+                var categorias = await _categoriaService.ObtenerCategoriasGlobales(idUsuarioToken);
                 return Ok(new
                 {
                     mensaje = "Categorías obtenidas exitosamente",

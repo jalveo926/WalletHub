@@ -54,21 +54,23 @@ formRegistro.addEventListener('submit', async (e) => {
     const password = document.getElementById('contrasena-reg').value;
     
 
-    if (!usuario || !email || !password || !confirmarPassword) {
+    if (!usuario || !email || !password ) {
         alert('Por favor, complete todos los campos.');
         return;
     }
 
-    const envio = {
+
+    if(password.length < 10) { 
+        alert('La contraseña debe tener al menos 10 caracteres.');
+        return;
+    }
+
+     const envio = {
         nombreUsu: usuario,
         correoUsu: email,
         contrasena: password //Cambiar esto en el backend
     }
-
-    if(contrasena.length < 10) { 
-        alert('La contraseña debe tener al menos 10 caracteres.');
-        return;
-    }
+    
     try {
         const response = await fetch(`${API_URL}/Registro/RegistrarUsuario`, { //Arreglar esta ruta en C#
             method: 'POST',
@@ -90,6 +92,7 @@ formRegistro.addEventListener('submit', async (e) => {
         alert('Ocurrió un error. Por favor, intente nuevamente.');
     }
 });
+
 
 // Redirigir al usuario si ya está logueado
 window.addEventListener('DOMContentLoaded', () => {
