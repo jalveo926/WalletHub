@@ -38,6 +38,7 @@ async function cargarTransaccionesDesdeAPI() {
         await cargarCategorias();
         await cargarCategoriasEnSelect();
         configurarSlider();
+        actualizarEstadoBotonesFiltros();
 
     } catch (error) {
         console.error("Error al cargar las transacciones:", error);

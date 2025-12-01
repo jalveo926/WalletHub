@@ -106,8 +106,8 @@ async function crearCategoria() {
 
     try {
         const envio = {
-            nombre: nombre,
-            tipo: tipo
+            nombreCateg: nombre,
+            tipoCateg: tipo
         };
 
         const respuesta = await fetch(`${API_URL}/Categoria/AgregarCategoria`, {

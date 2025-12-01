@@ -142,6 +142,16 @@ function configurarSlider() {
     valorSlider.textContent = maxMonto.toFixed(2);
 }
 
+// Actualizar estado del botón de filtros según disponibilidad de transacciones
+function actualizarEstadoBotonesFiltros() {
+    const btnAplicarFiltros = document.getElementById("aplicarFiltrosBtn");
+    const btnLimpiar = document.getElementById("limpiarBtn");
+    const tieneTransacciones = data.transacciones.length > 0;
+
+    btnAplicarFiltros.disabled = !tieneTransacciones;
+    btnLimpiar.disabled = !tieneTransacciones;
+}
+
 
 
 // ------------------ EVENTOS ------------------
@@ -153,11 +163,17 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("filtroFechaDesde").setAttribute("max", hoy);
   document.getElementById("filtroFechaHasta").setAttribute("max", hoy);
 
+  // Deshabilitar botones inicialmente
+  actualizarEstadoBotonesFiltros();
+
   // Cargar datos desde API
   cargarTransaccionesDesdeAPI();
 
   // Slider cambia en tiempo real
-  document.getElementById("filtroMontoMax").addEventListener("input", aplicarFiltros);
+  document.getElementById("filtroMontoMax").addEventListener("input", (e) => {
+    document.getElementById("valorMontoMax").textContent = parseFloat(e.target.value).toFixed(2);
+    aplicarFiltros();
+  });
 
   // Filtros automáticos
   document.getElementById("filtroTipo").addEventListener("change", aplicarFiltros);
