@@ -22,6 +22,7 @@ body {
 
 h1 {
   font-family: "Raleway", sans-serif;}
+  
 main {
     flex: 1;
     padding: 20px 200px; /* Para dar espacio a los botones */
