@@ -7,7 +7,8 @@ h1 {
     color: #0A1F44;
 }
 
-.integranteInfo {
+/*Contenedor de las noticias*/
+.noticia {
     display: flex;
     flex-direction: row;
     align-items: stretch;
@@ -19,13 +20,13 @@ h1 {
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.integranteInfo img {
-    width: 300px;                    
-    height: auto;                   
-    margin: auto;                   
-    border-radius: 10px;   
+.noticia img {
+    width: auto;                    
+    height: 300px;                   
+    object-fit: cover;                      
 }
 
+/*Contenedor del contenido a la derecha*/
 .infoDerecha {
     display: flex;
     flex-direction: column;        
@@ -34,13 +35,13 @@ h1 {
     flex: 1;
 }
 
-.integranteInfo p,
-.integranteInfo ul {
-    margin: 10px;
-    max-width: 700px;
-    color: #0A1F44;
+a {
+    text-decoration: none;
+    color: #16A085;
+    font-weight: bold;
+    font-size: 18px;
 }
 
-.integranteInfo ul li {
-    color: black;
+a:hover {
+    color: #3A7BD5;
 }

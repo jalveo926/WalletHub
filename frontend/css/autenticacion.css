@@ -73,7 +73,7 @@ form button {
     font-weight: bold;
 }
 
-form button:hover {
+button:hover {
     background-color: #3A7BD5;
 }
 
@@ -156,3 +156,19 @@ a:hover {
 .toggle-password:hover {
     opacity: 1;
 }
+
+/*Estilos para los mensajes de error*/
+.mensaje {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    display: none; /*Oculto por defecto*/
+}
+ 
+.mensaje-error {
+    background-color: #FDEDEC;
+    color: #c0392b;
+    border: 1px solid #e74c3c;
+}
+
