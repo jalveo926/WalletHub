@@ -1,23 +1,22 @@
 //Función para mostrar el popup
-//Carga el popup desde el archivo externo
-fetch("../components/popup.html")
-    .then(res => res.text())
-    .then(html => {
-        //Insertar el popup en la página
-        document.getElementById("popup").innerHTML = html;
+window.addEventListener("DOMContentLoaded", () => {
+    // Cargar HTML del popup
+    fetch("../components/popup.html")
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("popup-general").innerHTML = html;
 
-        //Activar los botones y funciones una vez insertado el HTML
-        const popup = document.querySelector("#popup .popup");
-        const popupText = document.getElementById("popup-text");
-        const popupBtn = document.getElementById("popup-btn");
+            const popup = document.querySelector("#popup-general .popup-general");
+            const popupText = popup.querySelector("#popup-text");
+            const popupBtn = popup.querySelector("#popup-btn");
 
-        window.mostrarPopup = function(mensaje) {
-            popupText.textContent = mensaje;
-            popup.style.display = "flex";
-        };
+            window.mostrarPopup = function(mensaje) {
+                popupText.textContent = mensaje;
+                popup.style.display = "flex";
+            };
 
-        //Botón OK
-        popupBtn.addEventListener("click", () => {
-            popup.style.display = "none";
+            popupBtn.addEventListener("click", () => {
+                popup.style.display = "none";
+            });
         });
-    });
+});
