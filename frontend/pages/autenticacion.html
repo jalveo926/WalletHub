@@ -7,7 +7,7 @@
     <title>Inicio de Sesión</title>
 </head>
 <body>
-   
+   <body>
     <main>
         <div class="contenedor">
             <a href="../pages/home.html">X</a>
@@ -20,14 +20,12 @@
 
                     <label for="contrasena-login">Contraseña</label>
                     <div class="password-wrapper">
-                        <input type="password" id="contrasena-login" placeholder="Ingresa tu contraseña">
+                        <input type="password" id="contrasena-login" placeholder="Ingresa tu contraseña" required>
                         <span class="toggle-password" data-target="contrasena-login"></span> <!--Para que la contraseña se muestre y se oculte-->
                     </div>
 
-                    <div class="mensaje" id="mensaje-login"></div>
                     <button type="submit">Iniciar sesión</button>
                 </form>
-                
                  <button id="mostrar-registro">¿No tienes cuenta? Regístrate</button>
             </div>
 
@@ -36,21 +34,19 @@
                 <h1 class="titulo">Registrarte</h1>
                 <form id="form-reg">
                     <label for="usuario-reg">Usuario</label>
-                    <input type="text" id="usuario-reg" placeholder="Ingresa tu usuario" required>
+                    <input type="text" id="usuario-reg" placeholder="Ingresa tu usuario">
 
                     <label for="correo-reg">Correo</label>
-                    <input type="text" id="correo-reg" placeholder="Ingresa tu correo" required>
+                    <input type="text" id="correo-reg" placeholder="Ingresa tu correo">
 
                     <label for="contrasena-reg">Contraseña</label>
                     <div class="password-wrapper">
-                        <input type="password" id="contrasena-reg" placeholder="Ingresa tu contraseña" minlength="12" required>
+                        <input type="password" id="contrasena-reg" placeholder="Ingresa tu contraseña" minlength="10" required>
                         <span class="toggle-password" data-target="contrasena-reg"></span> <!--Para que la contraseña se muestre y se oculte-->
                     </div>
 
-                    <div class="mensaje" id="mensaje-reg"></div>
                     <button type="submit">Registrarte</button>
                 </form>
-                
                 <button id="mostrar-login">¿Ya tienes cuenta? Inicia sesión</button>
             </div>
 
@@ -62,9 +58,6 @@
         </div> 
     </main>
 
-    <div id="popup-general"></div>
-
-    <script src="../js/CargarPopup.js"></script>
     <script src="../js/AUTH/autenticacion.js"></script>
     <script src="../js/AUTH/LoginAUTH.js"></script>
 </body>
