@@ -45,3 +45,33 @@ function estaLogueado() {
     return token !== null;
 }
 
+/*Mensaje de error login*/
+const mensajeLogin = document.getElementById('mensaje-login');
+ 
+function mostrarMensajeLogin(texto, tipo = 'error') {
+    mensajeLogin.style.display = 'block';
+    mensajeLogin.textContent = texto;
+    mensajeLogin.className = tipo === 'error' ? 'mensaje mensaje-error' : 'mensaje mensaje-exito';
+}
+
+/*Mensaje de error registro*/
+const mensajeReg = document.getElementById('mensaje-reg');
+ 
+function mostrarMensajeRegistro(texto, tipo = 'error') {
+    mensajeReg.style.display = 'block';
+    mensajeReg.textContent = texto;
+    mensajeReg.className = tipo === 'error' ? 'mensaje mensaje-error' : 'mensaje mensaje-exito';
+}
+
+/*Muestra popup en lugar de alerta*/
+function mostrarPopup(mensaje) {
+    const popup = document.getElementById("popup");
+    const popupText = document.getElementById("popup-text");
+
+    popupText.textContent = mensaje;
+    popup.style.display = "flex"; //Mostrar pop-up
+}
+
+document.getElementById("popup-btn").addEventListener("click", () => {
+    document.getElementById("popup").style.display = "none"; //Ocultar pop-up
+});

@@ -10,14 +10,14 @@ formLogin.addEventListener('submit', async (e) => {
     const password = document.getElementById('contrasena-login').value;
 
     if (!email || !password) {
-        alert('Por favor, complete todos los campos.');
+        mostrarMensajeLogin('Por favor, complete todos los campos.');
         return;
     }
 
     const envio = {
 
         correoUsu: email,
-        contrasena: password //Cambiar esto en el backend
+        contrasena: password 
     }
 
     try {
@@ -35,11 +35,11 @@ formLogin.addEventListener('submit', async (e) => {
             window.location.href = '../pages/dashboard.html'; // Redirigir al dashboard que es nuestra página principal después del login
         }
         else { {
-            alert(data.mensaje || 'Correo o contraseña incorrectos.');
+            mostrarMensajeLogin(data.mensaje || 'Correo o contraseña incorrectos.');
         }}
     } catch (error) {
         console.error('Error durante el inicio de sesión:', error);
-        alert('Ocurrió un error. Por favor, intente nuevamente.');
+        mostrarPopup('Ocurrió un error. Por favor, intente nuevamente.');
     }
 
 });
@@ -55,35 +55,25 @@ formRegistro.addEventListener('submit', async (e) => {
     
 
     if (!usuario || !email || !password ) {
-        alert('Por favor, complete todos los campos.');
+        mostrarMensajeRegistro('Por favor, complete todos los campos.');
         return;
     }
 
     if(!email.includes("@")) {
-        alert('El correo debe tener un @.');
+        mostrarMensajeRegistro('El correo debe tener un @.');
         return;
     }
 
 
-    if(password.length < 12) { 
-        alert('La contraseña debe tener al menos 12 caracteres.');
-        return;
-    }
-
-    if(!/[A-Z]/.test(password)) {
-        alert('La contraseña debe tener al menos una mayúscula.')
-        return;
-    }
-
-    if(!/[0-9]/.test(password)) {
-        alert('La contraseña debe tener al menos un número.')
+    if(password.length < 12 || !/[A-Z]/.test(password) || !/[0-9]/.test(password)) { 
+        mostrarMensajeRegistro('La contraseña debe tener al menos 12 caracteres, una mayúscula y un número.');
         return;
     }
 
      const envio = {
         nombreUsu: usuario,
         correoUsu: email,
-        contrasena: password //Cambiar esto en el backend
+        contrasena: password 
     }
     
     try {
@@ -96,15 +86,15 @@ formRegistro.addEventListener('submit', async (e) => {
         });
         const data = await response.json();
         if (response.ok) {
-            alert('Registro exitoso. Ahora puedes iniciar sesión.');
+            mostrarPopup('Registro exitoso. Ahora puedes iniciar sesión.');
             formRegistro.reset();
             document.getElementById('mostrar-login').click(); // Muestra el formulario de login
         } else {
-            alert(data.mensaje || 'Error en el registro. Por favor, intente nuevamente.');
+            mostrarPopup(data.mensaje || 'Error en el registro. Por favor, intente nuevamente.');
         }
     } catch (error) {
         console.error('Error durante el registro:', error);
-        alert('Ocurrió un error. Por favor, intente nuevamente.');
+        mostrarPopup('Ocurrió un error. Por favor, intente nuevamente.');
     }
 });
 
