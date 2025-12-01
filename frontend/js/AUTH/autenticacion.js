@@ -62,16 +62,3 @@ function mostrarMensajeRegistro(texto) {
     mensajeReg.textContent = texto;
     mensajeReg.className = 'mensaje mensaje-error';
 }
-
-//Muestra popup en lugar de alerta
-function mostrarPopup(mensaje) {
-    const popup = document.getElementById("popup");
-    const popupText = document.getElementById("popup-text");
-
-    popupText.textContent = mensaje;
-    popup.style.display = "flex"; //Mostrar pop-up
-}
-
-document.getElementById("popup-btn").addEventListener("click", () => {
-    document.getElementById("popup").style.display = "none"; //Ocultar pop-up
-});
