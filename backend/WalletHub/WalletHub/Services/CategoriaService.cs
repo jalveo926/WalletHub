@@ -84,9 +84,9 @@ namespace WalletHub.Services
             return lista ?? new List<Categoria>();
         }
 
-        public async Task<List<Categoria>> ObtenerCategoriasGlobales()
+        public async Task<List<Categoria>> ObtenerCategoriasGlobales(string idUsuario)
         {
-            var lista = await _categoriaRepository.GetCategoriasGlobales();
+            var lista = await _categoriaRepository.GetCategoriasGlobales(idUsuario);
 
             return lista ?? new List<Categoria>(); //Si la lista es null devuelve una lista vacía y si no es null devuelve la lista
         }

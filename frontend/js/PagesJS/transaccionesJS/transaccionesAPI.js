@@ -1,6 +1,6 @@
 const API_URL = 'https://localhost:7258/api'; // Cambiar cuando uses fetch real
 
-const token = obtenerToken();
+const token = localStorage.getItem("token");
 
 async function cargarTransaccionesDesdeAPI() {
     try {
@@ -35,7 +35,8 @@ async function cargarTransaccionesDesdeAPI() {
         data = resultado;
 
         mostrarTransacciones(data.transacciones);
-        cargarCategorias();
+        await cargarCategorias();
+        await cargarCategoriasEnSelect();
         configurarSlider();
 
     } catch (error) {
