@@ -73,7 +73,6 @@ form button {
     font-weight: bold;
 }
 
-/*Hover a todos los botones*/
 button:hover {
     background-color: #3A7BD5;
 }
@@ -122,10 +121,10 @@ a:hover {
     font-weight: bold;
 }
 
-/*#mostrar-registro:hover,
+#mostrar-registro:hover,
 #mostrar-login:hover {
     color: #3A7BD5;
-}*/
+}
 
 /*Contenedor del input con icono*/
 .password-wrapper {
@@ -164,22 +163,16 @@ a:hover {
     padding: 10px;
     font-size: 14px;
     border-radius: 6px;
-    display: none; /* Oculto por defecto */
+    display: none; /*Oculto por defecto*/
 }
  
 .mensaje-error {
-    background-color: #ffdddd;
-    color: #d9534f;
-    border: 1px solid #d9534f;
-}
- 
-.mensaje-exito {
-    background-color: #ddffdd;
-    color: #0E6B57;
-    border: 1px solid #0E6B57;
+    background-color: #FDEDEC;
+    color: #c0392b;
+    border: 1px solid #e74c3c;
 }
 
-/*Estilos para popups tipo alerta*/
+/*Estilos para popups*/
 .popup {
     position: fixed;
     top: 0;

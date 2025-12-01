@@ -1,6 +1,6 @@
-const API_URL = 'https://localhost:7258/api'; // Reemplacen con la de su computadora
+const API_URL = 'https://localhost:7258/api'; //Reemplacen con la de su computadora
 
-// Manejar el inicio de sesión
+//Manejar el inicio de sesión
 
 const formLogin = document.getElementById('form-login');
 formLogin.addEventListener('submit', async (e) => {
@@ -32,7 +32,7 @@ formLogin.addEventListener('submit', async (e) => {
 
         if (response.ok) {
             GuardarToken(data.token, data.usuario);
-            window.location.href = '../pages/dashboard.html'; // Redirigir al dashboard que es nuestra página principal después del login
+            window.location.href = '../pages/dashboard.html'; //Redirigir al dashboard que es nuestra página principal después del login
         }
         else { {
             mostrarMensajeLogin(data.mensaje || 'Correo o contraseña incorrectos.');
@@ -44,7 +44,7 @@ formLogin.addEventListener('submit', async (e) => {
 
 });
 
-// Manejar el registro
+//Manejar el registro
 
 const formRegistro = document.getElementById('form-reg');
 formRegistro.addEventListener('submit', async (e) => {
@@ -53,6 +53,7 @@ formRegistro.addEventListener('submit', async (e) => {
     const email = document.getElementById('correo-reg').value;
     const password = document.getElementById('contrasena-reg').value;
     
+//Validaciones del registro
 
     if (!usuario || !email || !password ) {
         mostrarMensajeRegistro('Por favor, complete todos los campos.');
@@ -77,7 +78,7 @@ formRegistro.addEventListener('submit', async (e) => {
     }
     
     try {
-        const response = await fetch(`${API_URL}/Registro/RegistrarUsuario`, { //Arreglar esta ruta en C#
+        const response = await fetch(`${API_URL}/Registro/RegistrarUsuario`, { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -88,7 +89,7 @@ formRegistro.addEventListener('submit', async (e) => {
         if (response.ok) {
             mostrarPopup('Registro exitoso. Ahora puedes iniciar sesión.');
             formRegistro.reset();
-            document.getElementById('mostrar-login').click(); // Muestra el formulario de login
+            document.getElementById('mostrar-login').click(); //Muestra el formulario de login
         } else {
             mostrarPopup(data.mensaje || 'Error en el registro. Por favor, intente nuevamente.');
         }
@@ -99,10 +100,10 @@ formRegistro.addEventListener('submit', async (e) => {
 });
 
 
-// Redirigir al usuario si ya está logueado
+//Redirigir al usuario si ya está logueado
 window.addEventListener('DOMContentLoaded', () => {
     if (estaLogueado()) {
-        // Si ya tiene token, redirigir a dashboard
+        //Si ya tiene token, redirigir a dashboard
         window.location.href = '../pages/dashboard.html';
     }
 });

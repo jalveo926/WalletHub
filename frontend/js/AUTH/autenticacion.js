@@ -45,25 +45,25 @@ function estaLogueado() {
     return token !== null;
 }
 
-/*Mensaje de error login*/
+//Mensaje de error login
 const mensajeLogin = document.getElementById('mensaje-login');
  
-function mostrarMensajeLogin(texto, tipo = 'error') {
+function mostrarMensajeLogin(texto) {
     mensajeLogin.style.display = 'block';
     mensajeLogin.textContent = texto;
-    mensajeLogin.className = tipo === 'error' ? 'mensaje mensaje-error' : 'mensaje mensaje-exito';
+    mensajeLogin.className = 'mensaje mensaje-error'; 
 }
 
-/*Mensaje de error registro*/
+//Mensaje de error registro
 const mensajeReg = document.getElementById('mensaje-reg');
  
-function mostrarMensajeRegistro(texto, tipo = 'error') {
+function mostrarMensajeRegistro(texto) {
     mensajeReg.style.display = 'block';
     mensajeReg.textContent = texto;
-    mensajeReg.className = tipo === 'error' ? 'mensaje mensaje-error' : 'mensaje mensaje-exito';
+    mensajeReg.className = 'mensaje mensaje-error';
 }
 
-/*Muestra popup en lugar de alerta*/
+//Muestra popup en lugar de alerta
 function mostrarPopup(mensaje) {
     const popup = document.getElementById("popup");
     const popupText = document.getElementById("popup-text");
