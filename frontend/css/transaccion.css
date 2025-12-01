@@ -110,6 +110,60 @@
     border-radius: 10px;
 }
 
+/* Contenedor para el botón de opciones y el menú */
+.btn-opciones-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Menú desplegable de opciones */
+.menu-opciones {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    min-width: 160px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.menu-opciones.hidden {
+    display: none;
+}
+
+.opcion-modificar,
+.opcion-eliminar {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background-color: white;
+    color: #0A1F44;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-weight: 500;
+}
+
+.opcion-modificar:hover {
+    background-color: #f5f5f5;
+}
+
+.opcion-eliminar {
+    border-top: 1px solid #eee;
+    color: #e74c3c;
+}
+
+.opcion-eliminar:hover {
+    background-color: #ffebee;
+}
+
 .limpiarFiltroBtn {
     width: 32px;
     height: 32px;

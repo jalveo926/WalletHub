@@ -39,7 +39,13 @@ function mostrarTransacciones(lista) {
         <div class="item ${tipoClase}">
             <div class="item-encabezado">
                 <h3>${t.nombreCateg}</h3>
-                <button class="btn-opciones"></button>
+                <div class="btn-opciones-container">
+                    <button class="btn-opciones" data-id="${t.idTransaccion}"></button>
+                    <div class="menu-opciones hidden" data-id="${t.idTransaccion}">
+                        <button class="opcion-modificar" data-id="${t.idTransaccion}">Modificar</button>
+                        <button class="opcion-eliminar" data-id="${t.idTransaccion}">Eliminar</button>
+                    </div>
+                </div>
             </div>
 
             <p>${t.descripcionTransac}</p>
@@ -184,4 +190,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Resetear filtros
   document.getElementById("limpiarBtn").addEventListener("click", resetearFiltros);
+
+  // Event delegation para abrir/cerrar menú de opciones
+  document.addEventListener("click", (e) => {
+    // Cerrar todos los menús si se hace clic fuera
+    if (!e.target.closest(".btn-opciones-container")) {
+      document.querySelectorAll(".menu-opciones").forEach(menu => {
+        menu.classList.add("hidden");
+      });
+    }
+
+    // Abrir/cerrar menú al hacer clic en btn-opciones
+    if (e.target.closest(".btn-opciones")) {
+      e.stopPropagation();
+      const btn = e.target.closest(".btn-opciones");
+      const container = btn.closest(".btn-opciones-container");
+      const menu = container.querySelector(".menu-opciones");
+      
+      // Cerrar otros menús
+      document.querySelectorAll(".menu-opciones").forEach(m => {
+        if (m !== menu) {
+          m.classList.add("hidden");
+        }
+      });
+      
+      // Toggle del menú actual
+      menu.classList.toggle("hidden");
+    }
+  });
 });
