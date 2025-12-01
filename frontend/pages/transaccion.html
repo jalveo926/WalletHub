@@ -68,10 +68,83 @@
 
     </main>
 
+    <!-- POPUP PARA CREAR CATEGORÍA -->
+    <div id="popupCategoria" class="popup-overlay hidden">
+        <div class="popup-contenido">
+            <div class="popup-header">
+                <h2>Nueva Categoría</h2>
+                <button class="popup-cerrar" onclick="cerrarPopupCategoria()">&times;</button>
+            </div>
+            <form id="formCategoria" class="popup-form">
+                <div class="form-grupo">
+                    <label for="nombreCategoria">Nombre de la categoría:</label>
+                    <input type="text" id="nombreCategoria" placeholder="Ej: Comida, Transporte" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="tipoCategoria">Tipo:</label>
+                    <select id="tipoCategoria" required>
+                        <option value="">Selecciona un tipo</option>
+                        <option value="Ingreso">Ingreso</option>
+                        <option value="Gasto">Gasto</option>
+                    </select>
+                </div>
+                <div class="popup-botones">
+                    <button type="button" class="btn-cancelar" onclick="cerrarPopupCategoria()">Cancelar</button>
+                    <button type="submit" class="btn-guardar">Crear Categoría</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- POPUP PARA CREAR TRANSACCIÓN -->
+    <div id="popupTransaccion" class="popup-overlay hidden">
+        <div class="popup-contenido">
+            <div class="popup-header">
+                <h2>Nueva Transacción</h2>
+                <button class="popup-cerrar" onclick="cerrarPopupTransaccion()">&times;</button>
+            </div>
+            
+            <form id="formTransaccion" class="popup-form">
+                <div class="form-grupo">
+                    <label for="tipoTransaccion">Tipo:</label>
+                    <select id="tipoTransaccion" required>
+                        <option value="">Selecciona un tipo</option>
+                        <option value="Ingreso">Ingreso</option>
+                        <option value="Gasto">Gasto</option>
+                    </select>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="categoriaTransaccion">Categoría:</label>
+                    <select id="categoriaTransaccion" required>
+                        <option value="">Selecciona una categoría</option>
+                    </select>   
+                </div>
+                <div class="form-grupo">
+                    <label for="descripcionTransaccion">Descripción:</label>
+                    <input type="text" id="descripcionTransaccion" placeholder="Descripción de la transacción" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="montoTransaccion">Monto:</label>
+                    <input type="number" id="montoTransaccion" placeholder="0.00" step="0.01" min="0" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="fechaTransaccion">Fecha:</label>
+                    <input type="date" id="fechaTransaccion" required>
+                </div>
+                <div class="popup-botones">
+                    <button type="button" class="btn-cancelar" onclick="cerrarPopupTransaccion()">Cancelar</button>
+                    <button type="submit" class="btn-guardar">Crear Transacción</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div id="footer"></div>
 
     <script src="../js/CargaLayoutGeneral.js"></script>
-    <script src="../js/PagesJS/transaccionesJS/transaccionesVisual.js"></script>
     <script src="../js/PagesJS/transaccionesJS/transaccionesAPI.js"></script>
+    <script src="../js/PagesJS/transaccionesJS/popups.js"></script>
+    <script src="../js/PagesJS/transaccionesJS/transaccionesVisual.js"></script>
 </body>
 </html>

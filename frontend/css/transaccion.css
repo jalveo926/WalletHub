@@ -141,3 +141,156 @@
 input[type="range"] {
     width: 250px;
 }
+
+/* Estilo del contenedor de los popups */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-overlay.hidden {
+    display: none;
+}
+
+.popup-contenido {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 450px;
+    padding: 0;
+    animation: popupSlideIn 0.3s ease-out;
+}
+
+@keyframes popupSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 2px solid #f0f0f0;
+    background-color: #0A1F44;
+    border-radius: 12px 12px 0 0;
+    color: white;
+}
+
+.popup-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.popup-cerrar {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: white;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+}
+
+.popup-cerrar:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.popup-form {
+    padding: 20px;
+}
+
+.form-grupo {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-grupo label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #0A1F44;
+    font-size: 14px;
+}
+
+.form-grupo input,
+.form-grupo select,
+.form-grupo textarea {
+    padding: 10px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.form-grupo input:focus,
+.form-grupo select:focus,
+.form-grupo textarea:focus {
+    outline: none;
+    border-color: #0A1F44;
+    box-shadow: 0 0 0 3px rgba(10, 31, 68, 0.1);
+}
+
+.form-grupo textarea {
+    resize: vertical;
+}
+
+.popup-botones {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    justify-content: flex-end;
+}
+
+.btn-cancelar,
+.btn-guardar {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancelar {
+    background-color: #e0e0e0;
+    color: #0A1F44;
+}
+
+.btn-cancelar:hover {
+    background-color: #d0d0d0;
+}
+
+.btn-guardar {
+    background-color: #16A085;
+    color: white;
+}
+
+
+
+.btn-guardar:active {
+    transform: scale(0.98);
+}
