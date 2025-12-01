@@ -4,17 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/transaccion.css">
     <title>Transacciones</title>
 </head>
 <body>
     <div id="header"></div>
 
     <main>
-        <h1>TRANSACCIONES</h1>
+        <!-- Botones para crear categoria o transaccion -->
+            
+
+        <div class = "transacciones-options">
+            <h1>TRANSACCIONES</h1>
+            <div class="tituloFiltro">
+                
+                <!-- Filtrar por ingreso o gasto -->
+                <select id="filtroTipo">
+                    <option value="Todos">Todas las transacciones</option>
+                    <option value="Ingreso">Ingresos</option>
+                    <option value="Gasto">Gastos</option>
+                </select>
+                <select id="filtroCategoria">
+                    <option value="">Todas las categorías</option> 
+                </select>
+
+                <!-- Filtrar por monto -->
+                <div class="monto-slider">
+                    <label>Monto máximo: $<span id="valorMontoMax">0</span></label>
+                    <input type="range" id="filtroMontoMax" min="0" step="0.01">
+                </div>
+
+
+            </div>
+
+            <!-- Filtrar por fecha -->
+                 <div class="fecha-filtros">
+                    <div class="fechaInput">
+                        <label for="filtroFechaDesde">Desde:</label>
+                        <input type="date" id="filtroFechaDesde">
+                    </div>
+                    <div class="fechaInput">
+                        <label for="filtroFechaHasta">Hasta:</label>
+                        <input type="date" id="filtroFechaHasta">
+                    </div>
+                 </div> 
+        </div>
+
+        <div class = "botonesMainContainer" >
+                <div class = "aplicarFiltrosContainer">
+                    <button id="aplicarFiltrosBtn">Aplicar filtros</button>
+                    <button id="limpiarBtn" class="limpiarFiltroBtn" ></button>
+                </div>
+
+                <div class="botonesCrear">
+                    <button id = "crearCategoriaBtn">Nueva categoria</button>
+                    <button id = "crearTransaccionBtn">Nueva transaccion</button>
+                </div>
+        </div>
+        
+
+        <!-- Esto se rellena dinamicamente con JS -->
+        <div id="lista-transacciones" class="lista-transacciones"></div> 
+
     </main>
 
     <div id="footer"></div>
 
     <script src="../js/CargaLayoutGeneral.js"></script>
+    <script src="../js/PagesJS/transaccionesJS/transaccionesVisual.js"></script>
+    <script src="../js/PagesJS/transaccionesJS/transaccionesAPI.js"></script>
 </body>
 </html>
