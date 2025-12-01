@@ -16,8 +16,6 @@ namespace WalletHub.Data.Repository
             _context = context;
         }
 
-
-
         //Devuelve una lista de transacciones de la base de datos con el filtrado por categoría
         public async Task<IEnumerable<TransaccionDTO>> GetByCategoria(string nombreCategoria, string idUsuario)
         {
@@ -25,7 +23,8 @@ namespace WalletHub.Data.Repository
                 .Include(t => t.Categoria)
                 .Where(t => t.idUsuario == idUsuario && t.Categoria.nombreCateg == nombreCategoria)
                 .Select(t => new TransaccionDTO()
-                {
+                {   
+                    idTransaccion = t.idTransaccion,
                     fechaTransac = t.fechaTransac,
                     descripcionTransac = t.descripcionTransac,
                     montoTransac = t.montoTransac,
@@ -47,7 +46,8 @@ namespace WalletHub.Data.Repository
                 .Where(t => t.idUsuario == idUsuario)
                 .OrderByDescending(t => t.fechaTransac)
                 .Select(t => new TransaccionDTO()
-                {
+                {   
+                    idTransaccion = t.idTransaccion,
                     fechaTransac = t.fechaTransac,
                     montoTransac = t.montoTransac,
                     descripcionTransac = t.descripcionTransac,
@@ -97,7 +97,8 @@ namespace WalletHub.Data.Repository
 
             // 5. Respuesta DTO
             return new TransaccionDTO()
-            {
+            {   
+                idTransaccion = transaccion.idTransaccion,
                 fechaTransac = transaccion.fechaTransac,
                 montoTransac = transaccion.montoTransac,
                 descripcionTransac = transaccion.descripcionTransac,
@@ -161,23 +162,17 @@ namespace WalletHub.Data.Repository
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<IEnumerable<TransaccionDTO>> GetTransaccionesByIngresoGasto( TipoCategoria tipoCateg,string idUsuario)
+        public async Task<List<Transaccion>> ObtenerPorUsuarioYFechas(
+        string idUsuario,
+        DateTime inicio,
+        DateTime fin)
         {
-            var resultado = await _context.Transaccion
+            return await _context.Transaccion
                 .Include(t => t.Categoria)
                 .Where(t => t.idUsuario == idUsuario
-                         && t.Categoria.tipoCateg == tipoCateg)
-                .Select(t => new TransaccionDTO()
-                {
-                    fechaTransac = t.fechaTransac,
-                    descripcionTransac = t.descripcionTransac,
-                    montoTransac = t.montoTransac,
-                    nombreCateg = t.Categoria.nombreCateg,
-                    tipoCategoria = t.Categoria.tipoCateg.ToString()
-                })
+                         && t.fechaTransac >= inicio
+                         && t.fechaTransac <= fin)
                 .ToListAsync();
-
-            return resultado;
         }
     }
 }

@@ -33,6 +33,35 @@ namespace WalletHub.Controllers
                 });
             }
 
+            // Correo debe tener un @
+            if (!dto.correoUsu.Contains("@"))
+            {
+                return BadRequest(new
+                {
+                    mensaje = "Debe ingresar un correo válido."
+                });
+            }
+
+            if (dto.contrasena.Length < 12) // Contraseña con un mínimo de 12 caracteres
+            {
+                return BadRequest(new
+                {
+                    mensaje = "La contraseña debe tener al menos 12 caracteres."
+                });
+            } else if (!dto.contrasena.Any(char.IsUpper)) // Contraseña con al menos una mayúscula
+            {
+                return BadRequest(new
+                {
+                    mensaje = "La contraseña debe tener al menos una letra mayúscula."
+                });
+            } else if (!dto.contrasena.Any(char.IsDigit)) //contraseña con al menos 1 número
+            {
+                return BadRequest(new
+                {
+                    mensaje = "La contraseña debe tener al menos un número."
+                });
+            }
+
             try
             {
                 // Hashea la contraseña antes de guardar
