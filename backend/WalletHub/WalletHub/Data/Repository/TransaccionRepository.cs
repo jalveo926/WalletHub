@@ -194,5 +194,24 @@ namespace WalletHub.Data.Repository
 
             return resultado;
         }
+
+        public async Task<IEnumerable<TransaccionDTO>> GetTransaccionesByIngresoGasto( TipoCategoria tipoCateg,string idUsuario)
+        {
+            var resultado = await _context.Transaccion
+                .Include(t => t.Categoria)
+                .Where(t => t.idUsuario == idUsuario
+                         && t.Categoria.tipoCateg == tipoCateg)
+                .Select(t => new TransaccionDTO()
+                {
+                    fechaTransac = t.fechaTransac,
+                    descripcionTransac = t.descripcionTransac,
+                    montoTransac = t.montoTransac,
+                    nombreCateg = t.Categoria.nombreCateg,
+                    tipoCategoria = t.Categoria.tipoCateg.ToString()
+                })
+                .ToListAsync();
+
+            return resultado;
+        }
     }
 }

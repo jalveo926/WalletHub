@@ -45,8 +45,3 @@ function estaLogueado() {
     return token !== null;
 }
 
-function cerrarSesion() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('usuario');
-    window.location.href = '../pages/autenticacion.html';
-}

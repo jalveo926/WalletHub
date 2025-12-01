@@ -12,7 +12,7 @@ namespace WalletHub.Services.Interface
 
         public Task<List<Categoria?>> ObtenerCategoriasPorUsuario(string idCategoria);
 
-        public Task<List<Categoria>> ObtenerCategoriasGlobales();
+        public Task<List<Categoria>> ObtenerCategoriasGlobales(string idUsuario);
         public Task<List<Categoria>> ObtenerTodasCategoriasAsync();
        
     }

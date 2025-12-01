@@ -6,8 +6,7 @@ footer {
     text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: center; /* <- AGREGADO: Centra los elementos hijos */
-    
+    align-items: center;
     font-family: "Nunito", sans-serif;
 }
 
@@ -23,7 +22,7 @@ footer ul {
     font-weight: 600;
 }
 
-footer ul b li{ 
+footer ul b li { 
     margin-bottom: 10px;
 }
 
@@ -59,20 +58,26 @@ footer p {
     opacity: 0.9;
 }
 
-/* Link CERRAR SESIÓN  */
+/* BOTÓN CERRAR SESIÓN */
 footer .cerrar-sesion {
-    color: #11cca7;
+    padding: 8px 18px;
+    background-color: #F4F6F8;
+    border: 2px solid #16A085;
+    color: #0c5042;
     font-weight: bold;
-    text-decoration: none;
-    padding: 6px 12px;
-    display: inline-block;
-    border-radius: 4px;
-    transition: 0.2s;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    font-size: 15px;
+}
+
+footer p {
+    margin-bottom: 10px;
 }
 
 footer .cerrar-sesion:hover {
+    background-color: #16A085;
     color: white;
-    background-color: #16A08522;
 }
 
 /* Responsive */
