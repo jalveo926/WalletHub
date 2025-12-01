@@ -59,9 +59,24 @@ formRegistro.addEventListener('submit', async (e) => {
         return;
     }
 
+    if(!email.includes("@")) {
+        alert('El correo debe tener un @.');
+        return;
+    }
 
-    if(password.length < 10) { 
-        alert('La contraseña debe tener al menos 10 caracteres.');
+
+    if(password.length < 12) { 
+        alert('La contraseña debe tener al menos 12 caracteres.');
+        return;
+    }
+
+    if(!/[A-Z]/.test(password)) {
+        alert('La contraseña debe tener al menos una mayúscula.')
+        return;
+    }
+
+    if(!/[0-9]/.test(password)) {
+        alert('La contraseña debe tener al menos un número.')
         return;
     }
 
