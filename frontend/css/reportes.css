@@ -6,6 +6,7 @@
   margin-bottom: 20px;
 }
 
+/* FILTRO PERIODO */
 .filtro-periodo {
   display: flex;
   align-items: center;
@@ -44,7 +45,6 @@
   font-weight: 700;
 }
 
-/* Colores basados en transaccion.css */
 .card-resumen.ingreso {
   border-left: 6px solid #2ecc71;
   color: #2e7d32;
@@ -64,7 +64,7 @@
 /* TABLAS INGRESOS / GASTOS */
 .reportes-tablas {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* Dos columnas */
   gap: 20px;
 }
 
@@ -74,7 +74,7 @@
 
 .tabla-contenedor table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse; /* Eliminar espacios entre celdas */
   font-size: 14px;
 }
 
@@ -93,16 +93,16 @@
 /* RESPONSIVE */
 @media (max-width: 800px) {
   .reportes-resumen {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /*| Una columna */
   }
 
   .reportes-tablas {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Una columna */
   }
 
   .reportes-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    flex-direction: column; /* Cambiar a columna */
+    align-items: flex-start; /* Alinear al inicio */
+    gap: 10px; /* Espacio entre elementos */
   }
 }
