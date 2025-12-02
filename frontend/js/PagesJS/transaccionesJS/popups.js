@@ -19,6 +19,47 @@ function abrirPopupTransaccion() {
     document.getElementById("fechaTransaccion").value = hoy;
 }
 
+async function abrirPopupModificarTransaccion(idTransaccion) {
+    // Buscar la transacción en el array global
+    const transaccion = data.transacciones.find(t => t.idTransaccion == idTransaccion);
+    
+    if (!transaccion) {
+        alert("No se encontró la transacción");
+        return;
+    }
+
+    // Cargar las categorías primero
+    await cargarCategoriasCombobox("categoriaModificar", "tipoModificar");
+    
+    // Llenar el formulario con los datos de la transacción
+    document.getElementById("tipoModificar").value = transaccion.tipoCategoria;
+    
+    // Filtrar categorías según el tipo
+    filtrarCategoriasPorTipo("categoriaModificar", "tipoModificar");
+    
+    // Establecer la categoría seleccionada
+    document.getElementById("categoriaModificar").value = transaccion.nombreCateg;
+    document.getElementById("descripcionModificar").value = transaccion.descripcionTransac;
+    document.getElementById("montoModificar").value = transaccion.montoTransac;
+    
+    // Formatear la fecha correctamente (solo la parte de la fecha, sin hora)
+    const fecha = new Date(transaccion.fechaTransac);
+    const fechaFormateada = fecha.toISOString().split("T")[0];
+    document.getElementById("fechaModificar").value = fechaFormateada;
+    
+    // Guardar el ID de la transacción en un atributo del formulario para usarlo después
+    document.getElementById("formModificarTransaccion").setAttribute("data-id-transaccion", idTransaccion);
+    
+    // Mostrar el popup
+    document.getElementById("popupModificarTransaccion").classList.remove("hidden");
+}
+
+function cerrarPopupModificarTransaccion() {
+    document.getElementById("popupModificarTransaccion").classList.add("hidden");
+    document.getElementById("formModificarTransaccion").reset();
+    document.getElementById("formModificarTransaccion").removeAttribute("data-id-transaccion");
+}
+
 function cerrarPopupTransaccion() {
     document.getElementById("popupTransaccion").classList.add("hidden");
     document.getElementById("formTransaccion").reset();
@@ -28,12 +69,16 @@ function cerrarPopupTransaccion() {
 document.addEventListener("click", (e) => {
     const popupCategoria = document.getElementById("popupCategoria");
     const popupTransaccion = document.getElementById("popupTransaccion");
+    const popupModificar = document.getElementById("popupModificarTransaccion");
 
     if (e.target === popupCategoria) {
         cerrarPopupCategoria();
     }
     if (e.target === popupTransaccion) {
         cerrarPopupTransaccion();
+    }
+    if (e.target === popupModificar) {
+        cerrarPopupModificarTransaccion();
     }
 });
 
@@ -42,10 +87,11 @@ document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
         cerrarPopupCategoria();
         cerrarPopupTransaccion();
+        cerrarPopupModificarTransaccion();
     }
 });
 
-// ==================== MANEJAR ENVÍO DE FORMULARIOS ====================
+// MANEJAR ENVÍO DE FORMULARIOS 
 
 // Evento para crear categoría
 document.addEventListener("DOMContentLoaded", () => {
@@ -79,139 +125,37 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Event listener para el cambio de tipo en la transacción
+    // Formulario de modificar transacción
+    const formModificar = document.getElementById("formModificarTransaccion");
+    if (formModificar) {
+        formModificar.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const idTransaccion = formModificar.getAttribute("data-id-transaccion");
+            await actualizarTransaccion(idTransaccion);
+        });
+    }
+
+    // Event listener para el cambio de tipo en la transacción (CREAR)
     const selectTipo = document.getElementById("tipoTransaccion");
     if (selectTipo) {
-        selectTipo.addEventListener("change", filtrarCategoriasPorTipo);
+        selectTipo.addEventListener("change", () => {
+            filtrarCategoriasPorTipo("categoriaTransaccion", "tipoTransaccion");
+        });
+    }
+
+    // Event listener para el cambio de tipo en la transacción (MODIFICAR)
+    const selectTipoModificar = document.getElementById("tipoModificar");
+    if (selectTipoModificar) {
+        selectTipoModificar.addEventListener("change", () => {
+            filtrarCategoriasPorTipo("categoriaModificar", "tipoModificar");
+        });
     }
 });
 
-// ==================== FUNCIONES PARA LLAMAR A LA API ====================
 
-async function crearCategoria() {
-    const nombre = document.getElementById("nombreCategoria").value.trim();
-    const tipo = document.getElementById("tipoCategoria").value;
-
-    if (!nombre || !tipo) {
-        alert("Por favor completa los campos requeridos.");
-        return;
-    }
-
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-        alert("No estás autenticado. Por favor inicia sesión.");
-        return;
-    }
-
-    try {
-        const envio = {
-            nombre: nombre,
-            tipo: tipo
-        };
-
-        const respuesta = await fetch(`${API_URL}/Categoria/AgregarCategoria`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify(envio)
-        });
-
-        if (respuesta.status === 401) {
-            alert("Tu sesión expiró. Inicia sesión de nuevo.");
-            window.location.href = "autenticacion.html";
-            return;
-        }
-
-        if (!respuesta.ok) {
-            const errorData = await respuesta.json();
-            alert(`Error: ${errorData.mensaje || "No se pudo crear la categoría"}`);
-            return;
-        }
-
-        alert("Categoría creada exitosamente.");
-        cerrarPopupCategoria();
-        
-        // Recargar transacciones para actualizar la lista de categorías
-        cargarTransaccionesDesdeAPI();
-
-    } catch (error) {
-        console.error("Error al crear categoría:", error);
-        alert("Error al crear la categoría. Por favor intenta de nuevo.");
-    }
-}
-
-async function crearTransaccion() {
-    const categoria = document.getElementById("categoriaTransaccion").value;
-    const tipo = document.getElementById("tipoTransaccion").value;
-    const descripcion = document.getElementById("descripcionTransaccion").value.trim();
-    const monto = parseFloat(document.getElementById("montoTransaccion").value);
-    const fecha = document.getElementById("fechaTransaccion").value;
-
-    if (!categoria || !tipo || !descripcion || !monto || !fecha) {
-        alert("Por favor completa todos los campos.");
-        return;
-    }
-
-    if (monto <= 0) {
-        alert("El monto debe ser mayor a 0.");
-        return;
-    }
-
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-        alert("No estás autenticado. Por favor inicia sesión.");
-        return;
-    }
-
-    try {
-        const envio = {
-            nombreCateg: categoria,
-            descripcionTransac: descripcion,
-            montoTransac: monto,
-            fechaTransac: fecha
-        };
-
-        const respuesta = await fetch(`${API_URL}/Transaccion/RegistrarTransaccion`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify(envio)
-        });
-
-        if (respuesta.status === 401) {
-            alert("Tu sesión expiró. Inicia sesión de nuevo.");
-            window.location.href = "autenticacion.html";
-            return;
-        }
-
-        if (!respuesta.ok) {
-            const errorData = await respuesta.json();
-            alert(`Error: ${errorData.mensaje || "No se pudo crear la transacción"}`);
-            return;
-        }
-
-        alert("Transacción creada exitosamente.");
-        cerrarPopupTransaccion();
-        
-        // Recargar transacciones para actualizar la lista
-        cargarTransaccionesDesdeAPI();
-
-    } catch (error) {
-        console.error("Error al crear transacción:", error);
-        alert("Error al crear la transacción. Por favor intenta de nuevo.");
-    }
-}
-
-// ==================== CARGAR CATEGORÍAS EN EL SELECT ====================
-
-async function cargarCategoriasEnSelect() {
-    const selectCategoria = document.getElementById("categoriaTransaccion");
+// Cargar categorías en un combobox específico
+async function cargarCategoriasCombobox(idComboboxCategoria, idComboBoxTipoCat) {
+    const selectCategoria = document.getElementById(idComboboxCategoria);
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -245,8 +189,8 @@ async function cargarCategoriasEnSelect() {
         const resultado = await respuesta.json();
         todasLasCategorias = resultado.categorias || [];
         
-        // Filtrar categorías por el tipo seleccionado (si hay uno)
-        filtrarCategoriasPorTipo();
+        // Filtrar categorías por el tipo seleccionado 
+        filtrarCategoriasPorTipo(idComboboxCategoria, idComboBoxTipoCat);
 
     } catch (error) {
         console.error("Error al cargar categorías en el select:", error);
@@ -254,9 +198,9 @@ async function cargarCategoriasEnSelect() {
 }
 
 // Función para filtrar categorías según el tipo seleccionado
-function filtrarCategoriasPorTipo() {
-    const selectCategoria = document.getElementById("categoriaTransaccion");
-    const tipoSeleccionado = document.getElementById("tipoTransaccion").value;
+function filtrarCategoriasPorTipo(idComboboxCategoria, idComboBoxTipoCat) {
+    const selectCategoria = document.getElementById(idComboboxCategoria);
+    const tipoSeleccionado = document.getElementById(idComboBoxTipoCat).value;
 
     // Limpiar opciones anteriores (excepto la primera)
     while (selectCategoria.options.length > 1) {
