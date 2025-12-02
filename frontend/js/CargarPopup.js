@@ -6,7 +6,7 @@ window.mostrarPopup = function(mensaje) {
 
 window.addEventListener("DOMContentLoaded", () => {
     //Ruta relativa correcta desde pages/transaccion.html hacia frontend/components/popup.html
-    fetch("/components/popup.html")
+    fetch("../components/popup.html")
         .then(res => {
             if (!res.ok) throw new Error(`No se pudo cargar popup.html: ${res.status}`);
             return res.text();
