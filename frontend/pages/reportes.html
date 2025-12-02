@@ -10,23 +10,23 @@
 <body>
     <div id="header"></div>
 
-    <main class="reportes-main">
-  <section class="reportes-header">
-    <h1>REPORTES</h1>
-    <div class="filtro-periodo">
-      <label for="periodoSelect">Periodo:</label>
-      <select id="periodoSelect">
-        <option value="semana" selected>Última semana</option>
+    <main class="reportes-main"> <!-- Main de reportes -->
+  <section class="reportes-header"> <!-- Header de reportes -->
+    <h1>REPORTES</h1> 
+    <div class="filtro-periodo"> <!-- Filtro de periodo -->
+      <label for="periodoSelect">Periodo:</label> <!-- Label del select -->
+      <select id="periodoSelect"> <!-- Select de periodo -->
+        <option value="semana" selected>Última semana</option> <!-- Opciones del select -->
         <option value="mes">Último mes</option>
         <option value="anio">Último año</option>
       </select>
     </div>
   </section>
 
-  <section class="reportes-resumen">
-    <div class="card-resumen ingreso">
+  <section class="reportes-resumen"> <!-- Resumen de reportes -->
+    <div class="card-resumen ingreso"> <!-- Card de ingresos -->
       <h3>Total ingresos</h3>
-      <p id="totalIngresos">$0.00</p>
+      <p id="totalIngresos">$0.00</p> <!-- Monto de ingresos -->
     </div>
     <div class="card-resumen gasto">
       <h3>Total gastos</h3>
@@ -38,23 +38,23 @@
     </div>
   </section>
 
-  <section class="reportes-tablas">
-    <div class="tabla-contenedor">
+  <section class="reportes-tablas"> <!-- Tablas de reportes -->
+    <div class="tabla-contenedor"> <!-- Contenedor de tabla -->
       <h2>Ingresos</h2>
-      <table id="tablaIngresos">
-        <thead>
-          <tr>
-            <th>Fecha</th>
+      <table id="tablaIngresos"> <!-- Tabla de ingresos -->
+        <thead> <!-- Encabezado de tabla -->
+          <tr> <!-- Fila de encabezado -->
+            <th>Fecha</th> <!-- Columnas -->
             <th>Categoría</th>
             <th>Descripción</th>
             <th>Monto</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody></tbody> <!-- Vacío para que el js ingrese los datos de la api -->
       </table>
     </div>
 
-    <div class="tabla-contenedor">
+    <div class="tabla-contenedor"> 
       <h2>Gastos</h2>
       <table id="tablaGastos">
         <thead>
