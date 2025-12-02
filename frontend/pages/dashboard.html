@@ -10,13 +10,17 @@
 <body>
     <div id="header"></div>
     <main>
-        <div class="">
+        <div class="dashboard-header">
             <h1>DASHBOARD</h1>
-            <select id="colbobox-filtro-tiempo">
-                <option value="semana">Última semana</option>
-                <option value="mes" selected>Último mes</option>
-                <option value="anio">Último año</option>
-            </select>
+
+                <div class="filtro-tiempo">
+                <label for="combobox-filtro-tiempo">Periodo: </label>
+                <select id="combobox-filtro-tiempo">
+                    <option value="semana">Última semana</option>
+                    <option value="mes" selected>Último mes</option>
+                    <option value="ano">Último año</option>
+                </select>
+            </div>
         </div>
 
         <div>

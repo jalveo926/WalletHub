@@ -13,9 +13,10 @@ function obtenerRangoUltimaSemana() { //Rango predeterminado de gráficas
 
 // ==================== FUNCIONES PARA LLAMAR CREAR GRAFICAS ====================
 
+const API_URL = 'https://localhost:7258/api';
+
 async function cargarResumen(fechaInicio, fechaFin) {
     const token = localStorage.getItem("token");
-    const idUsuario = localStorage.getItem("idUsuario");
 
     const url = `${API_URL}/Calculos/resumen?inicio=${fechaInicio}&fin=${fechaFin}`;
 
@@ -81,14 +82,16 @@ function crearIngresosVsGastos(totalIngresos, totalGastos) {
     const ctx = document.getElementById('ingresos-vs-gastos').getContext('2d');
 
     new Chart(ctx, {
-    type: 'HorizontalBar',
+    type: 'bar',
     data: {
         labels: ['Total de ingresos', 'Total de gastos'],
         datasets: [{
             data: [100, 200]
         }]
     },
-    options: {}
+    options: {
+        indexAxis: 'y',
+    }
     });
 }
 
