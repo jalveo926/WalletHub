@@ -79,7 +79,7 @@ function aplicarFiltros() {
     // Validar rango de fechas
     if (fechaDesde !== "" && fechaHasta !== "") {
     if (new Date(fechaHasta) < new Date(fechaDesde)) {
-        alert("La fecha 'Hasta' no puede ser menor que 'Desde'.");
+        mostrarPopup("La fecha 'Hasta' no puede ser menor que 'Desde'.");
         return;
     }
 }
