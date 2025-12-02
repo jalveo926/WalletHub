@@ -9,6 +9,7 @@ using WalletHub.Models;
 using WalletHub.Services;
 using WalletHub.Services.Interface;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class CalculosController : ControllerBase
@@ -21,7 +22,7 @@ public class CalculosController : ControllerBase
     }
 
     // GET: api/Calculos/resumen
-    [HttpGet("resumen")]
+    [HttpGet("ObtenerResumen")]
     public async Task<ActionResult<CalculosDTO>> GetResumen(
         [FromQuery] DateOnly inicio,
         [FromQuery] DateOnly fin)
@@ -89,4 +90,59 @@ public class CalculosController : ControllerBase
             });
         }
     }
+
+    [HttpGet("ObtenerTotalesGenerales")]
+    public async Task<ActionResult<IngresosGastosDTO>> GetTotalesGenerales()
+    {
+        try
+        {
+            var claim = User.Claims.FirstOrDefault(c => c.Type == "idUsuario");
+            if (claim == null)
+            {
+                return Unauthorized(new
+                {
+                    exito = false,
+                    mensaje = "No se pudo obtener el id del usuario del token."
+                });
+            }
+
+            string idUsuario = claim.Value;
+
+            var resultado = await _calculosService.ObtenerTotalesGeneralesAsync(idUsuario);
+
+            return Ok(new
+            {
+                exito = true,
+                mensaje = "Totales generales obtenidos correctamente.",
+                datos = resultado
+            });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new
+            {
+                exito = false,
+                mensaje = ex.Message
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return StatusCode(500, new
+            {
+                exito = false,
+                mensaje = "Error en la operación.",
+                error = ex.Message
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new
+            {
+                exito = false,
+                mensaje = "Error interno en el servidor.",
+                error = ex.Message
+            });
+        }
+    }
+
 }
