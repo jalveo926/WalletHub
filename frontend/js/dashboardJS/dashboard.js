@@ -1,19 +1,32 @@
-function obtenerRangoUltimaSemana() { //Rango predeterminado de gráficas
+function obtenerRango(opcion) { //Rango de gráficas
     const hoy = new Date();
-    const semanaAtras = new Date();
+    const inicio = new Date();
 
-    semanaAtras.setDate(hoy.getDate() - 7);
-
+    switch (opcion) {
+        case "semana":
+            inicio.setDate(hoy.getDate() - 7);
+            break;
+        case "mes":
+            inicio.setMonth(hoy.getMonth() - 1);
+            break;
+        case "ano":
+            inicio.setFullYear(hoy.getFullYear() - 1);
+            break;
+        default:
+            inicio.setDate(hoy.getDate() - 7);
+    }
     // Convertimos a formato YYYY-MM-DD para API
-    const fechaFin = hoy.toISOString().split("T")[0]; //primero, lo convierte a formato internacional estándar YYYY-MM-DDTHH:MM:SSZ
-    const fechaInicio = semanaAtras.toISOString().split("T")[0]; //Luego, lo corta en la T (separando en un array la fecha (0) y la hora (1)) y toma la parte de la fecha (índice 0).
-
+    const fechaFin = hoy.toISOString().split("T")[0];
+    const fechaInicio = inicio.toISOString().split("T")[0];
     return { fechaInicio, fechaFin };
 }
 
 // ==================== FUNCIONES PARA LLAMAR CREAR GRAFICAS ====================
 
 const API_URL = 'https://localhost:7258/api';
+let chartIngresosVsGastos = null;
+let chartGastosPorCategoria = null;
+let chartIngresosPorCategoria = null;
 
 async function cargarResumen(fechaInicio, fechaFin) {
     const token = localStorage.getItem("token");
@@ -81,7 +94,9 @@ function cargarSaldoActual(diferencia) {
 function crearIngresosVsGastos(totalIngresos, totalGastos) {
     const ctx = document.getElementById('ingresos-vs-gastos').getContext('2d');
 
-    new Chart(ctx, {
+    if (chartIngresosVsGastos) chartIngresosVsGastos.destroy(); // Destruir gráfico previo si existe, permite actualizar nuevas gráficas
+
+    chartIngresosVsGastos = new Chart(ctx, {
     type: 'bar',
     data: {
         labels: ['Total de ingresos', 'Total de gastos'],
@@ -91,6 +106,7 @@ function crearIngresosVsGastos(totalIngresos, totalGastos) {
     },
     options: {
         indexAxis: 'y',
+        responsive: true
     }
     });
 }
@@ -98,7 +114,9 @@ function crearIngresosVsGastos(totalIngresos, totalGastos) {
 function crearGastosPorCategoria(gastosPorCategoria) {
     const ctx = document.getElementById('gastos-por-categoria').getContext('2d');
 
-    new Chart(ctx, {
+    if (chartGastosPorCategoria) chartGastosPorCategoria.destroy();
+
+    chartGastosPorCategoria = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: gastosPorCategoria.map(item => item.nombreCategoria),
@@ -106,14 +124,18 @@ function crearGastosPorCategoria(gastosPorCategoria) {
                 data: gastosPorCategoria.map(item => item.total)
             }]
         },
-        options: {}
+        options: {
+            responsive: true
+        }
     });
 }
 
 function crearIngresosPorCategoria(ingresosPorCategoria) {
     const ctx = document.getElementById('ingresos-por-categoria').getContext('2d');
 
-    new Chart(ctx, {
+    if (chartIngresosPorCategoria) chartIngresosPorCategoria.destroy(); // Destruir gráfico previo si existe, permite actualizar nuevas gráficas
+
+    chartIngresosPorCategoria = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: ingresosPorCategoria.map(item => item.nombreCategoria),
@@ -121,11 +143,20 @@ function crearIngresosPorCategoria(ingresosPorCategoria) {
                 data: ingresosPorCategoria.map(item => item.total)
             }]
         },
-        options: {}
+        options: {
+            responsive: true
+        }
     });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const { fechaInicio, fechaFin } = obtenerRangoUltimaSemana();
+    const { fechaInicio, fechaFin } = obtenerRango("semana");
     cargarResumen(fechaInicio, fechaFin);
-});
+
+    const combo = document.getElementById("combobox-filtro-tiempo");
+
+    combo.addEventListener("change", () => {
+        const { fechaInicio, fechaFin } = obtenerRango(combo.value);
+        cargarResumen(fechaInicio, fechaFin);
+    });
+})
