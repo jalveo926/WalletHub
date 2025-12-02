@@ -1,4 +1,6 @@
-
+body{
+    min-width: 1096px;
+}
 
 /* Estilo de los botones de crear categoria/transaccion */
 .botonesMainContainer {
@@ -21,8 +23,9 @@
 /* Estilo del encabezado antes de la lista */
 .transacciones-options {
     display: flex;
+    flex-direction: column;
     justify-content: flex-end;
-    align-items: center;
+    
     gap: 10px ;
     color: #0A1F44;
     margin-bottom: 10px;
@@ -30,12 +33,23 @@
 
 .transacciones-options h1 {
     margin-right: auto;
+    margin-bottom: 0px;
+}
+
+.opciones-izq{
+    display: flex;
+    gap: 30px;
+}
+
+#filtroTipo,#filtroCategoria {
+    max-height: fit-content;
+    margin-top: auto;
 }
 
 .tituloFiltro {
     display: flex;
-    align-items: center;
-    gap: 20px;
+    justify-content: space-between;
+   
 }
 
 .botonesCrear button {
@@ -86,6 +100,7 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    margin-top: auto;
 }
 
 .fechaInput {
@@ -110,6 +125,60 @@
     border-radius: 10px;
 }
 
+/* Contenedor para el botón de opciones y el menú */
+.btn-opciones-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Menú desplegable de opciones */
+.menu-opciones {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    min-width: 160px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.menu-opciones.hidden {
+    display: none;
+}
+
+.opcion-modificar,
+.opcion-eliminar {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background-color: white;
+    color: #0A1F44;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-weight: 500;
+}
+
+.opcion-modificar:hover {
+    background-color: #f5f5f5;
+}
+
+.opcion-eliminar {
+    border-top: 1px solid #eee;
+    color: #e74c3c;
+}
+
+.opcion-eliminar:hover {
+    background-color: #ffebee;
+}
+
 .limpiarFiltroBtn {
     width: 32px;
     height: 32px;
@@ -126,11 +195,11 @@
 
 /* Estilo del slider de monto maximo */
 .monto-slider {
-    margin-top: 10px;
+    
     display: flex;
     flex-direction: column;
     gap: 5px;
-    margin-bottom: 20px;
+    margin-top: auto;
 }
 
 #montoMax {
@@ -293,4 +362,31 @@ input[type="range"] {
 
 .btn-guardar:active {
     transform: scale(0.98);
+}
+
+/* Estilo para botones deshabilitados */
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #ccc;
+    color: #999;
+}
+
+button:disabled:hover {
+    background-color: #ccc;
+}
+
+@media (max-width:1370px){
+    .tituloFiltro{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .opciones-izq{
+        margin-bottom: 10px;
+    }
+
+    .transacciones-options{
+        margin-bottom: 10px;
+    }
 }
