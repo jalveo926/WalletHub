@@ -4,17 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/reportes.css">
     <title>Reportes</title>
 </head>
 <body>
     <div id="header"></div>
 
-    <main>
-        <h1>REPORTES</h1>
-    </main>
+    <main class="reportes-main">
+  <section class="reportes-header">
+    <h1>REPORTES</h1>
+    <div class="filtro-periodo">
+      <label for="periodoSelect">Periodo:</label>
+      <select id="periodoSelect">
+        <option value="semana" selected>Última semana</option>
+        <option value="mes">Último mes</option>
+        <option value="anio">Último año</option>
+      </select>
+    </div>
+  </section>
+
+  <section class="reportes-resumen">
+    <div class="card-resumen ingreso">
+      <h3>Total ingresos</h3>
+      <p id="totalIngresos">$0.00</p>
+    </div>
+    <div class="card-resumen gasto">
+      <h3>Total gastos</h3>
+      <p id="totalGastos">$0.00</p>
+    </div>
+    <div class="card-resumen saldo">
+      <h3>Saldo</h3>
+      <p id="saldo">$0.00</p>
+    </div>
+  </section>
+
+  <section class="reportes-tablas">
+    <div class="tabla-contenedor">
+      <h2>Ingresos</h2>
+      <table id="tablaIngresos">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Categoría</th>
+            <th>Descripción</th>
+            <th>Monto</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="tabla-contenedor">
+      <h2>Gastos</h2>
+      <table id="tablaGastos">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Categoría</th>
+            <th>Descripción</th>
+            <th>Monto</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
 
     <div id="footer"></div>
 
     <script src="../js/CargaLayoutGeneral.js"></script>
+    <script src="../js/ReportesJS/reportes.js"></script>
 </body>
 </html>
