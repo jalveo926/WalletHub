@@ -1,5 +1,8 @@
 const API_URL = 'https://localhost:7258/api';
 
+let transacciones = [];
+
+// ================== RESUMEN (CalculosController) ==================
 async function cargarResumen(periodo) {
   const token = localStorage.getItem('token');
   if (!token) {
@@ -41,22 +44,129 @@ async function cargarResumen(periodo) {
   }
 
   const resultado = await resp.json(); // { exito, mensaje, datos }
-  const datos = resultado.datos; // CalculosDTO
+  console.log('Resumen recibido:', resultado);
 
-  // Suponiendo que el DTO trae algo como: totalIngresos, totalGastos, saldo
-  document.getElementById('totalIngresos').textContent = `$${datos.totalIngresos.toFixed(2)}`;
-  document.getElementById('totalGastos').textContent = `$${datos.totalGastos.toFixed(2)}`;
-  document.getElementById('saldo').textContent = `$${datos.saldo.toFixed(2)}`;
+  if (!resultado.exito || !resultado.datos) {
+    console.error('No hay datos de resumen para el periodo.');
+    return;
+  }
+
+  const datos = resultado.datos;
+  console.log('Datos dentro de resumen:', datos);
+
+  const totalIngresos = datos.totalIngresos ?? 0;
+  const totalGastos = datos.totalGastos ?? 0;
+  const saldoCalculado =
+    datos.saldo ??
+    datos.diferencia ??
+    (totalIngresos - totalGastos);
+
+  document.getElementById('totalIngresos').textContent =
+    `$${Number(totalIngresos).toFixed(2)}`;
+  document.getElementById('totalGastos').textContent =
+    `$${Number(totalGastos).toFixed(2)}`;
+  document.getElementById('saldo').textContent =
+    `$${Number(saldoCalculado).toFixed(2)}`;
 }
 
+// ================== TRANSACCIONES PARA TABLAS ==================
+async function cargarTransaccionesPeriodo(periodo) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = 'autenticacion.html';
+    return;
+  }
+
+  const resp = await fetch(`${API_URL}/Transaccion/MisTransacciones`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+
+  if (resp.status === 401) {
+    alert('Tu sesión expiró. Inicia sesión de nuevo.');
+    window.location.href = 'autenticacion.html';
+    return;
+  }
+
+  if (!resp.ok) {
+    console.error('Error al obtener transacciones');
+    return;
+  }
+
+  const resultado = await resp.json(); // { mensaje, transacciones }
+  transacciones = resultado.transacciones || [];
+  console.log('Transacciones cargadas:', transacciones);
+
+  aplicarFiltroTablas(periodo);
+}
+
+function aplicarFiltroTablas(periodo) {
+  const hoy = new Date();
+  let inicio = new Date();
+
+  if (periodo === 'semana') {
+    inicio.setDate(hoy.getDate() - 7);
+  } else if (periodo === 'mes') {
+    inicio.setMonth(hoy.getMonth() - 1);
+  } else if (periodo === 'anio') {
+    inicio.setFullYear(hoy.getFullYear() - 1);
+  }
+
+  const filtradas = transacciones.filter(t => {
+    const f = new Date(t.fechaTransac);
+    return f >= inicio && f <= hoy;
+  });
+
+  const ingresos = filtradas.filter(t => t.tipoCategoria === 'Ingreso');
+  const gastos = filtradas.filter(t => t.tipoCategoria === 'Gasto');
+
+  renderTablas(ingresos, gastos);
+}
+
+function renderTablas(ingresos, gastos) {
+  const tbodyIngresos = document.querySelector('#tablaIngresos tbody');
+  const tbodyGastos = document.querySelector('#tablaGastos tbody');
+
+  tbodyIngresos.innerHTML = '';
+  tbodyGastos.innerHTML = '';
+
+  ingresos.forEach(t => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${t.fechaTransac.split('T')[0]}</td>
+      <td>${t.nombreCateg}</td>
+      <td>${t.descripcionTransac}</td>
+      <td>$${Number(t.montoTransac).toFixed(2)}</td>
+    `;
+    tbodyIngresos.appendChild(tr);
+  });
+
+  gastos.forEach(t => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${t.fechaTransac.split('T')[0]}</td>
+      <td>${t.nombreCateg}</td>
+      <td>${t.descripcionTransac}</td>
+      <td>$${Number(t.montoTransac).toFixed(2)}</td>
+    `;
+    tbodyGastos.appendChild(tr);
+  });
+}
+
+// ================== INICIALIZACIÓN ==================
 document.addEventListener('DOMContentLoaded', () => {
   const periodoSelect = document.getElementById('periodoSelect');
 
-  // Cargar resumen por defecto (última semana)
-  cargarResumen(periodoSelect.value);
+  const periodoInicial = periodoSelect.value; // 'semana' por defecto
+  cargarResumen(periodoInicial);
+  cargarTransaccionesPeriodo(periodoInicial);
 
   periodoSelect.addEventListener('change', () => {
-    cargarResumen(periodoSelect.value);
+    const periodo = periodoSelect.value;
+    cargarResumen(periodo);
+    aplicarFiltroTablas(periodo); // usa las transacciones ya cargadas
   });
 });
-
