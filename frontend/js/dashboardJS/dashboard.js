@@ -48,7 +48,8 @@ async function cargarResumen(fechaInicio, fechaFin) {
                     break;
                 case 401:
                     alert("No autorizado. Tu sesión expiró, inicia sesión nuevamente.");
-                    window.location.href = "/autenticacion.html";
+                    localStorage.removeItem("token");
+                    window.location.href = "../pages/autenticacion.html";
                     break;
                 case 403:
                     alert("Acceso denegado.");
