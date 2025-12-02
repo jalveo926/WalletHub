@@ -1,4 +1,6 @@
-
+body{
+    min-width: 1096px;
+}
 
 /* Estilo de los botones de crear categoria/transaccion */
 .botonesMainContainer {
@@ -21,8 +23,9 @@
 /* Estilo del encabezado antes de la lista */
 .transacciones-options {
     display: flex;
+    flex-direction: column;
     justify-content: flex-end;
-    align-items: center;
+    
     gap: 10px ;
     color: #0A1F44;
     margin-bottom: 10px;
@@ -30,12 +33,23 @@
 
 .transacciones-options h1 {
     margin-right: auto;
+    margin-bottom: 0px;
+}
+
+.opciones-izq{
+    display: flex;
+    gap: 30px;
+}
+
+#filtroTipo,#filtroCategoria {
+    max-height: fit-content;
+    margin-top: auto;
 }
 
 .tituloFiltro {
     display: flex;
-    align-items: center;
-    gap: 20px;
+    justify-content: space-between;
+   
 }
 
 .botonesCrear button {
@@ -86,6 +100,7 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    margin-top: auto;
 }
 
 .fechaInput {
@@ -180,11 +195,11 @@
 
 /* Estilo del slider de monto maximo */
 .monto-slider {
-    margin-top: 10px;
+    
     display: flex;
     flex-direction: column;
     gap: 5px;
-    margin-bottom: 20px;
+    margin-top: auto;
 }
 
 #montoMax {
@@ -359,4 +374,19 @@ button:disabled {
 
 button:disabled:hover {
     background-color: #ccc;
+}
+
+@media (max-width:1370px){
+    .tituloFiltro{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .opciones-izq{
+        margin-bottom: 10px;
+    }
+
+    .transacciones-options{
+        margin-bottom: 10px;
+    }
 }

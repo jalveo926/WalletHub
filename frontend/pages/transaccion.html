@@ -18,8 +18,10 @@
             <h1>TRANSACCIONES</h1>
             <div class="tituloFiltro">
                 
-                <!-- Filtrar por ingreso o gasto -->
-                <select id="filtroTipo">
+                
+                 <div class="opciones-izq">
+                    <!-- Filtrar por ingreso o gasto -->
+                    <select id="filtroTipo">
                     <option value="Todos">Todas las transacciones</option>
                     <option value="Ingreso">Ingresos</option>
                     <option value="Gasto">Gastos</option>
@@ -33,11 +35,10 @@
                     <label>Monto máximo: $<span id="valorMontoMax">0</span></label>
                     <input type="range" id="filtroMontoMax" min="0" step="0.01">
                 </div>
+                 </div>
+                
 
-
-            </div>
-
-            <!-- Filtrar por fecha -->
+                <!-- Filtrar por fecha -->
                  <div class="fecha-filtros">
                     <div class="fechaInput">
                         <label for="filtroFechaDesde">Desde:</label>
@@ -48,6 +49,10 @@
                         <input type="date" id="filtroFechaHasta">
                     </div>
                  </div> 
+
+            </div>
+
+            
         </div>
 
         <div class = "botonesMainContainer" >
@@ -97,6 +102,7 @@
     </div>
 
     <!-- POPUP PARA CREAR TRANSACCIÓN -->
+     <!-- Los metodos cerrarPopup y abrirPopup se encuentran en el archivo popups.js y remueven el hidden de la clase -->
     <div id="popupTransaccion" class="popup-overlay hidden">
         <div class="popup-contenido">
             <div class="popup-header">
@@ -145,7 +151,7 @@
         <div class="popup-contenido">
             <div class="popup-header">
                 <h2>Modificar Transacción</h2>
-                <button class="popup-cerrar" onclick="cerrarPopupModificar()">&times;</button>
+                <button class="popup-cerrar" onclick="cerrarPopupModificarTransaccion()">&times;</button> 
             </div>
             
             <form id="formModificarTransaccion" class="popup-form">
@@ -177,7 +183,7 @@
                     <input type="date" id="fechaModificar" required>
                 </div>
                 <div class="popup-botones">
-                    <button type="button" class="btn-cancelar" onclick="cerrarPopupModificar()">Cancelar</button>
+                    <button type="button" class="btn-cancelar" onclick="cerrarPopupModificarTransaccion()">Cancelar</button>
                     <button type="submit" class="btn-guardar">Actualizar Transacción</button>
                 </div>
             </form>

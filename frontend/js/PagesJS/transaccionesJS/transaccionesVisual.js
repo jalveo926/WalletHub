@@ -22,7 +22,7 @@ function cargarCategorias() {
 }
 
 
-// ------------------ MOSTRAR TRANSACCIONES ------------------
+// ------------------ MOSTRAR TRANSACCIONES ------------------ Aqui se crean tambien los botones de modificiar y eliminar
 function mostrarTransacciones(lista) {
     const contenedor = document.getElementById("lista-transacciones");
     contenedor.innerHTML = "";
@@ -162,6 +162,7 @@ function actualizarEstadoBotonesFiltros() {
 
 // ------------------ EVENTOS ------------------
 // Cargar categorías y mostrar transacciones al cargar la página
+//Configuracion de elementos dinámicos y sus eventos
 document.addEventListener("DOMContentLoaded", () => {
 
   // Bloquear fechas futuras
@@ -217,5 +218,22 @@ document.addEventListener("DOMContentLoaded", () => {
       // Toggle del menú actual
       menu.classList.toggle("hidden");
     }
+    // Acceder al botón Modificar
+    if (e.target.closest(".opcion-modificar")) {
+        const idTransaccion = e.target.closest(".opcion-modificar").getAttribute("data-id"); //Obtener ID de la transacción
+        console.log("Modificar transacción:", idTransaccion);
+        abrirPopupModificarTransaccion(idTransaccion);
+        
+    }
+    
+    // Acceder al botón Eliminar
+    if (e.target.closest(".opcion-eliminar")) {
+        const idTransaccion = e.target.closest(".opcion-eliminar").getAttribute("data-id"); //Obtener ID de la transacción
+        const confirmar = confirm("¿Estás seguro de que deseas eliminar esta transacción?");
+        if (!confirmar) return;
+        eliminarTransaccion(idTransaccion);
+        console.log("Eliminar transacción:", idTransaccion);
+    }
   });
 });
+
