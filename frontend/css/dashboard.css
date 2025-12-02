@@ -1,0 +1,11 @@
+main > div {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+main > div > div:first-child {
+    display: grid;
+    grid-template-rows: repeat(3, 300px);
+    gap: 20px;
+}

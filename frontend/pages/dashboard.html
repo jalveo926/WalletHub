@@ -4,17 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
     <title>Dashboard</title>
 </head>
 <body>
     <div id="header"></div>
-
     <main>
-        <h1>DASHBOARD</h1>
+        <div class="">
+            <h1>DASHBOARD</h1>
+            <select id="colbobox-filtro-tiempo">
+                <option value="semana">Última semana</option>
+                <option value="mes" selected>Último mes</option>
+                <option value="anio">Último año</option>
+            </select>
+        </div>
+
+        <div>
+        <div>
+            <canvas id="ingresos-vs-gastos"></canvas>
+            <canvas id="gastos-por-categoria"></canvas>
+            <canvas id="ingresos-por-categoria"></canvas>
+        </div>
+
+        <div>
+            <h1>Saldo Actual</h1>
+            <h1 id="saldo-actual"></h1>
+
+            <div>
+                <h2>Últimas Transacciones</h2>
+                <ul></ul>
+            </div>
+        </div>
+        </div>
     </main>
 
     <div id="footer"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+    <script src="../js/dashboardJS/dashboard.js"></script>
     <script src="../js/CargaLayoutGeneral.js"></script>
 </body>
 </html>
