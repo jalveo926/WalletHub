@@ -1,9 +1,10 @@
-﻿using WalletHub.Models;
+﻿using WalletHub.DTOs;
+using WalletHub.Models;
 
 namespace WalletHub.Services.Interface
 {
     public interface IUsuarioService
     {
-        public Task<Usuario?> RegistrarUsuarioAsync(Usuario usuario);
+        public Task<Usuario?> RegistrarUsuarioAsync(RegistrarDTO dto);
     }
 }

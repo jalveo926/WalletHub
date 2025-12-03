@@ -9,6 +9,7 @@ using WalletHub.Models;
 using WalletHub.Services;
 using WalletHub.Services.Interface;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class EstadisticasController : ControllerBase
