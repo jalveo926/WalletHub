@@ -20,10 +20,11 @@
 
                     <label for="contrasena-login">Contraseña</label>
                     <div class="password-wrapper">
-                        <input type="password" id="contrasena-login" placeholder="Ingresa tu contraseña" required>
+                        <input type="password" id="contrasena-login" placeholder="Ingresa tu contraseña">
                         <span class="toggle-password" data-target="contrasena-login"></span> <!--Para que la contraseña se muestre y se oculte-->
                     </div>
 
+                    <div class="mensaje" id="mensaje-login"></div>
                     <button type="submit">Iniciar sesión</button>
                 </form>
                  <button id="mostrar-registro">¿No tienes cuenta? Regístrate</button>
@@ -34,17 +35,18 @@
                 <h1 class="titulo">Registrarte</h1>
                 <form id="form-reg">
                     <label for="usuario-reg">Usuario</label>
-                    <input type="text" id="usuario-reg" placeholder="Ingresa tu usuario">
+                    <input type="text" id="usuario-reg" placeholder="Ingresa tu usuario" required>
 
                     <label for="correo-reg">Correo</label>
-                    <input type="text" id="correo-reg" placeholder="Ingresa tu correo">
+                    <input type="text" id="correo-reg" placeholder="Ingresa tu correo" required>
 
                     <label for="contrasena-reg">Contraseña</label>
                     <div class="password-wrapper">
-                        <input type="password" id="contrasena-reg" placeholder="Ingresa tu contraseña" minlength="10" required>
+                        <input type="password" id="contrasena-reg" placeholder="Ingresa tu contraseña" minlength="12" required>
                         <span class="toggle-password" data-target="contrasena-reg"></span> <!--Para que la contraseña se muestre y se oculte-->
                     </div>
 
+                    <div class="mensaje" id="mensaje-reg"></div>
                     <button type="submit">Registrarte</button>
                 </form>
                 <button id="mostrar-login">¿Ya tienes cuenta? Inicia sesión</button>
@@ -58,6 +60,9 @@
         </div> 
     </main>
 
+    <div id="popup-container"></div>
+
+    <script src="../js/CargarPopup.js"></script>
     <script src="../js/AUTH/autenticacion.js"></script>
     <script src="../js/AUTH/LoginAUTH.js"></script>
 </body>

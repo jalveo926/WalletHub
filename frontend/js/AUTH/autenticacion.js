@@ -45,3 +45,20 @@ function estaLogueado() {
     return token !== null;
 }
 
+//Mensaje de error login
+const mensajeLogin = document.getElementById('mensaje-login');
+ 
+function mostrarMensajeLogin(texto) {
+    mensajeLogin.style.display = 'block';
+    mensajeLogin.textContent = texto;
+    mensajeLogin.className = 'mensaje mensaje-error'; 
+}
+
+//Mensaje de error registro
+const mensajeReg = document.getElementById('mensaje-reg');
+ 
+function mostrarMensajeRegistro(texto) {
+    mensajeReg.style.display = 'block';
+    mensajeReg.textContent = texto;
+    mensajeReg.className = 'mensaje mensaje-error';
+}

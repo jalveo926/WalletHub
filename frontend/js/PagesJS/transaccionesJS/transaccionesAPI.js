@@ -20,7 +20,7 @@ async function cargarTransaccionesDesdeAPI() {
         });
 
         if (respuesta.status === 401) {
-            alert("Tu sesión expiró. Inicia sesión de nuevo.");
+            mostrarPopup("Tu sesión expiró. Inicia sesión de nuevo.");
             window.location.href = "autenticacion.html";
             return;
         }
@@ -50,14 +50,14 @@ async function crearCategoria() {
     const tipo = document.getElementById("tipoCategoria").value;
 
     if (!nombre || !tipo) {
-        alert("Por favor completa los campos requeridos.");
+        mostrarPopup("Por favor completa los campos requeridos.");
         return;
     }
 
     const token = localStorage.getItem("token");
 
     if (!token) {
-        alert("No estás autenticado. Por favor inicia sesión.");
+        mostrarPopup("No estás autenticado. Por favor inicia sesión.");
         return;
     }
 
@@ -77,18 +77,18 @@ async function crearCategoria() {
         });
 
         if (respuesta.status === 401) {
-            alert("Tu sesión expiró. Inicia sesión de nuevo.");
+            mostrarPopup("Tu sesión expiró. Inicia sesión de nuevo.");
             window.location.href = "autenticacion.html";
             return;
         }
 
         if (!respuesta.ok) {
             const errorData = await respuesta.json();
-            alert(`Error: ${errorData.mensaje || "No se pudo crear la categoría"}`);
+            mostrarPopup(`Error: ${errorData.mensaje || "No se pudo crear la categoría"}`);
             return;
         }
 
-        alert("Categoría creada exitosamente.");
+        mostrarPopup("Categoría creada exitosamente.");
         cerrarPopupCategoria();
         
         // Recargar transacciones para actualizar la lista de categorías
@@ -96,7 +96,7 @@ async function crearCategoria() {
 
     } catch (error) {
         console.error("Error al crear categoría:", error);
-        alert("Error al crear la categoría. Por favor intenta de nuevo.");
+        mostrarPopup("Error al crear la categoría. Por favor intenta de nuevo.");
     }
 }
 
@@ -108,19 +108,19 @@ async function crearTransaccion() {
     const fecha = document.getElementById("fechaTransaccion").value;
 
     if (!categoria || !tipo || !descripcion || !monto || !fecha) {
-        alert("Por favor completa todos los campos.");
+        mostrarPopup("Por favor completa todos los campos.");
         return;
     }
 
     if (monto <= 0) {
-        alert("El monto debe ser mayor a 0.");
+        mostrarPopup("El monto debe ser mayor a 0.");
         return;
     }
 
     const token = localStorage.getItem("token");
 
     if (!token) {
-        alert("No estás autenticado. Por favor inicia sesión.");
+        mostrarPopup("No estás autenticado. Por favor inicia sesión.");
         return;
     }
 
@@ -142,18 +142,18 @@ async function crearTransaccion() {
         });
 
         if (respuesta.status === 401) {
-            alert("Tu sesión expiró. Inicia sesión de nuevo.");
+            mostrarPopup("Tu sesión expiró. Inicia sesión de nuevo.");
             window.location.href = "autenticacion.html";
             return;
         }
 
         if (!respuesta.ok) {
             const errorData = await respuesta.json();
-            alert(`Error: ${errorData.mensaje || "No se pudo crear la transacción"}`);
+            mostrarPopup(`Error: ${errorData.mensaje || "No se pudo crear la transacción"}`);
             return;
         }
 
-        alert("Transacción creada exitosamente.");
+        mostrarPopup("Transacción creada exitosamente.");
         cerrarPopupTransaccion();
         
         // Recargar transacciones para actualizar la lista
@@ -161,7 +161,7 @@ async function crearTransaccion() {
 
     } catch (error) {
         console.error("Error al crear transacción:", error);
-        alert("Error al crear la transacción. Por favor intenta de nuevo.");
+        mostrarPopup("Error al crear la transacción. Por favor intenta de nuevo.");
     }
 }
 
@@ -169,7 +169,7 @@ async function eliminarTransaccion(idTransaccion) {
     const token = localStorage.getItem("token");
 
     if (!token) {
-        alert("No estás autenticado. Por favor inicia sesión.");
+        mostrarPopup("No estás autenticado. Por favor inicia sesión.");
         return;
     }
 
@@ -183,22 +183,22 @@ async function eliminarTransaccion(idTransaccion) {
         });
 
         if (respuesta.status === 401) {
-            alert("Tu sesión expiró. Inicia sesión de nuevo.");
+            mostrarPopup("Tu sesión expiró. Inicia sesión de nuevo.");
             window.location.href = "autenticacion.html";
             return;
         }
         
         if (!respuesta.ok) {
             const errorData = await respuesta.json();
-            alert(`Error: ${errorData.mensaje || "No se pudo eliminar la transacción"}`);
+            mostrarPopup(`Error: ${errorData.mensaje || "No se pudo eliminar la transacción"}`);
             return;
         }
         
-        alert("Transacción eliminada exitosamente.");
+        mostrarPopup("Transacción eliminada exitosamente.");
         cargarTransaccionesDesdeAPI();
     } catch (error) {
         console.error("Error al eliminar transacción:", error);
-        alert("Error al eliminar la transacción. Por favor intenta de nuevo.");
+        mostrarPopup("Error al eliminar la transacción. Por favor intenta de nuevo.");
     }
 }
 
@@ -210,19 +210,19 @@ async function actualizarTransaccion(idTransaccion) {
     const categoria = document.getElementById("categoriaModificar").value;
     
     if (!descripcion || !monto || !fecha || !categoria) {
-        alert("Por favor completa todos los campos.");
+        mostrarPopup("Por favor completa todos los campos.");
         return;
     }
 
     if (monto <= 0) {
-        alert("El monto debe ser mayor a 0.");
+        mostrarPopup("El monto debe ser mayor a 0.");
         return;
     }
 
     const token = localStorage.getItem("token");
 
     if (!token) {
-        alert("No estás autenticado. Por favor inicia sesión.");
+        mostrarPopup("No estás autenticado. Por favor inicia sesión.");
         return;
     }
 
@@ -244,18 +244,18 @@ async function actualizarTransaccion(idTransaccion) {
         });
 
         if (respuesta.status === 401) {
-            alert("Tu sesión expiró. Inicia sesión de nuevo.");
+            mostrarPopup("Tu sesión expiró. Inicia sesión de nuevo.");
             window.location.href = "autenticacion.html";
             return;
         }
 
         if (!respuesta.ok) {
             const errorData = await respuesta.json();
-            alert(`Error: ${errorData.mensaje || "No se pudo actualizar la transacción"}`);
+            mostrarPopup(`Error: ${errorData.mensaje || "No se pudo actualizar la transacción"}`);
             return;
         }
 
-        alert("Transacción actualizada exitosamente.");
+        mostrarPopup("Transacción actualizada exitosamente.");
         cerrarPopupModificarTransaccion();
         
         // Recargar transacciones para actualizar la lista
@@ -263,6 +263,6 @@ async function actualizarTransaccion(idTransaccion) {
 
     } catch (error) {
         console.error("Error al actualizar transacción:", error);
-        alert("Error al actualizar la transacción. Por favor intenta de nuevo.");
+        mostrarPopup("Error al actualizar la transacción. Por favor intenta de nuevo.");
     }
 }

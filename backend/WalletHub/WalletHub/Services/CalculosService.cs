@@ -86,4 +86,42 @@ public class CalculosService : ICalculosService
             IngresosPorCategoria = ingresosPorCategoria
         };
     }
+
+    public async Task<IngresosGastosDTO> ObtenerTotalesGeneralesAsync(string idUsuario) // servicio para obtener totales generales independientemente del periodo
+    {
+        if (string.IsNullOrWhiteSpace(idUsuario))
+            throw new ArgumentException("El idUsuario no puede estar vacío.");
+
+        var transacciones = await _transaccionRepository.GetTransaccionesPorUsuarioAsync(idUsuario);
+
+        if (transacciones == null)
+            throw new InvalidOperationException("No se pudieron obtener las transacciones del usuario.");
+
+        if (!transacciones.Any())
+        {
+            return new IngresosGastosDTO
+            {
+                TotalIngresos = 0,
+                TotalGastos = 0
+            };
+        }
+
+        var totalIngresos = transacciones
+            .Where(t => t.tipoCategoria == TipoCategoria.Ingreso.ToString())
+            .Sum(t => t.montoTransac);
+
+        var totalGastos = transacciones
+            .Where(t => t.tipoCategoria == TipoCategoria.Gasto.ToString())
+            .Sum(t => t.montoTransac);
+
+        // Defensa extra: nunca deben ser negativos
+        if (totalIngresos < 0 || totalGastos < 0)
+            throw new InvalidOperationException("Los totales calculados no pueden ser negativos.");
+
+        return new IngresosGastosDTO
+        {
+            TotalIngresos = totalIngresos,
+            TotalGastos = totalGastos
+        };
+    }
 }
