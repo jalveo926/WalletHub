@@ -76,6 +76,42 @@ h1, h2 {
 
 .transacciones-lista {
     list-style: none;
-    padding-left: 0;
+    padding: 0;
     margin: 0;
+    
+}
+
+.transacciones-lista li {
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.transacciones-lista li {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.4s ease-out forwards;
+}
+
+@keyframes fadeUp { /*Animación para que los li hagan fade in hacia arriba*/
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.transacciones-lista li.ingreso {
+    border-left: 6px solid #2ecc71;
+    color: #2e7d32;
+    background-color: #E8F8F2;
+}
+
+.transacciones-lista li.gasto {
+    border-left: 6px solid #e74c3c;
+    color: #c0392b;
+    background-color: #FDEDEC;
 }

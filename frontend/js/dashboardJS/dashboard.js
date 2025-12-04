@@ -125,6 +125,53 @@ async function cargarSaldoActual() {
     }
 }
 
+async function cargarUltimasTransacciones() {
+    try {
+        const response = await fetch(`${API_URL}/Transaccion/MisTransacciones`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            console.error("Error al obtener transacciones");
+            return;
+        }
+
+        const resultado = await response.json();
+        transacciones = resultado.transacciones || []; /* Guarda todas las transacciones */
+
+        //Obtener las últimas 6
+        const ultimas = transacciones.slice(0, 8);
+
+        // Lista UL
+        const ul = document.querySelector(".transacciones-lista");
+        ul.innerHTML = ""; // limpiar
+
+        ultimas.forEach(t => {
+            const li = document.createElement("li");
+
+            // clase ingreso o gasto
+            li.classList.add(
+                t.tipoCategoria === "Ingreso" ? "ingreso" : "gasto"
+            );
+
+            li.innerHTML = `
+                <span>${t.descripcionTransac}</span>
+                <strong>$${t.montoTransac.toFixed(2)}</strong>
+            `;
+
+            ul.appendChild(li);
+        });
+
+    } catch (error) {
+        console.error("Error cargando últimas transacciones:", error);
+    }
+}
+
+
 function crearIngresosVsGastos(totalIngresos, totalGastos) {
     const ctx = document.getElementById('ingresos-vs-gastos').getContext('2d');
 
@@ -296,6 +343,7 @@ function crearIngresosPorCategoria(ingresosPorCategoria) {
 document.addEventListener("DOMContentLoaded", () => {
     const { fechaInicio, fechaFin } = obtenerRango("semana");
     cargarResumen(fechaInicio, fechaFin);
+    cargarUltimasTransacciones();
     cargarSaldoActual();
 
     const combo = document.getElementById("combobox-filtro-tiempo");
