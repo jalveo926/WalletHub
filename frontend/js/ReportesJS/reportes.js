@@ -33,7 +33,7 @@ async function cargarResumen(periodo) {
   });
 
   if (resp.status === 401) { /* Si no autorizado, redirige a login */
-    alert('Tu sesión expiró. Inicia sesión de nuevo.');
+    mostrarPopup('Tu sesión expiró. Inicia sesión de nuevo.');
     window.location.href = '../pages/autenticacion.html';
     return;
   }
@@ -81,7 +81,7 @@ async function cargarTransaccionesPeriodo(periodo) {
   });
 
   if (resp.status === 401) { /* Si no autorizado, redirige a login */
-    alert('Tu sesión expiró. Inicia sesión de nuevo.');
+    mostrarPopup('Tu sesión expiró. Inicia sesión de nuevo.');
     window.location.href = '../pages/autenticacion.html';
     return;
   }

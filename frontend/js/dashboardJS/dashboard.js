@@ -50,24 +50,24 @@ async function cargarResumen(fechaInicio, fechaFin) {
         if (!respuesta.ok) {
             switch (respuesta.status) {
                 case 400:
-                    alert("Solicitud inválida. Revisa los datos enviados.");
+                    mostrarPopup("Solicitud inválida. Revisa los datos enviados.");
                     break;
                 case 401:
-                    alert("No autorizado. Tu sesión expiró, inicia sesión nuevamente.");
+                    mostrarPopup("No autorizado. Tu sesión expiró, inicia sesión nuevamente.");
                     localStorage.removeItem("token");
                     window.location.href = "../pages/autenticacion.html";
                     break;
                 case 403:
-                    alert("Acceso denegado.");
+                    mostrarPopup("Acceso denegado.");
                     break;
                 case 404:
-                    alert("No se encontraron datos para el rango seleccionado.");
+                    mostrarPopup("No se encontraron datos para el rango seleccionado.");
                     break;
                 case 500:
-                    alert("Error en el servidor. Inténtalo más tarde.");
+                    mostrarPopup("Error en el servidor. Inténtalo más tarde.");
                     break;
                 default:
-                    alert("Ocurrió un error inesperado.");
+                    mostrarPopup("Ocurrió un error inesperado.");
             }
             return;
         }
@@ -76,7 +76,7 @@ async function cargarResumen(fechaInicio, fechaFin) {
 
     // validar estructura esperada
         if (!json.exito || !json.datos) {
-            alert(json.mensaje || "El servidor no devolvió datos válidos.");
+            mostrarPopup(json.mensaje || "El servidor no devolvió datos válidos.");
             return;
         }
 
@@ -104,7 +104,7 @@ async function cargarResumen(fechaInicio, fechaFin) {
 
     } catch (error) {
         console.error("Error en fetch:", error);
-        alert("Error de conexión. Verifica tu internet o el servidor.");
+        mostrarPopup("Error de conexión. Verifica tu internet o el servidor.");
     }
 }
 

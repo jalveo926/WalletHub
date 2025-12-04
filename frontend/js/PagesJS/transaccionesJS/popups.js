@@ -24,7 +24,7 @@ async function abrirPopupModificarTransaccion(idTransaccion) {
     const transaccion = data.transacciones.find(t => t.idTransaccion == idTransaccion);
     
     if (!transaccion) {
-        alert("No se encontró la transacción");
+        mostrarPopup("No se encontró la transacción");
         return;
     }
 
