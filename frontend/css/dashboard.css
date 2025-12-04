@@ -1,0 +1,123 @@
+h1, h2 {
+    color: #0A1F44;
+}
+
+.filtro-tiempo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dashboard-header h1 {
+    margin: 0;
+}
+
+/* HEADER */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+/* GRID PRINCIPAL */
+.dashboard-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Izquierda: gráficas | Derecha: saldo */
+    gap: 30px;
+}
+
+/* Columna izquierda */
+.charts-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Gráfica grande (barras) */
+.chart-large {
+    background: #fff;
+    padding: 10px;
+    border-radius: 12px;
+    height: 350px;
+    border: 2px solid #0A1F44;
+}
+
+/* Fila de gráficas de dona */
+.charts-small-row {
+    display: flex;
+    gap: 20px;
+}
+
+/* Gráficas pequeñas (dona) */
+.chart-small {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    flex: 1;
+    height: 250px;
+    border: 2px solid #0A1F44;
+}
+
+/* Columna derecha (saldo + lista) */
+.saldo-column {
+    background: #fff;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.saldo-column h1 {
+    margin-bottom: 10px;
+}
+
+.ultimas-transacciones {
+    margin-top: 20px;
+}
+
+.transacciones-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;  
+}
+
+.transacciones-lista li {
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.4s ease, box-shadow 0.2s ease;
+}
+
+.transacciones-lista li:hover {
+    transform: translateY(-3px) scale(1.02);   /* se eleva y aumenta */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); /* sombra suave */
+}
+
+
+.transacciones-lista li {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.4s ease-out forwards;
+}
+
+@keyframes fadeUp { /*Animación para que los li hagan fade in hacia arriba*/
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.transacciones-lista li.ingreso {
+    border-left: 6px solid #2ecc71;
+    color: #2e7d32;
+    background-color: #E8F8F2;
+}
+
+.transacciones-lista li.gasto {
+    border-left: 6px solid #e74c3c;
+    color: #c0392b;
+    background-color: #FDEDEC;
+}
