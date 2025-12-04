@@ -21,7 +21,7 @@ async function cargarTransaccionesDesdeAPI() {
 
         if (respuesta.status === 401) {
             mostrarPopup("Tu sesión expiró. Inicia sesión de nuevo.");
-            window.location.href = "autenticacion.html";
+            window.location.href = "../pages/autenticacion.html";
             return;
         }
 
@@ -78,7 +78,7 @@ async function crearCategoria() {
 
         if (respuesta.status === 401) {
             mostrarPopup("Tu sesión expiró. Inicia sesión de nuevo.");
-            window.location.href = "autenticacion.html";
+            window.location.href = "../pages/autenticacion.html";
             return;
         }
 
@@ -143,7 +143,7 @@ async function crearTransaccion() {
 
         if (respuesta.status === 401) {
             mostrarPopup("Tu sesión expiró. Inicia sesión de nuevo.");
-            window.location.href = "autenticacion.html";
+            window.location.href = "../pages/autenticacion.html";
             return;
         }
 
@@ -184,7 +184,7 @@ async function eliminarTransaccion(idTransaccion) {
 
         if (respuesta.status === 401) {
             mostrarPopup("Tu sesión expiró. Inicia sesión de nuevo.");
-            window.location.href = "autenticacion.html";
+            window.location.href = "../pages/autenticacion.html";
             return;
         }
         
@@ -245,7 +245,7 @@ async function actualizarTransaccion(idTransaccion) {
 
         if (respuesta.status === 401) {
             mostrarPopup("Tu sesión expiró. Inicia sesión de nuevo.");
-            window.location.href = "autenticacion.html";
+            window.location.href = "../pages/autenticacion.html";
             return;
         }
 

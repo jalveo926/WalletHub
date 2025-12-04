@@ -1,8 +1,5 @@
-.dashboard-header {
-    display: flex;
-    justify-content: space-between; /* Título izquierda, combo derecha */
-    align-items: center;             /* Centra verticalmente */
-    margin-bottom: 20px;             /* Espacio hacia abajo */
+h1, h2 {
+    color: #0A1F44;
 }
 
 .filtro-tiempo {
@@ -15,31 +12,62 @@
     margin: 0;
 }
 
-.filtro-tiempo select {
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: 2px solid #e0e0e0;
+/* HEADER */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
 }
 
-/* Contenedor principal de dashboard */
-.dashboard-content {
+/* GRID PRINCIPAL */
+.dashboard-layout {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
+    grid-template-columns: 2fr 1fr; /* Izquierda: gráficas | Derecha: saldo */
+    gap: 30px;
 }
 
-/* Columna izquierda: gráficas */
-.content-graficas {
-    display: grid;
-    grid-template-rows: repeat(3, 300px);
-    gap: 20px;
-}
-
-/* Columna derecha: saldo actual + transacciones */
-.content-saldo {
+/* Columna izquierda */
+.charts-column {
     display: flex;
     flex-direction: column;
+    gap: 10px;
+}
+
+/* Gráfica grande (barras) */
+.chart-large {
+    background: #fff;
+    padding: 10px;
+    border-radius: 12px;
+    height: 350px;
+    border: 2px solid #0A1F44;
+}
+
+/* Fila de gráficas de dona */
+.charts-small-row {
+    display: flex;
     gap: 20px;
+}
+
+/* Gráficas pequeñas (dona) */
+.chart-small {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    flex: 1;
+    height: 250px;
+    border: 2px solid #0A1F44;
+}
+
+/* Columna derecha (saldo + lista) */
+.saldo-column {
+    background: #fff;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.saldo-column h1 {
+    margin-bottom: 10px;
 }
 
 .ultimas-transacciones {
@@ -48,5 +76,6 @@
 
 .transacciones-lista {
     list-style: none;
-    padding: 0;
+    padding-left: 0;
+    margin: 0;
 }

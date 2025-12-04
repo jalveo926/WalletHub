@@ -6,7 +6,7 @@ let transacciones = []; /* Almacena todas las transacciones cargadas */
 async function cargarResumen(periodo) {
   const token = localStorage.getItem('token'); /* Obtiene el token */
   if (!token) { /* Si no hay token, redirige a login */
-    window.location.href = 'autenticacion.html';
+    window.location.href = '../pages/autenticacion.html';
     return;
   }
 
@@ -24,7 +24,7 @@ async function cargarResumen(periodo) {
   const inicioStr = inicio.toISOString().split('T')[0]; // yyyy-MM-dd
   const finStr = hoy.toISOString().split('T')[0]; 
 
-  const resp = await fetch(`${API_URL}/Calculos/resumen?inicio=${inicioStr}&fin=${finStr}`, { /* Llamada al endpoint */
+  const resp = await fetch(`${API_URL}/Calculos/ObtenerResumen?inicio=${inicioStr}&fin=${finStr}`, { /* Llamada al endpoint */
     method: 'GET', 
     headers: { /* Headers con token */
       'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ async function cargarResumen(periodo) {
 
   if (resp.status === 401) { /* Si no autorizado, redirige a login */
     alert('Tu sesión expiró. Inicia sesión de nuevo.');
-    window.location.href = 'autenticacion.html';
+    window.location.href = '../pages/autenticacion.html';
     return;
   }
 
@@ -68,7 +68,7 @@ async function cargarResumen(periodo) {
 async function cargarTransaccionesPeriodo(periodo) { 
   const token = localStorage.getItem('token');
   if (!token) { /* Si no hay token, redirige a login */
-    window.location.href = 'autenticacion.html';
+    window.location.href = '../pages/autenticacion.html';
     return;
   }
 
@@ -82,7 +82,7 @@ async function cargarTransaccionesPeriodo(periodo) {
 
   if (resp.status === 401) { /* Si no autorizado, redirige a login */
     alert('Tu sesión expiró. Inicia sesión de nuevo.');
-    window.location.href = 'autenticacion.html';
+    window.location.href = '../pages/autenticacion.html';
     return;
   }
 
