@@ -275,6 +275,9 @@ function crearGastosPorCategoria(gastosPorCategoria) {
                     labels: {
                         font: {
                             size: 14 
+                        },
+                        filter: function (item, chart) {
+                            return item.index < 3; // muestra solo 3 leyendas
                         }
                     }
                 },
@@ -324,6 +327,9 @@ function crearIngresosPorCategoria(ingresosPorCategoria) {
                     labels: {
                         font: {
                             size: 14 
+                        },
+                        filter: function (item, chart) {
+                            return item.index < 3; // muestra solo 3 leyendas
                         }
                     }
                 },
