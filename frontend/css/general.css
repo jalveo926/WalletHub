@@ -1,5 +1,14 @@
 /*Estilos del layout general: header, nav y footer*/
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden; /*Oculta el scroll horizontal*/
+}
 
 body {
     display: flex;
@@ -12,7 +21,8 @@ body {
 }
 
 h1 {
-  font-family: "Raleway", sans-serif;}
+  font-family: "Raleway", sans-serif;
+}
   
 main {
     flex: 1;
