@@ -82,9 +82,25 @@ async function cargarResumen(fechaInicio, fechaFin) {
 
     const datos = json.datos;
 
-    crearIngresosVsGastos(datos.totalIngresos, datos.totalGastos);
-    crearGastosPorCategoria(datos.gastosPorCategoria);
-    crearIngresosPorCategoria(datos.ingresosPorCategoria);
+    // Referencia al contenedor donde van tus gráficas
+    const contenedor = document.querySelector('.charts-column');
+
+    // Validar si no hay datos
+    if (!datos || !datos.totalIngresos && !datos.totalGastos &&
+        (!datos.gastosPorCategoria || datos.gastosPorCategoria.length === 0) &&
+        (!datos.ingresosPorCategoria || datos.ingresosPorCategoria.length === 0)) {
+
+        contenedor.innerHTML = `
+            <div class="charts-column">
+                <p>Crea una transacción para comenzar.</p>
+            </div>
+        `;
+        return;
+    } else {
+        crearIngresosVsGastos(datos.totalIngresos, datos.totalGastos);
+        crearGastosPorCategoria(datos.gastosPorCategoria);
+        crearIngresosPorCategoria(datos.ingresosPorCategoria);
+    }
 
     } catch (error) {
         console.error("Error en fetch:", error);
@@ -212,6 +228,7 @@ function crearIngresosVsGastos(totalIngresos, totalGastos) {
                     weight: "bold"
                 },
                 formatter: (value) => {
+                    if (value === 0) return null; // oculta el datalabel
                     return `$${value.toFixed(2)}`;
                 }
             }
