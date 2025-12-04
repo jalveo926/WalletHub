@@ -1,0 +1,28 @@
+﻿namespace WalletHub.Models
+{
+    public class Reporte
+    {
+        public string idReporte { get; set; } = string.Empty;
+        public string rutaArchivoRepo { get; set; } = string.Empty; //Se inicializa como cadena vacía para evitar null
+        public TipoArchivo tipoArchivoRepo { get; set; }
+        public DateTime fechaCreacionRepo { get; set; }
+        public DateTime inicioPeriodo { get; set; }
+        public DateTime finalPeriodo { get; set; }
+
+        // FK Usuario
+        public string idUsuario { get; set; }
+        public Usuario Usuario { get; set; }
+    }
+
+    /// <summary>
+    /// Representa los tipos de archivo que un reporte puede tener.
+    /// Usamos un enum para limitar los valores posibles (PDF, Excel, etc.)
+    /// Esto ayuda a evitar errores de tipo, facilita la validación y 
+    /// EF Core puede convertirlo a string al guardarlo en la base de datos.
+    /// </summary>
+    public enum TipoArchivo
+    {
+        Pdf,
+        Excel
+    }
+}

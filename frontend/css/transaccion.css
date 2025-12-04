@@ -1,0 +1,392 @@
+body{
+    min-width: 1096px;
+}
+
+/* Estilo de los botones de crear categoria/transaccion */
+.botonesMainContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+/* Contenedor de los botones de filtrado*/
+.aplicarFiltrosContainer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+
+ 
+
+/* Estilo del encabezado antes de la lista */
+.transacciones-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    
+    gap: 10px ;
+    color: #0A1F44;
+    margin-bottom: 10px;
+}
+
+.transacciones-options h1 {
+    margin-right: auto;
+    margin-bottom: 0px;
+}
+
+.opciones-izq{
+    display: flex;
+    gap: 30px;
+}
+
+#filtroTipo,#filtroCategoria {
+    max-height: fit-content;
+    margin-top: auto;
+}
+
+.tituloFiltro {
+    display: flex;
+    justify-content: space-between;
+   
+}
+
+.botonesCrear button {
+    margin-left: 10px;
+}
+
+.lista-transacciones {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* Estilo de cada item de la lista de transacciones/categorias  */
+.item {
+  background-color: #F4F6F8;
+  border: 2px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+  color: #0A1F44;
+}
+
+.item.ingreso {
+  border-left: 6px solid #2ecc71; /* Me ayuda a aplicarlo solo a un borde */
+  color: #2e7d32;
+  background-color: #E8F8F2;
+}
+
+.item.gasto {
+  border-left: 6px solid #e74c3c; 
+  color: #c0392b;
+  background-color: #FDEDEC;
+}
+
+.item-encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  gap: 10px;
+  
+}
+
+.item h3 {
+ margin: 0;
+}
+
+.fecha-filtros {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: auto;
+}
+
+.fechaInput {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: #0A1F44;
+}
+
+/* Estilo del boton de opciones en cada item */
+.btn-opciones {
+    width: 32px;
+    height: 32px;
+    background: url("../assets/icons/options.svg") no-repeat center;
+    background-size: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-opciones:hover {
+    background-color: #E0E0E0;
+    border-radius: 10px;
+}
+
+/* Contenedor para el botón de opciones y el menú */
+.btn-opciones-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Menú desplegable de opciones */
+.menu-opciones {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    min-width: 160px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.menu-opciones.hidden {
+    display: none;
+}
+
+.opcion-modificar,
+.opcion-eliminar {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background-color: white;
+    color: #0A1F44;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-weight: 500;
+}
+
+.opcion-modificar:hover {
+    background-color: #f5f5f5;
+}
+
+.opcion-eliminar {
+    border-top: 1px solid #eee;
+    color: #e74c3c;
+}
+
+.opcion-eliminar:hover {
+    background-color: #ffebee;
+}
+
+.limpiarFiltroBtn {
+    width: 32px;
+    height: 32px;
+    background: url("../assets/icons/refresh-ccw.svg") no-repeat center;
+    background-size: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.limpiarFiltroBtn:hover {
+    background-color: #E0E0E0;
+    border-radius: 10px;
+}
+
+/* Estilo del slider de monto maximo */
+.monto-slider {
+    
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: auto;
+}
+
+#montoMax {
+    font-weight: bold;
+    color: #333;
+}
+
+input[type="range"] {
+    width: 250px;
+}
+
+/* Estilo del contenedor de los popups */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-overlay.hidden {
+    display: none;
+}
+
+.popup-contenido {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 450px;
+    padding: 0;
+    animation: popupSlideIn 0.3s ease-out;
+}
+
+@keyframes popupSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 2px solid #f0f0f0;
+    background-color: #0A1F44;
+    border-radius: 12px 12px 0 0;
+    color: white;
+}
+
+.popup-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.popup-cerrar {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: white;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+}
+
+.popup-cerrar:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.popup-form {
+    padding: 20px;
+}
+
+.form-grupo {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-grupo label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #0A1F44;
+    font-size: 14px;
+}
+
+.form-grupo input,
+.form-grupo select,
+.form-grupo textarea {
+    padding: 10px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.form-grupo input:focus,
+.form-grupo select:focus,
+.form-grupo textarea:focus {
+    outline: none;
+    border-color: #0A1F44;
+    box-shadow: 0 0 0 3px rgba(10, 31, 68, 0.1);
+}
+
+.form-grupo textarea {
+    resize: vertical;
+}
+
+.popup-botones {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    justify-content: flex-end;
+}
+
+.btn-cancelar,
+.btn-guardar {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancelar {
+    background-color: #e0e0e0;
+    color: #0A1F44;
+}
+
+.btn-cancelar:hover {
+    background-color: #d0d0d0;
+}
+
+.btn-guardar {
+    background-color: #16A085;
+    color: white;
+}
+
+
+
+.btn-guardar:active {
+    transform: scale(0.98);
+}
+
+/* Estilo para botones deshabilitados */
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #ccc;
+    color: #999;
+}
+
+button:disabled:hover {
+    background-color: #ccc;
+}
+
+@media (max-width:1370px){
+    .tituloFiltro{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .opciones-izq{
+        margin-bottom: 10px;
+    }
+
+    .transacciones-options{
+        margin-bottom: 10px;
+    }
+}

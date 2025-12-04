@@ -11,3 +11,8 @@ function cargarLayout(id, url) { /*Recibe como parámetros el id y la dirección
         .catch(err => console.error("Error cargando ${id}:", err)); 
 }
 
+function cerrarSesion() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
+    window.location.href = '../pages/autenticacion.html';
+}

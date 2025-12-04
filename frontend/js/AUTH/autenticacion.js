@@ -29,3 +29,36 @@ document.querySelectorAll(".toggle-password").forEach(icon => {
             : "url('../assets/icons/eye.svg')"; //Si showing es false, muestra el ojo abierto cuando se muestra la contraseña
     });
 });
+
+
+function GuardarToken(token, usuario) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('usuario', JSON.stringify(usuario));
+}
+
+function obtenerToken() {
+    return localStorage.getItem('token');
+}
+
+function estaLogueado() {
+    const token = obtenerToken();
+    return token !== null;
+}
+
+//Mensaje de error login
+const mensajeLogin = document.getElementById('mensaje-login');
+ 
+function mostrarMensajeLogin(texto) {
+    mensajeLogin.style.display = 'block';
+    mensajeLogin.textContent = texto;
+    mensajeLogin.className = 'mensaje mensaje-error'; 
+}
+
+//Mensaje de error registro
+const mensajeReg = document.getElementById('mensaje-reg');
+ 
+function mostrarMensajeRegistro(texto) {
+    mensajeReg.style.display = 'block';
+    mensajeReg.textContent = texto;
+    mensajeReg.className = 'mensaje mensaje-error';
+}

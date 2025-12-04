@@ -11,4 +11,81 @@ body {
     font-weight: bolder;
 }
 
+h1 {
+  font-family: "Raleway", sans-serif;}
+  
+main {
+    flex: 1;
+    padding: 20px 200px; /* Para dar espacio a los botones */
+}
 
+button {
+    padding: 10px 20px;
+    background-color: #16A085;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: medium;
+    font-family: "Nunito", sans-serif;
+    font-weight: bold;
+    
+  }
+
+  button:hover {
+    background-color: #3A7BD5;
+  }
+
+  /* --- Estilos generales para Selects y Date Inputs --- */
+
+select,
+input[type="date"],
+input[type="text"],
+input[type="number"] {
+    padding: 10px;
+    font-size: 13px;
+    font-family: "Nunito", sans-serif;
+    border: 2px solid #d0d6db;
+    border-radius: 6px;
+    background-color: #F4F6F8;
+    color: #333;
+    outline: none;
+    transition: all 0.2s ease;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Efecto cuando el usuario hace hover */
+select:hover,
+input[type="date"]:hover,
+input[type="text"]:hover,
+input[type="number"]:hover {
+    border-color: #16A085;
+}
+
+/* Efecto al hacer focus (cuando el usuario selecciona el input) */
+select:focus,
+input[type="date"]:focus,
+input[type="text"]:focus,
+input[type="number"]:focus {
+    border-color: #3A7BD5;
+    background-color: #ffffff;
+    box-shadow: 0 0 4px rgba(58, 123, 213, 0.4);
+}
+
+/* Opciones del ComboBox */
+select option {
+    font-weight: 600;
+    padding: 5px;
+}
+
+/* Para que los inputs de fecha muestren icono más limpio en Chrome */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: invert(30%);
+    opacity: 0.8;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
