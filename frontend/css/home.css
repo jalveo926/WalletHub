@@ -35,6 +35,7 @@ h1 {
     flex: 1;
 }
 
+/*Estilos para los enlaces*/
 a {
     text-decoration: none;
     color: #16A085;
@@ -44,4 +45,28 @@ a {
 
 a:hover {
     color: #3A7BD5;
+}
+
+
+/*Estilos para pantallas menores de 1000px*/
+@media (max-width: 1000px) {
+  .noticia {
+    flex-direction: column; /*Los elementos cambian de posición para que sea en columna*/
+    padding: 12px;
+    gap: 12px;
+  }
+
+    /*Las imágenes se adaptan al ancho disponible*/
+  .noticia img {
+    max-width: 100%; /*La imagen no sobrepasa el ancho del contenedor*/
+    height: auto;
+    margin: 0 auto;
+  }
+
+  /*El video se adapta al tamaño del contenedor*/
+  .noticia iframe {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 9; /*Mantiene una proporción estándar de video*/
+  }
 }

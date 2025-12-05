@@ -7,6 +7,7 @@ h1 {
     color: #0A1F44;
 }
 
+/*Contenedor de la información de todos los integrantes, incluyendo la foto*/
 .integranteInfo {
     display: flex;
     flex-direction: row;
@@ -26,6 +27,7 @@ h1 {
     border-radius: 10px;   
 }
 
+/*Contenedor del contenido a la derecha*/
 .infoDerecha {
     display: flex;
     flex-direction: column;        
@@ -34,6 +36,7 @@ h1 {
     flex: 1;
 }
 
+/*Estilos para los párrafos y listas de integranteInfo*/
 .integranteInfo p,
 .integranteInfo ul {
     margin: 10px;
@@ -41,6 +44,23 @@ h1 {
     color: #0A1F44;
 }
 
+/**/
 .integranteInfo ul li {
     color: black;
+}
+
+/*Estilos para pantallas menores de 1000px*/
+@media (max-width: 1000px) {
+  .integranteInfo {
+    flex-direction: column; /*Los elementos cambian de posición para que sea en columna*/
+    padding: 12px;
+    gap: 12px;
+  }
+
+    /*Las imágenes se adaptan al ancho disponible*/
+  .integranteInfo img {
+    max-width: 100%; /*La imagen no sobrepasa el ancho del contenedor*/
+    height: auto;
+    margin: 0 auto;
+  }
 }
