@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WalletHub.DTOs;
 using WalletHub.Services.Interface;
+
 namespace WalletHub.Controllers
 {
     [Authorize]
@@ -10,9 +11,14 @@ namespace WalletHub.Controllers
     public class ReporteController : ControllerBase
     {
         private readonly IReporteService _reporteServicio;
-        public ReporteController(IReporteService reporteServicio)
+        private readonly IReportePDFService _reportePdfServicio;
+
+        public ReporteController(
+            IReporteService reporteServicio,
+            IReportePDFService reportePdfServicio)
         {
             _reporteServicio = reporteServicio;
+            _reportePdfServicio = reportePdfServicio;
         }
 
         [HttpPost("AgregarReporte")]
@@ -20,19 +26,18 @@ namespace WalletHub.Controllers
         {
             if (dto == null)
             {
-                return new BadRequestObjectResult(new
+                return BadRequest(new
                 {
                     mensaje = "Especifique los datos correspondientes."
                 });
             }
 
-            // VALIDACIÓN ENUM tipoPeriodo
             if (!Enum.TryParse<ReporteSolicitadoDTO.TipoPeriodo>(
                     dto.tipoPeriodo.ToString(),
                     ignoreCase: true,
                     out var tipoValido))
             {
-                return new BadRequestObjectResult(new
+                return BadRequest(new
                 {
                     mensaje = "El tipo de periodo no es válido. Debe ser: semana, mes o año."
                 });
@@ -45,12 +50,12 @@ namespace WalletHub.Controllers
                 var idUsuario = User.Claims.FirstOrDefault(c => c.Type == "idUsuario")?.Value;
                 if (string.IsNullOrEmpty(idUsuario))
                 {
-                    return new UnauthorizedResult();
+                    return Unauthorized();
                 }
 
                 var nuevoIdReporte = await _reporteServicio.CrearReporteAsync(dto, idUsuario);
 
-                return new OkObjectResult(new
+                return Ok(new
                 {
                     mensaje = "Reporte creado exitosamente",
                     idReporte = nuevoIdReporte
@@ -58,16 +63,12 @@ namespace WalletHub.Controllers
             }
             catch (Exception)
             {
-                return new ObjectResult(new
+                return StatusCode(500, new
                 {
                     mensaje = "Ocurrió un error al crear el reporte"
-                })
-                {
-                    StatusCode = 500
-                };
+                });
             }
         }
-
 
         [HttpDelete("EliminarReporte/{idReporte}")]
         public async Task<IActionResult> EliminarReporte(string idReporte)
@@ -77,30 +78,29 @@ namespace WalletHub.Controllers
                 var idUsuario = User.Claims.FirstOrDefault(c => c.Type == "idUsuario")?.Value;
                 if (string.IsNullOrEmpty(idUsuario))
                 {
-                    return new UnauthorizedResult();
+                    return Unauthorized();
                 }
+
                 var eliminado = await _reporteServicio.EliminarReporteAsync(idReporte, idUsuario);
-                if (!eliminado) //Si no encuentra nada se ejecuta esto
+                if (!eliminado)
                 {
-                    return new NotFoundObjectResult(new
+                    return NotFound(new
                     {
                         mensaje = "El reporte no existe."
                     });
                 }
-                return new OkObjectResult(new
+
+                return Ok(new
                 {
                     mensaje = "Reporte eliminado exitosamente."
                 });
             }
             catch (Exception)
             {
-                return new ObjectResult(new
+                return StatusCode(500, new
                 {
                     mensaje = "Ocurrió un error al eliminar el reporte"
-                })
-                {
-                    StatusCode = 500
-                };
+                });
             }
         }
 
@@ -112,21 +112,21 @@ namespace WalletHub.Controllers
                 var idUsuario = User.Claims.FirstOrDefault(c => c.Type == "idUsuario")?.Value;
                 if (string.IsNullOrEmpty(idUsuario))
                 {
-                    return new UnauthorizedResult();
+                    return Unauthorized();
                 }
 
                 var reportes = await _reporteServicio.ObtenerReportesPorUsuarioAsync(idUsuario);
 
                 if (reportes == null || !reportes.Any())
                 {
-                    return new OkObjectResult(new
+                    return Ok(new
                     {
                         mensaje = "No se encontraron reportes para este usuario.",
-                        reportes = new List<object>() // []
+                        reportes = new List<object>()
                     });
                 }
 
-                return new OkObjectResult(new
+                return Ok(new
                 {
                     mensaje = "Reportes obtenidos exitosamente",
                     reportes
@@ -134,16 +134,12 @@ namespace WalletHub.Controllers
             }
             catch (Exception)
             {
-                return new ObjectResult(new
+                return StatusCode(500, new
                 {
                     mensaje = "Ocurrió un error al obtener los reportes"
-                })
-                {
-                    StatusCode = 500
-                };
+                });
             }
         }
-
 
         [HttpGet("ObtenerReporteUnico/{idReporte}")]
         public async Task<IActionResult> ObtenerReportePorId(string idReporte)
@@ -153,27 +149,59 @@ namespace WalletHub.Controllers
                 var idUsuario = User.Claims.FirstOrDefault(c => c.Type == "idUsuario")?.Value;
                 if (string.IsNullOrEmpty(idUsuario))
                 {
-                    return new UnauthorizedResult();
+                    return Unauthorized();
                 }
+
                 var reporte = await _reporteServicio.ObtenerReportePorIdAsync(idReporte, idUsuario);
                 if (reporte == null)
                 {
-                    return new NotFoundObjectResult(new
+                    return NotFound(new
                     {
                         mensaje = "El reporte no existe."
                     });
                 }
-                return new OkObjectResult(reporte);
+
+                return Ok(reporte);
             }
             catch (Exception)
             {
-                return new ObjectResult(new
+                return StatusCode(500, new
                 {
                     mensaje = "Ocurrió un error al obtener el reporte"
-                })
+                });
+            }
+        }
+
+        [HttpGet("DescargarPdf/{idReporte}")]
+        public async Task<IActionResult> DescargarPdf(string idReporte)
+        {
+            try
+            {
+                var idUsuario = User.Claims.FirstOrDefault(c => c.Type == "idUsuario")?.Value;
+                if (string.IsNullOrEmpty(idUsuario))
                 {
-                    StatusCode = 500
-                };
+                    return Unauthorized();
+                }
+
+                var pdfBytes = await _reportePdfServicio.GenerarReportePdfAsync(idReporte, idUsuario);
+
+                if (pdfBytes == null || pdfBytes.Length == 0)
+                {
+                    return NotFound(new
+                    {
+                        mensaje = "No fue posible generar el PDF para este reporte."
+                    });
+                }
+
+                var nombreArchivo = $"Reporte_{idReporte}.pdf";
+                return File(pdfBytes, "application/pdf", nombreArchivo);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new
+                {
+                    mensaje = "Ocurrió un error al generar o descargar el PDF del reporte"
+                });
             }
         }
     }

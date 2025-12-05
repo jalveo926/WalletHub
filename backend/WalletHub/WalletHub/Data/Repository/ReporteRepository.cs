@@ -61,7 +61,8 @@ public class ReporteRepository : IReporteRepository
             .FirstOrDefaultAsync();
     }
 
-    public async Task<Reporte?> GetReporteByIdInterno(string idReporte, string idUsuario) {
+    public async Task<Reporte?> GetReporteByIdInterno(string idReporte, string idUsuario)
+    {
         return await _context.Reporte
             .FirstOrDefaultAsync(r => r.idReporte == idReporte && r.idUsuario == idUsuario);
     }
