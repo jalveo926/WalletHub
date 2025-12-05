@@ -1,5 +1,7 @@
-h1, h2 {
-    color: #0A1F44;
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+#saldo-actual {
+    font-family: "Nunito", sans-serif; /*Sobreescribe el estilo que sale en general*/
 }
 
 .filtro-tiempo {
