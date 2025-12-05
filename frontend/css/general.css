@@ -20,8 +20,10 @@ body {
     font-weight: bolder;
 }
 
-h1 {
-  font-family: "Raleway", sans-serif;}
+h1, h2 {
+  font-family: "Raleway", sans-serif;
+  color: #0A1F44;
+}
   
 main {
     flex: 1;

@@ -3,10 +3,6 @@ main {
     padding: 20px 200px;
 }
 
-h1 {
-    color: #0A1F44;
-}
-
 /*Contenedor de las noticias*/
 .noticia {
     display: flex;
