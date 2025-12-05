@@ -6,33 +6,38 @@ using WalletHub.Models;
 using WalletHub.Services.Interface;
 using WalletHub.DTOs;
 
+// Servicio encargado de generar el PDF de un reporte
 public class ReportePDFService : IReportePDFService
 {
     private readonly IReporteRepository _reporteRepository;
     private readonly ICalculosService _calculosService;
 
+    // Recibe el repositorio de reportes y el servicio de cálculos por inyección de dependencias
     public ReportePDFService(
-        IReporteRepository reporteRepository, 
+        IReporteRepository reporteRepository,
         ICalculosService calculosService)
     {
         _reporteRepository = reporteRepository;
         _calculosService = calculosService;
     }
 
+    // Genera el PDF de un reporte específico del usuario y lo devuelve como byte[]
     public async Task<byte[]> GenerarReportePdfAsync(string idReporte, string idUsuario)
     {
+        // Obtiene la entidad Reporte y valida que pertenezca al usuario
         var reporte = await _reporteRepository.GetReporteByIdInterno(idReporte, idUsuario);
 
         if (reporte == null)
             throw new InvalidOperationException("El reporte no existe o no pertenece al usuario.");
 
-        // Usamos el periodo del reporte
+        // Usa el periodo del reporte para obtener el resumen (ingresos, gastos, categorías)
         var resumen = await _calculosService.ObtenerResumenAsync(
             idUsuario,
             reporte.inicioPeriodo,
             reporte.finalPeriodo
         );
 
+        // Construye el documento PDF en memoria usando QuestPDF
         var pdfBytes = Document.Create(container =>
         {
             container.Page(page =>
@@ -42,10 +47,12 @@ public class ReportePDFService : IReportePDFService
                 page.PageColor(Colors.White);
                 page.DefaultTextStyle(x => x.FontSize(12));
 
+                // Encabezado del reporte
                 page.Header()
                     .Text("REPORTE DE TRANSACCIONES")
                     .SemiBold().FontSize(20).FontColor(Colors.Blue.Medium);
 
+                // Contenido principal en formato de columna
                 page.Content().Column(col =>
                 {
                     col.Spacing(10);
@@ -58,7 +65,7 @@ public class ReportePDFService : IReportePDFService
 
                     col.Item().LineHorizontal(1).LineColor(Colors.Grey.Medium);
 
-                    // Resumen general
+                    // Resumen general del periodo
                     col.Item().Text("Resumen del periodo").SemiBold().FontSize(14);
                     col.Item().Text($"Total ingresos: {resumen.TotalIngresos:C}");
                     col.Item().Text($"Total gastos: {resumen.TotalGastos:C}");
@@ -66,7 +73,7 @@ public class ReportePDFService : IReportePDFService
 
                     col.Item().LineHorizontal(1).LineColor(Colors.Grey.Medium);
 
-                    // Gastos por categoría
+                    // Tabla de gastos por categoría (si existen datos)
                     if (resumen.GastosPorCategoria.Any())
                     {
                         col.Item().Text("Gastos por categoría").SemiBold().FontSize(14);
@@ -74,9 +81,9 @@ public class ReportePDFService : IReportePDFService
                         {
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(40);
-                                columns.RelativeColumn();
-                                columns.ConstantColumn(80);
+                                columns.ConstantColumn(40);  // ID categoría
+                                columns.RelativeColumn();    // Nombre categoría
+                                columns.ConstantColumn(80);  // Monto total
                             });
 
                             table.Header(header =>
@@ -97,7 +104,7 @@ public class ReportePDFService : IReportePDFService
 
                     col.Item().LineHorizontal(1).LineColor(Colors.Grey.Medium);
 
-                    // Ingresos por categoría
+                    // Tabla de ingresos por categoría (si existen datos)
                     if (resumen.IngresosPorCategoria.Any())
                     {
                         col.Item().Text("Ingresos por categoría").SemiBold().FontSize(14);
@@ -127,6 +134,7 @@ public class ReportePDFService : IReportePDFService
                     }
                 });
 
+                // Pie de página con numeración
                 page.Footer().AlignCenter().Text(x =>
                 {
                     x.Span("Página ");
@@ -135,7 +143,7 @@ public class ReportePDFService : IReportePDFService
                     x.TotalPages();
                 });
             });
-        }).GeneratePdf();
+        }).GeneratePdf();  // Genera el PDF y devuelve el byte[]
 
         return pdfBytes;
     }
