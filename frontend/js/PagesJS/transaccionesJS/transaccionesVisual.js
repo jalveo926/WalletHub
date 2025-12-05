@@ -22,7 +22,7 @@ function cargarCategorias() {
 }
 
 
-// ------------------ MOSTRAR TRANSACCIONES ------------------
+// ------------------ MOSTRAR TRANSACCIONES ------------------ Aqui se crean tambien los botones de modificiar y eliminar
 function mostrarTransacciones(lista) {
     const contenedor = document.getElementById("lista-transacciones");
     contenedor.innerHTML = "";
@@ -39,7 +39,13 @@ function mostrarTransacciones(lista) {
         <div class="item ${tipoClase}">
             <div class="item-encabezado">
                 <h3>${t.nombreCateg}</h3>
-                <button class="btn-opciones"></button>
+                <div class="btn-opciones-container">
+                    <button class="btn-opciones" data-id="${t.idTransaccion}"></button>
+                    <div class="menu-opciones hidden" data-id="${t.idTransaccion}">
+                        <button class="opcion-modificar" data-id="${t.idTransaccion}">Modificar</button>
+                        <button class="opcion-eliminar" data-id="${t.idTransaccion}">Eliminar</button>
+                    </div>
+                </div>
             </div>
 
             <p>${t.descripcionTransac}</p>
@@ -73,7 +79,7 @@ function aplicarFiltros() {
     // Validar rango de fechas
     if (fechaDesde !== "" && fechaHasta !== "") {
     if (new Date(fechaHasta) < new Date(fechaDesde)) {
-        alert("La fecha 'Hasta' no puede ser menor que 'Desde'.");
+        mostrarPopup("La fecha 'Hasta' no puede ser menor que 'Desde'.");
         return;
     }
 }
@@ -142,10 +148,21 @@ function configurarSlider() {
     valorSlider.textContent = maxMonto.toFixed(2);
 }
 
+// Actualizar estado del botón de filtros según disponibilidad de transacciones
+function actualizarEstadoBotonesFiltros() {
+    const btnAplicarFiltros = document.getElementById("aplicarFiltrosBtn");
+    const btnLimpiar = document.getElementById("limpiarBtn");
+    const tieneTransacciones = data.transacciones.length > 0;
+
+    btnAplicarFiltros.disabled = !tieneTransacciones;
+    btnLimpiar.disabled = !tieneTransacciones;
+}
+
 
 
 // ------------------ EVENTOS ------------------
 // Cargar categorías y mostrar transacciones al cargar la página
+//Configuracion de elementos dinámicos y sus eventos
 document.addEventListener("DOMContentLoaded", () => {
 
   // Bloquear fechas futuras
@@ -153,11 +170,17 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("filtroFechaDesde").setAttribute("max", hoy);
   document.getElementById("filtroFechaHasta").setAttribute("max", hoy);
 
+  // Deshabilitar botones inicialmente
+  actualizarEstadoBotonesFiltros();
+
   // Cargar datos desde API
   cargarTransaccionesDesdeAPI();
 
   // Slider cambia en tiempo real
-  document.getElementById("filtroMontoMax").addEventListener("input", aplicarFiltros);
+  document.getElementById("filtroMontoMax").addEventListener("input", (e) => {
+    document.getElementById("valorMontoMax").textContent = parseFloat(e.target.value).toFixed(2);
+    aplicarFiltros();
+  });
 
   // Filtros automáticos
   document.getElementById("filtroTipo").addEventListener("change", aplicarFiltros);
@@ -168,4 +191,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Resetear filtros
   document.getElementById("limpiarBtn").addEventListener("click", resetearFiltros);
+
+  // Event delegation para abrir/cerrar menú de opciones
+  document.addEventListener("click", (e) => {
+    // Cerrar todos los menús si se hace clic fuera
+    if (!e.target.closest(".btn-opciones-container")) {
+      document.querySelectorAll(".menu-opciones").forEach(menu => {
+        menu.classList.add("hidden");
+      });
+    }
+
+    // Abrir/cerrar menú al hacer clic en btn-opciones
+    if (e.target.closest(".btn-opciones")) {
+      e.stopPropagation();
+      const btn = e.target.closest(".btn-opciones");
+      const container = btn.closest(".btn-opciones-container");
+      const menu = container.querySelector(".menu-opciones");
+      
+      // Cerrar otros menús
+      document.querySelectorAll(".menu-opciones").forEach(m => {
+        if (m !== menu) {
+          m.classList.add("hidden");
+        }
+      });
+      
+      // Toggle del menú actual
+      menu.classList.toggle("hidden");
+    }
+    // Acceder al botón Modificar
+    if (e.target.closest(".opcion-modificar")) {
+        const idTransaccion = e.target.closest(".opcion-modificar").getAttribute("data-id"); //Obtener ID de la transacción
+        console.log("Modificar transacción:", idTransaccion);
+        abrirPopupModificarTransaccion(idTransaccion);
+        
+    }
+    
+    // Acceder al botón Eliminar
+    if (e.target.closest(".opcion-eliminar")) {
+        const idTransaccion = e.target.closest(".opcion-eliminar").getAttribute("data-id"); //Obtener ID de la transacción
+        const confirmar = confirm("¿Estás seguro de que deseas eliminar esta transacción?");
+        if (!confirmar) return;
+        eliminarTransaccion(idTransaccion);
+        console.log("Eliminar transacción:", idTransaccion);
+    }
+  });
 });
+
