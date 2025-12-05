@@ -8,6 +8,10 @@ using WalletHub.Data.Interface;
 using WalletHub.Data.Repository;
 using WalletHub.Services;
 using WalletHub.Services.Interface;
+using QuestPDF.Infrastructure;
+
+//Licencia para poder generar los PDFs
+QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -151,13 +155,14 @@ builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<IReporteService, ReporteService>();
 builder.Services.AddScoped<ICalculosService, CalculosService>();
 builder.Services.AddScoped<IEstadisticasService, EstadisticasService>();
+builder.Services.AddScoped<IReportePDFService, ReportePDFService>();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins( "http://127.0.0.1:5500") // Permitimos solo desde esta URL (LiveServer de VSCODE)
+            policy.WithOrigins("http://127.0.0.1:5500") // Permitimos solo desde esta URL (LiveServer de VSCODE)
 
 
                   .AllowAnyHeader()

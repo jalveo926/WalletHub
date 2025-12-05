@@ -5,15 +5,18 @@ using WalletHub.Utils;
 using WalletHub.DTOs;
 using Microsoft.EntityFrameworkCore;
 
+// Repositorio encargado de las operaciones sobre la entidad Reporte
 public class ReporteRepository : IReporteRepository
 {
     private readonly ApplicationDbContext _context;
 
+    // Recibe el DbContext por inyección de dependencias
     public ReporteRepository(ApplicationDbContext context)
     {
         _context = context;
     }
 
+    // Genera un nuevo id de reporte con el prefijo "RE"
     public async Task<string> GenerarIdReporteAsync()
     {
         return await IdGenerator.GenerateIdAsync(
@@ -23,12 +26,14 @@ public class ReporteRepository : IReporteRepository
         );
     }
 
+    // Inserta un nuevo reporte en base de datos
     public async Task CreateReporteAsync(Reporte reporte)
     {
         _context.Reporte.Add(reporte);
         await _context.SaveChangesAsync();
     }
 
+    // Obtiene todos los reportes asociados a un usuario (como DTO)
     public async Task<IEnumerable<ReporteDTO>> GetReportesAsync(string idUsuario)
     {
         return await _context.Reporte
@@ -36,7 +41,7 @@ public class ReporteRepository : IReporteRepository
             .Select(r => new ReporteDTO
             {
                 IdReporte = r.idReporte,
-                UrlArchivo = r.rutaArchivoRepo,    // La ruta que tengas guardada
+                UrlArchivo = r.rutaArchivoRepo,    // Ruta o URL que hayas guardado
                 TipoArchivo = r.tipoArchivoRepo.ToString(),
                 FechaCreacion = r.fechaCreacionRepo,
                 InicioPeriodo = r.inicioPeriodo,
@@ -45,6 +50,7 @@ public class ReporteRepository : IReporteRepository
             .ToListAsync();
     }
 
+    // Obtiene un reporte puntual del usuario (como DTO)
     public async Task<ReporteDTO?> GetReporteByIdAsync(string idReporte, string idUsuario)
     {
         return await _context.Reporte
@@ -61,14 +67,18 @@ public class ReporteRepository : IReporteRepository
             .FirstOrDefaultAsync();
     }
 
-    public async Task<Reporte?> GetReporteByIdInterno(string idReporte, string idUsuario) {
+    // Obtiene la entidad Reporte completa para uso interno (por ejemplo, generación de PDF)
+    public async Task<Reporte?> GetReporteByIdInterno(string idReporte, string idUsuario)
+    {
         return await _context.Reporte
             .FirstOrDefaultAsync(r => r.idReporte == idReporte && r.idUsuario == idUsuario);
     }
 
+    // Elimina un reporte del usuario si existe
     public async Task<bool> DeleteReporteAsync(string idReporte, string idUsuario)
     {
-        var reporte = await GetReporteByIdInterno(idReporte, idUsuario); //Utilizamos este método de forma interna para eliminar, no está en la interfaz
+        // Reutiliza el método interno para obtener la entidad
+        var reporte = await GetReporteByIdInterno(idReporte, idUsuario);
 
         if (reporte == null)
             return false;
