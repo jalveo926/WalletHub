@@ -123,3 +123,9 @@
     color: #c0392b;
     background-color: #FDEDEC;
 }
+
+@media (max-width: 1370px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr; /*Una columna*/
+  }
+}
