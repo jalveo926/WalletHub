@@ -1,84 +1,82 @@
 ﻿using WalletHub.DTOs;
 using WalletHub.Models;
-
 using WalletHub.Services.Interface;
+using static WalletHub.DTOs.ReporteSolicitadoDTO;
+
 namespace WalletHub.Services
 {
-    public class ReporteService: IReporteService
+    public class ReporteService : IReporteService
     {
         private readonly IReporteRepository _repo;
 
+        // Inyección del repositorio de reportes
         public ReporteService(IReporteRepository repo)
         {
             _repo = repo;
         }
 
+        // ⚠ Ya NO se usa para PDFs por periodo
+        //    Solo se mantiene para compatibilidad con reportes guardados
         public async Task<string> CrearReporteAsync(ReporteSolicitadoDTO dto, string idUsuario)
         {
-            //  Calcular fechas según la lógica del negocio
+            // Calcular fechas según el periodo solicitado
             DateTime inicio;
             DateTime final;
 
             switch (dto.tipoPeriodo)
             {
-                case ReporteSolicitadoDTO.TipoPeriodo.semana:
-                    inicio = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + 1);
-                    final = inicio.AddDays(6);
+                case TipoPeriodo.semana:
+                    inicio = DateTime.Today.AddDays(-7);
+                    final = DateTime.Today;
                     break;
-
-                case ReporteSolicitadoDTO.TipoPeriodo.mes:
-                    inicio = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-                    final = inicio.AddMonths(1).AddDays(-1);
+                case TipoPeriodo.mes:
+                    inicio = DateTime.Today.AddMonths(-1);
+                    final = DateTime.Today;
                     break;
-
-                case ReporteSolicitadoDTO.TipoPeriodo.año:
-                    inicio = new DateTime(DateTime.Today.Year, 1, 1);
-                    final = new DateTime(DateTime.Today.Year, 12, 31);
+                case TipoPeriodo.año:
+                    inicio = DateTime.Today.AddYears(-1);
+                    final = DateTime.Today;
                     break;
-
                 default:
-                    throw new Exception("Tipo de periodo inválido.");
+                    throw new Exception("Tipo de periodo inválido."); // Error si el tipo no es válido
             }
 
-            // El ID lo genera el repositorio
+            // Generar un nuevo ID para el reporte
             string nuevoId = await _repo.GenerarIdReporteAsync();
 
-            // Armar entidad COMPLETA AQUÍ (en el servicio)
+            // Crear objeto Reporte
             var reporte = new Reporte
             {
                 idReporte = nuevoId,
                 idUsuario = idUsuario,
-                tipoArchivoRepo = dto.tipoArchivoRepo,
                 inicioPeriodo = inicio,
                 finalPeriodo = final,
                 fechaCreacionRepo = DateTime.UtcNow,
-                rutaArchivoRepo = "" //Hay que definir el metodo para generar la ruta
+                rutaArchivoRepo = "" // Ruta del archivo, se puede implementar luego
             };
 
-            // Guardar usando el repositorio
+            // Guardar el reporte en la base de datos
             await _repo.CreateReporteAsync(reporte);
 
-            return nuevoId;
+            return nuevoId; // Devolver ID del reporte creado
         }
 
-        Task<bool> IReporteService.EliminarReporteAsync(string idReporte, string idUsuario)
+        // Eliminar un reporte por ID y usuario
+        public Task<bool> EliminarReporteAsync(string idReporte, string idUsuario)
         {
             return _repo.DeleteReporteAsync(idReporte, idUsuario);
         }
 
-        Task<ReporteDTO?> IReporteService.ObtenerReportePorIdAsync(string idReporte, string idUsuario)
+        // Obtener un reporte por ID y usuario
+        public Task<ReporteDTO?> ObtenerReportePorIdAsync(string idReporte, string idUsuario)
         {
             return _repo.GetReporteByIdAsync(idReporte, idUsuario);
         }
 
-        Task<IEnumerable<ReporteDTO>> IReporteService.ObtenerReportesPorUsuarioAsync(string idUsuario)
+        // Obtener todos los reportes de un usuario
+        public Task<IEnumerable<ReporteDTO>> ObtenerReportesPorUsuarioAsync(string idUsuario)
         {
-            return _repo.GetReportesAsync( idUsuario);
+            return _repo.GetReportesAsync(idUsuario);
         }
     }
-
-    
-
-
 }
-
