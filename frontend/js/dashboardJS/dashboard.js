@@ -1,4 +1,4 @@
-function obtenerRango(opcion) { //Rango de gráficas
+function obtenerRango(opcion) { //Función para que devuelva las fechas de inicio y fin según el filtro seleccionado
     const hoy = new Date();
     const inicio = new Date();
 
@@ -23,8 +23,8 @@ function obtenerRango(opcion) { //Rango de gráficas
 
 // ==================== FUNCIONES PARA CREAR GRAFICAS ====================
 
-const API_URL = 'https://localhost:7258/api';
-const token = localStorage.getItem("token");
+const API_URL = 'https://localhost:7258/api'; 
+const token = localStorage.getItem("token"); /* Obtener token del almacenamiento local */
 let chartIngresosVsGastos = null;
 let chartGastosPorCategoria = null;
 let chartIngresosPorCategoria = null;
@@ -35,7 +35,7 @@ Chart.defaults.font.size = 16;
 Chart.defaults.font.weight = "bold";
 Chart.defaults.color = "#0A1F44";
 
-async function cargarResumen(fechaInicio, fechaFin) {
+async function cargarResumen(fechaInicio, fechaFin) { //Función para llamar al endpoint y cargar las gráficas
 
     const url = `${API_URL}/Calculos/ObtenerResumen?inicio=${fechaInicio}&fin=${fechaFin}`;
 
@@ -108,7 +108,7 @@ async function cargarResumen(fechaInicio, fechaFin) {
     }
 }
 
-async function cargarSaldoActual() {
+async function cargarSaldoActual() { //Función para cargar el saldo actual (no cambia basado en el filtro) en el dashboard
     const saldoElemento = document.getElementById("saldo-actual");
 
     const url = `${API_URL}/Calculos/ObtenerTotalesGenerales`;
@@ -141,7 +141,7 @@ async function cargarSaldoActual() {
     }
 }
 
-async function cargarUltimasTransacciones() {
+async function cargarUltimasTransacciones() { //Función para cargar las últimas 6 transacciones en el dashboard
     try {
         const response = await fetch(`${API_URL}/Transaccion/MisTransacciones`, {
             method: "GET",
@@ -157,10 +157,10 @@ async function cargarUltimasTransacciones() {
         }
 
         const resultado = await response.json();
-        transacciones = resultado.transacciones || []; /* Guarda todas las transacciones */
+        transacciones = resultado.transacciones || []; // Guarda todas las transacciones
 
         //Obtener las últimas 6
-        const ultimas = transacciones.slice(0, 8);
+        const ultimas = transacciones.slice(0, 6);
 
         // Lista UL
         const ul = document.querySelector(".transacciones-lista");
@@ -188,7 +188,7 @@ async function cargarUltimasTransacciones() {
 }
 
 
-function crearIngresosVsGastos(totalIngresos, totalGastos) {
+function crearIngresosVsGastos(totalIngresos, totalGastos) { //Función para crear la gráfica de ingresos vs gastos
     const ctx = document.getElementById('ingresos-vs-gastos').getContext('2d');
 
     if (chartIngresosVsGastos) chartIngresosVsGastos.destroy(); // Destruir gráfico previo si existe, permite actualizar nuevas gráficas
@@ -217,7 +217,7 @@ function crearIngresosVsGastos(totalIngresos, totalGastos) {
                 }
             },
             legend: {
-                display: false
+                display: false // No necesitamos leyenda para este gráfico
             },
             datalabels: {
                 color: ["#2e7d32", "#c0392b"],
@@ -236,16 +236,16 @@ function crearIngresosVsGastos(totalIngresos, totalGastos) {
         scales: {
             x: {
                 grid: {
-                    display: false
+                    display: false // Oculta las líneas de la cuadrícula en el eje X
                 }
             },
             y: {
                 grid: {
-                    display: false
+                    display: false // Oculta la cuadrícula del eje Y
                 }
             }
         },
-        animation: {
+        animation: { // Animación suave al cargar
             duration: 900,
             easing: "easeOutQuart"
         },
@@ -259,7 +259,7 @@ function crearIngresosVsGastos(totalIngresos, totalGastos) {
 }
 
 
-function crearGastosPorCategoria(gastosPorCategoria) {
+function crearGastosPorCategoria(gastosPorCategoria) { //Función para crear la gráfica de gastos por categoría
     const ctx = document.getElementById('gastos-por-categoria').getContext('2d');
 
     if (chartGastosPorCategoria) chartGastosPorCategoria.destroy();
@@ -294,7 +294,7 @@ function crearGastosPorCategoria(gastosPorCategoria) {
                             size: 14 
                         },
                         filter: function (item, chart) {
-                            return item.index < 3; // muestra solo 3 leyendas
+                            return item.index < 3; // muestra máximo 3 leyendas
                         }
                     }
                 },
@@ -311,7 +311,7 @@ function crearGastosPorCategoria(gastosPorCategoria) {
     });
 }
 
-function crearIngresosPorCategoria(ingresosPorCategoria) {
+function crearIngresosPorCategoria(ingresosPorCategoria) { //Función para crear la gráfica de ingresos por categoría
     const ctx = document.getElementById('ingresos-por-categoria').getContext('2d');
 
     if (chartIngresosPorCategoria) chartIngresosPorCategoria.destroy(); // Destruir gráfico previo si existe, permite actualizar nuevas gráficas
@@ -346,7 +346,7 @@ function crearIngresosPorCategoria(ingresosPorCategoria) {
                             size: 14 
                         },
                         filter: function (item, chart) {
-                            return item.index < 3; // muestra solo 3 leyendas
+                            return item.index < 3; // muestra máximo 3 leyendas
                         }
                     }
                 },
@@ -363,8 +363,8 @@ function crearIngresosPorCategoria(ingresosPorCategoria) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    const { fechaInicio, fechaFin } = obtenerRango("semana");
+document.addEventListener("DOMContentLoaded", () => { //Código que se ejecuta al cargar la página
+    const { fechaInicio, fechaFin } = obtenerRango("semana"); //Rango por defecto: última semana
     cargarResumen(fechaInicio, fechaFin);
     cargarUltimasTransacciones();
     cargarSaldoActual();

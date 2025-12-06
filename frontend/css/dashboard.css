@@ -4,13 +4,13 @@
     font-family: "Nunito", sans-serif; /*Sobreescribe el estilo que sale en general*/
 }
 
-.filtro-tiempo {
+.filtro-tiempo { /*Estilo para el dropdown de filtro de tiempo*/
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.dashboard-header h1 {
+.dashboard-header h1 { /*Elimina todo el espacio exterior dentro del elemento*/
     margin: 0;
 }
 
@@ -77,12 +77,12 @@
 }
 
 .transacciones-lista {
-    list-style: none;
+    list-style: none; /*Elimina los puntos de la lista */
     padding: 0;
     margin: 0;  
 }
 
-.transacciones-lista li {
+.transacciones-lista li { /* Estilo para cada elemento de la lista */
     padding: 12px 14px;
     margin-bottom: 10px;
     border-radius: 8px;
@@ -90,7 +90,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: transform 0.4s ease, box-shadow 0.2s ease;
+    transition: transform 0.4s ease, box-shadow 0.2s ease; /* Transición suave */
 }
 
 .transacciones-lista li:hover {
@@ -99,10 +99,11 @@
 }
 
 
-.transacciones-lista li {
+.transacciones-lista li { /*Animación para que los li hagan fade in hacia arriba*/
     opacity: 0;
     transform: translateY(20px);
     animation: fadeUp 0.4s ease-out forwards;
+    border: 2px solid #ccc;
 }
 
 @keyframes fadeUp { /*Animación para que los li hagan fade in hacia arriba*/
