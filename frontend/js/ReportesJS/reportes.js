@@ -1,170 +1,172 @@
-const API_URL = 'https://localhost:7258/api'; /* URL base de la API */
+const API_URL = 'https://localhost:7258/api'; // URL base de la API
+let transacciones = []; // Almacena todas las transacciones cargadas
 
-let transacciones = []; /* Almacena todas las transacciones cargadas */
-
-// ================== RESUMEN (CalculosController) ==================
+// ================== CARGAR RESUMEN ==================
 async function cargarResumen(periodo) {
-  const token = localStorage.getItem('token'); /* Obtiene el token */
-  if (!token) { /* Si no hay token, redirige a login */
-    window.location.href = '../pages/autenticacion.html';
-    return;
-  }
-
-  const hoy = new Date(); /* Fecha actual */
-  let inicio = new Date(); /* Fecha de inicio según periodo */
-
-  if (periodo === 'semana') { /* Últimos 7 días */
-    inicio.setDate(hoy.getDate() - 7);
-  } else if (periodo === 'mes') { /* Último mes */
-    inicio.setMonth(hoy.getMonth() - 1);
-  } else if (periodo === 'anio') { /* Último año */
-    inicio.setFullYear(hoy.getFullYear() - 1);
-  }
-
-  const inicioStr = inicio.toISOString().split('T')[0]; // yyyy-MM-dd
-  const finStr = hoy.toISOString().split('T')[0]; 
-
-  const resp = await fetch(`${API_URL}/Calculos/ObtenerResumen?inicio=${inicioStr}&fin=${finStr}`, { /* Llamada al endpoint */
-    method: 'GET', 
-    headers: { /* Headers con token */
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+    const token = localStorage.getItem('token'); // Obtener token
+    if (!token) {
+        window.location.href = '../pages/autenticacion.html'; // Redirigir si no hay token
+        return;
     }
-  });
 
-  if (resp.status === 401) { /* Si no autorizado, redirige a login */
-    mostrarPopup('Tu sesión expiró. Inicia sesión de nuevo.');
-    window.location.href = '../pages/autenticacion.html';
-    return;
-  }
+    const hoy = new Date();
+    let inicio = new Date();
 
-  if (!resp.ok) { /* Si hay error en la respuesta */
-    console.error('Error al obtener resumen');
-    return;
-  }
+    // Determinar fecha de inicio según periodo
+    if (periodo === 'semana') inicio.setDate(hoy.getDate() - 7);
+    else if (periodo === 'mes') inicio.setMonth(hoy.getMonth() - 1);
+    else if (periodo === 'anio') inicio.setFullYear(hoy.getFullYear() - 1);
+    else if (periodo === 'todo') inicio = new Date(2000, 0, 1); // Fecha muy antigua para "todo"
 
-  const resultado = await resp.json(); // { exito, mensaje, datos }
-  console.log('Resumen recibido:', resultado);
+    const inicioStr = inicio.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    const finStr = hoy.toISOString().split('T')[0];
 
-  if (!resultado.exito || !resultado.datos) { /* Si no hay datos */
-    console.error('No hay datos de resumen para el periodo.');
-    return;
-  }
+    // Llamada a la API para obtener resumen
+    const resp = await fetch(`${API_URL}/Calculos/ObtenerResumen?inicio=${inicioStr}&fin=${finStr}`, { // Parámetros en query string
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+    });
 
-    const datos = resultado.datos; // { totalIngresos, totalGastos, diferencia }
-
-    const totalIngresos = datos.totalIngresos ?? 0; /* Valores por defecto a 0 */
-    const totalGastos = datos.totalGastos ?? 0; /* Valores por defecto a 0 */
-    const diferencia = datos.diferencia ?? (totalIngresos - totalGastos); /* Calcula diferencia si no viene */
-
-    /* Actualiza el DOM con los valores formateados */
-    document.getElementById('totalIngresos').textContent = `$${Number(totalIngresos).toFixed(2)}`; /* Formatea a 2 decimales */
-    document.getElementById('totalGastos').textContent = `$${Number(totalGastos).toFixed(2)}`;
-    document.getElementById('saldo').textContent = `$${Number(diferencia).toFixed(2)}`;
-
-}
-
-// ================== TRANSACCIONES PARA TABLAS ==================
-async function cargarTransaccionesPeriodo(periodo) { 
-  const token = localStorage.getItem('token');
-  if (!token) { /* Si no hay token, redirige a login */
-    window.location.href = '../pages/autenticacion.html';
-    return;
-  }
-
-  const resp = await fetch(`${API_URL}/Transaccion/MisTransacciones`, { /* Llamada al endpoint */
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+    if (resp.status === 401) { // Token expirado
+        alert('Tu sesión expiró. Inicia sesión de nuevo.');
+        window.location.href = '../pages/autenticacion.html'; // Redirigir 
+        return;
     }
-  });
 
-  if (resp.status === 401) { /* Si no autorizado, redirige a login */
-    mostrarPopup('Tu sesión expiró. Inicia sesión de nuevo.');
-    window.location.href = '../pages/autenticacion.html';
-    return;
-  }
+    if (!resp.ok) { console.error('Error al obtener resumen'); return; } // Manejo de error
 
-  if (!resp.ok) { /* Si hay error en la respuesta */
-    console.error('Error al obtener transacciones');
-    return;
-  }
+    const resultado = await resp.json(); // Parsear JSON
+    if (!resultado.exito || !resultado.datos) { console.error('No hay datos de resumen'); return; } // Validar datos
 
-  const resultado = await resp.json(); // { mensaje, transacciones }
-  transacciones = resultado.transacciones || []; /* Guarda todas las transacciones */
-  console.log('Transacciones cargadas:', transacciones);
-
-  aplicarFiltroTablas(periodo); /* Filtra y renderiza las tablas */
+    // Mostrar totales en la UI
+    const datos = resultado.datos;
+    document.getElementById('totalIngresos').textContent = `$${Number(datos.totalIngresos ?? 0).toFixed(2)}`; // Manejo de null/undefined
+    document.getElementById('totalGastos').textContent = `$${Number(datos.totalGastos ?? 0).toFixed(2)}`; 
+    document.getElementById('saldo').textContent = `$${Number(datos.diferencia ?? (datos.totalIngresos - datos.totalGastos)).toFixed(2)}`; // Calcular diferencia si no viene en datos
 }
 
-function aplicarFiltroTablas(periodo) { /* Filtra transacciones según periodo */
-  const hoy = new Date(); /* Fecha actual */
-  let inicio = new Date(); /* Fecha de inicio según periodo */
+// ================== CARGAR TRANSACCIONES ==================
+async function cargarTransaccionesPeriodo(periodo) { // Cargar todas las transacciones y filtrar después
+    const token = localStorage.getItem('token');
+    if (!token) { window.location.href = '../pages/autenticacion.html'; return; }
 
-  if (periodo === 'semana') {
-    inicio.setDate(hoy.getDate() - 7);
-  } else if (periodo === 'mes') {
-    inicio.setMonth(hoy.getMonth() - 1);
-  } else if (periodo === 'anio') {
-    inicio.setFullYear(hoy.getFullYear() - 1);
-  }
+    const resp = await fetch(`${API_URL}/Transaccion/MisTransacciones`, { // Obtener todas las transacciones
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+    });
 
-  const filtradas = transacciones.filter(t => { /* Filtra por fecha */
-    const f = new Date(t.fechaTransac);
-    return f >= inicio && f <= hoy;
-  });
+    if (resp.status === 401) { alert('Tu sesión expiró'); window.location.href = '../pages/autenticacion.html'; return; } // Token expirado
+    if (!resp.ok) { console.error('Error al obtener transacciones'); return; } // Manejo de error
 
-  /* Separa en ingresos y gastos */
-  const ingresos = filtradas.filter(t => t.tipoCategoria === 'Ingreso');
-  const gastos = filtradas.filter(t => t.tipoCategoria === 'Gasto');
-
-  renderTablas(ingresos, gastos);
+    const resultado = await resp.json(); // Parsear JSON
+    transacciones = resultado.transacciones || []; // Guardar transacciones
+    aplicarFiltroTablas(periodo); // Filtrar y renderizar
 }
 
-function renderTablas(ingresos, gastos) { /* Renderiza las tablas en el DOM */
-  const tbodyIngresos = document.querySelector('#tablaIngresos tbody'); /* Selecciona los cuerpos de las tablas */
-  const tbodyGastos = document.querySelector('#tablaGastos tbody'); /* Selecciona los cuerpos de las tablas */
+// ================== FILTRAR Y RENDERIZAR TABLAS ==================
+function aplicarFiltroTablas(periodo) { // Filtrar transacciones según periodo
+    const hoy = new Date(); // Fecha actual
+    let inicio = new Date(); // Fecha de inicio
 
-  tbodyIngresos.innerHTML = ''; /* Limpia tablas */
-  tbodyGastos.innerHTML = ''; 
+    if (periodo === 'semana') inicio.setDate(hoy.getDate() - 7); // Última semana
+    else if (periodo === 'mes') inicio.setMonth(hoy.getMonth() - 1); // Último mes
+    else if (periodo === 'anio') inicio.setFullYear(hoy.getFullYear() - 1); // Último año
+    else if (periodo === 'todo') inicio = new Date(2000, 0, 1); // Fecha muy antigua para "todo"
 
-  ingresos.forEach(t => { /* Agrega filas a la tabla de ingresos */
-    const tr = document.createElement('tr'); /* Crea una fila */
-    tr.innerHTML = ` 
-      <td>${t.fechaTransac.split('T')[0]}</td>
-      <td>${t.nombreCateg}</td>
-      <td>${t.descripcionTransac}</td>
-      <td>$${Number(t.montoTransac).toFixed(2)}</td>
-    `; /* Llena la fila */
+    const filtradas = transacciones.filter(t => { // Filtrar por fecha
+        const f = new Date(t.fechaTransac); // Convertir a Date
+        return f >= inicio && f <= hoy;
+    });
 
-    tbodyIngresos.appendChild(tr); /* Agrega la información de una fila a la tabla que dejamos vacia */
-  });
+    const ingresos = filtradas.filter(t => t.tipoCategoria === 'Ingreso'); // Separar ingresos y gastos
+    const gastos = filtradas.filter(t => t.tipoCategoria === 'Gasto');
 
-  gastos.forEach(t => { /* Agrega filas a la tabla de gastos */
-    const tr = document.createElement('tr'); /* Crea una fila */
-    tr.innerHTML = `
-      <td>${t.fechaTransac.split('T')[0]}</td>
-      <td>${t.nombreCateg}</td>
-      <td>${t.descripcionTransac}</td>
-      <td>$${Number(t.montoTransac).toFixed(2)}</td>
-    `; /* Llena la fila */
+    renderTablas(ingresos, gastos); // Renderizar tablas
+}
 
-    tbodyGastos.appendChild(tr); /* Agrega la información de una fila a la tabla que dejamos vacia */
-  });
+function renderTablas(ingresos, gastos) { // Renderizar tablas de ingresos y gastos
+    const tbodyIngresos = document.querySelector('#tablaIngresos tbody'); // Seleccionar cuerpos de tabla
+    const tbodyGastos = document.querySelector('#tablaGastos tbody');
+
+    // Limpiar tablas
+    tbodyIngresos.innerHTML = '';
+    tbodyGastos.innerHTML = '';
+
+    // Render ingresos
+    ingresos.forEach(t => {
+        const tr = document.createElement('tr'); // Crear fila
+        tr.innerHTML = `
+            <td>${t.fechaTransac.split('T')[0]}</td> 
+            <td>${t.nombreCateg}</td>
+            <td>${t.descripcionTransac}</td>
+            <td>$${Number(t.montoTransac).toFixed(2)}</td>
+        `;
+        tbodyIngresos.appendChild(tr); // Agregar fila a la tabla
+    });
+
+    // Render gastos
+    gastos.forEach(t => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${t.fechaTransac.split('T')[0]}</td>
+            <td>${t.nombreCateg}</td>
+            <td>${t.descripcionTransac}</td>
+            <td>$${Number(t.montoTransac).toFixed(2)}</td>
+        `;
+        tbodyGastos.appendChild(tr);
+    });
+}
+
+// ================== GENERAR PDF ==================
+async function generarPDF(periodo) { // Generar y descargar PDF del reporte
+    const token = localStorage.getItem('token');
+    if (!token) { window.location.href = '../pages/autenticacion.html'; return; }
+
+    const hoy = new Date(); // Fecha actual
+    let inicio = new Date(); // Fecha de inicio
+    if (periodo === 'semana') inicio.setDate(hoy.getDate() - 7); // Última semana
+    else if (periodo === 'mes') inicio.setMonth(hoy.getMonth() - 1);
+    else if (periodo === 'anio') inicio.setFullYear(hoy.getFullYear() - 1);
+    else if (periodo === 'todo') inicio = new Date(2000, 0, 1);
+
+    const mapPeriodo = { semana: "semana", mes: "mes", anio: "año", todo: "todo" }; // Mapeo para la API
+    let dto = { tipoPeriodo: mapPeriodo[periodo] }; // DTO para la API
+    if (periodo === "todo") { dto.inicio = inicio.toISOString(); dto.fin = hoy.toISOString(); } // Fechas para "todo"
+
+    const resp = await fetch(`${API_URL}/Reporte/DescargarPdfPeriodo`, { // Llamada a la API
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(dto)
+    });
+
+    if (!resp.ok) { console.error(await resp.text()); alert("Error generando PDF"); return; } // Manejo de error
+
+    // Descargar PDF
+    const blob = await resp.blob(); // Obtener blob del PDF
+    const url = window.URL.createObjectURL(blob); // Crear URL temporal
+    const a = document.createElement('a'); // Crear enlace de descarga
+    a.href = url; // Asignar URL
+    a.download = `Reporte_${periodo}.pdf`; // Nombre del archivo
+    a.click(); // Iniciar descarga
+    window.URL.revokeObjectURL(url); // Liberar URL
 }
 
 // ================== INICIALIZACIÓN ==================
-document.addEventListener('DOMContentLoaded', () => { /* Al cargar el DOM */
-  const periodoSelect = document.getElementById('periodoSelect'); /* Selector de periodo */
+document.addEventListener('DOMContentLoaded', () => { // Al cargar la página
+    const periodoSelect = document.getElementById('periodoSelect'); // Selector de periodo
+    const periodoInicial = periodoSelect.value; // Periodo inicial seleccionado
 
-  const periodoInicial = periodoSelect.value; // 'semana' por defecto
-  cargarResumen(periodoInicial); /* Carga resumen inicial */
-  cargarTransaccionesPeriodo(periodoInicial); /* Carga transacciones iniciales */
+    cargarResumen(periodoInicial); // Cargar resumen inicial
+    cargarTransaccionesPeriodo(periodoInicial); // Cargar transacciones iniciales
 
-  periodoSelect.addEventListener('change', () => { /* Al cambiar el periodo */
-    const periodo = periodoSelect.value; /* Nuevo periodo */
-    cargarResumen(periodo); /* Actualiza resumen */
-    aplicarFiltroTablas(periodo); // usa las transacciones ya cargadas
-  });
+    // Cambiar periodo
+    periodoSelect.addEventListener('change', () => { // Al cambiar el periodo
+        const periodo = periodoSelect.value; // Nuevo periodo seleccionado
+        cargarResumen(periodo); // Recargar resumen
+        aplicarFiltroTablas(periodo); // Filtrar y renderizar tablas
+    });
+
+    // Botón exportar PDF
+    const btnExportarPdf = document.getElementById('btnExportarPdf'); 
+    if (btnExportarPdf) btnExportarPdf.addEventListener('click', () => generarPDF(periodoSelect.value)); // Generar PDF al hacer clic
 });
