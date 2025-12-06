@@ -2,17 +2,15 @@
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using WalletHub.Data.Interface;
-using WalletHub.Models;
 using WalletHub.Services.Interface;
 using WalletHub.DTOs;
 
-// Servicio encargado de generar el PDF de un reporte
 public class ReportePDFService : IReportePDFService
 {
-    private readonly IReporteRepository _reporteRepository;
     private readonly ICalculosService _calculosService;
+    private readonly IReporteRepository _reporteRepository;
 
-    // Recibe el repositorio de reportes y el servicio de cálculos por inyección de dependencias
+    // Inyección de dependencias: repositorio y cálculos
     public ReportePDFService(
         IReporteRepository reporteRepository,
         ICalculosService calculosService)
@@ -21,69 +19,144 @@ public class ReportePDFService : IReportePDFService
         _calculosService = calculosService;
     }
 
-    // Genera el PDF de un reporte específico del usuario y lo devuelve como byte[]
-    public async Task<byte[]> GenerarReportePdfAsync(string idReporte, string idUsuario)
+    // ========================================================
+    // GENERAR PDF POR PERIODO (USADO EN EL FRONT)
+    // ========================================================
+    public async Task<byte[]> GenerarReportePdfPorPeriodoAsync(
+        string idUsuario,
+        DateTime inicio,
+        DateTime fin)
     {
-        // Obtiene la entidad Reporte y valida que pertenezca al usuario
+        // Obtener resumen de ingresos/gastos para el periodo
+        var resumen = await _calculosService.ObtenerResumenAsync(idUsuario, inicio, fin);
+
+        // Crear y devolver el PDF
+        return CrearDocumentoPDF(
+            titulo: "REPORTE POR PERIODO",
+            inicio: inicio,
+            fin: fin,
+            resumen: resumen
+        );
+    }
+
+    // ========================================================
+    // GENERAR PDF POR ID DE REPORTE (OPCIONAL)
+    // ========================================================
+    public async Task<byte[]> GenerarReportePdfAsync(
+        string idReporte,
+        string idUsuario)
+    {
         var reporte = await _reporteRepository.GetReporteByIdInterno(idReporte, idUsuario);
-
         if (reporte == null)
-            throw new InvalidOperationException("El reporte no existe o no pertenece al usuario.");
+            return Array.Empty<byte>(); // Retornar vacío si no existe
 
-        // Usa el periodo del reporte para obtener el resumen (ingresos, gastos, categorías)
+        // Obtener resumen usando las fechas del reporte
         var resumen = await _calculosService.ObtenerResumenAsync(
             idUsuario,
             reporte.inicioPeriodo,
-            reporte.finalPeriodo
-        );
+            reporte.finalPeriodo);
 
-        // Construye el documento PDF en memoria usando QuestPDF
-        var pdfBytes = Document.Create(container =>
+        // Crear y devolver el PDF
+        return CrearDocumentoPDF(
+            titulo: "REPORTE DETALLADO",
+            inicio: reporte.inicioPeriodo,
+            fin: reporte.finalPeriodo,
+            resumen: resumen,
+            idReporte: idReporte
+        );
+    }
+
+    // ========================================================
+    // PLANTILLA DE DISEÑO DEL PDF
+    // ========================================================
+    private byte[] CrearDocumentoPDF(
+        string titulo,
+        DateTime inicio,
+        DateTime fin,
+        CalculosDTO resumen,
+        string? idReporte = null)
+    {
+        return Document.Create(container =>
         {
             container.Page(page =>
             {
-                page.Size(PageSizes.A4);
-                page.Margin(2, Unit.Centimetre);
-                page.PageColor(Colors.White);
-                page.DefaultTextStyle(x => x.FontSize(12));
+                page.Size(PageSizes.A4);         // Tamaño A4
+                page.Margin(30);                 // Margen
+                page.DefaultTextStyle(x => x.FontSize(11).FontColor("#333")); // Estilo base
 
-                // Encabezado del reporte
-                page.Header()
-                    .Text("REPORTE DE TRANSACCIONES")
-                    .SemiBold().FontSize(20).FontColor(Colors.Blue.Medium);
-
-                // Contenido principal en formato de columna
-                page.Content().Column(col =>
+                // ---------------- ENCABEZADO ------------------
+                page.Header().Element(header =>
                 {
-                    col.Spacing(10);
+                    header.Column(col =>
+                    {
+                        col.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text(titulo)
+                                .SemiBold()
+                                .FontSize(22)
+                                .FontColor("#1A73E8");
+                        });
 
-                    // Datos generales del reporte
-                    col.Item().Text($"ID reporte: {reporte.idReporte}");
-                    col.Item().Text($"Fecha de creación: {reporte.fechaCreacionRepo:dd/MM/yyyy HH:mm}");
-                    col.Item().Text($"Periodo: {reporte.inicioPeriodo:dd/MM/yyyy} - {reporte.finalPeriodo:dd/MM/yyyy}");
-                    col.Item().Text($"Tipo de archivo: {reporte.tipoArchivoRepo}");
+                        col.Item()
+                           .PaddingTop(5)
+                           .BorderBottom(1)
+                           .BorderColor("#1A73E8");
+                    });
+                });
 
-                    col.Item().LineHorizontal(1).LineColor(Colors.Grey.Medium);
+                // ---------------- CUERPO ------------------
+                page.Content().PaddingVertical(15).Column(col =>
+                {
+                    col.Spacing(20);
 
-                    // Resumen general del periodo
-                    col.Item().Text("Resumen del periodo").SemiBold().FontSize(14);
-                    col.Item().Text($"Total ingresos: {resumen.TotalIngresos:C}");
-                    col.Item().Text($"Total gastos: {resumen.TotalGastos:C}");
-                    col.Item().Text($"Diferencia: {resumen.Diferencia:C}");
+                    // ---- Datos del periodo ----
+                    col.Item().Border(1).BorderColor("#E0E0E0").Padding(10).Column(info =>
+                    {
+                        info.Spacing(5);
 
-                    col.Item().LineHorizontal(1).LineColor(Colors.Grey.Medium);
+                        info.Item().Text("Información del periodo")
+                            .SemiBold().FontSize(14).FontColor("#1A73E8");
 
-                    // Tabla de gastos por categoría (si existen datos)
+                        if (idReporte != null)
+                            info.Item().Text($"ID reporte: {idReporte}");
+
+                        info.Item().Text($"Desde: {inicio:dd/MM/yyyy}");
+                        info.Item().Text($"Hasta: {fin:dd/MM/yyyy}");
+                    });
+
+                    // ---- Resumen ----
+                    col.Item().Border(1).BorderColor("#E0E0E0").Padding(10).Column(res =>
+                    {
+                        res.Spacing(8);
+                        res.Item().Text("Resumen General")
+                            .SemiBold().FontSize(14).FontColor("#1A73E8");
+
+                        res.Item().Row(r =>
+                        {
+                            r.RelativeItem().Text($"Ingresos\n{resumen.TotalIngresos:C}")
+                                .FontSize(12).FontColor("#0F9D58");
+
+                            r.RelativeItem().Text($"Gastos\n{resumen.TotalGastos:C}")
+                                .FontSize(12).FontColor("#DB4437");
+
+                            r.RelativeItem().Text($"Saldo\n{resumen.Diferencia:C}")
+                                .FontSize(12).Bold();
+                        });
+                    });
+
+                    // ---- Tabla Gastos ----
                     if (resumen.GastosPorCategoria.Any())
                     {
-                        col.Item().Text("Gastos por categoría").SemiBold().FontSize(14);
+                        col.Item().PaddingTop(10).Text("Gastos por Categoría")
+                            .SemiBold().FontSize(14).FontColor("#DB4437");
+
                         col.Item().Table(table =>
                         {
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(40);  // ID categoría
-                                columns.RelativeColumn();    // Nombre categoría
-                                columns.ConstantColumn(80);  // Monto total
+                                columns.ConstantColumn(50);
+                                columns.RelativeColumn();
+                                columns.ConstantColumn(90);
                             });
 
                             table.Header(header =>
@@ -95,26 +168,26 @@ public class ReportePDFService : IReportePDFService
 
                             foreach (var g in resumen.GastosPorCategoria)
                             {
-                                table.Cell().Text(g.IdCategoria);
+                                table.Cell().Text(g.IdCategoria.ToString());
                                 table.Cell().Text(g.NombreCategoria);
-                                table.Cell().Text(g.Total.ToString("C"));
+                                table.Cell().Text(g.Total.ToString("C")).FontColor("#DB4437");
                             }
                         });
                     }
 
-                    col.Item().LineHorizontal(1).LineColor(Colors.Grey.Medium);
-
-                    // Tabla de ingresos por categoría (si existen datos)
+                    // ---- Tabla Ingresos ----
                     if (resumen.IngresosPorCategoria.Any())
                     {
-                        col.Item().Text("Ingresos por categoría").SemiBold().FontSize(14);
+                        col.Item().PaddingTop(20).Text("Ingresos por Categoría")
+                            .SemiBold().FontSize(14).FontColor("#0F9D58");
+
                         col.Item().Table(table =>
                         {
                             table.ColumnsDefinition(columns =>
                             {
-                                columns.ConstantColumn(40);
+                                columns.ConstantColumn(50);
                                 columns.RelativeColumn();
-                                columns.ConstantColumn(80);
+                                columns.ConstantColumn(90);
                             });
 
                             table.Header(header =>
@@ -126,25 +199,23 @@ public class ReportePDFService : IReportePDFService
 
                             foreach (var i in resumen.IngresosPorCategoria)
                             {
-                                table.Cell().Text(i.IdCategoria);
+                                table.Cell().Text(i.IdCategoria.ToString());
                                 table.Cell().Text(i.NombreCategoria);
-                                table.Cell().Text(i.Total.ToString("C"));
+                                table.Cell().Text(i.Total.ToString("C")).FontColor("#0F9D58");
                             }
                         });
                     }
                 });
 
-                // Pie de página con numeración
+                // ---------------- FOOTER ------------------
                 page.Footer().AlignCenter().Text(x =>
                 {
                     x.Span("Página ");
                     x.CurrentPageNumber();
-                    x.Span(" de ");
+                    x.Span(" / ");
                     x.TotalPages();
                 });
             });
-        }).GeneratePdf();  // Genera el PDF y devuelve el byte[]
-
-        return pdfBytes;
+        }).GeneratePdf(); // Generar PDF final
     }
 }
