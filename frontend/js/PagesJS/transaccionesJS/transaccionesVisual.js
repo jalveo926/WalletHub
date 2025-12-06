@@ -229,11 +229,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Acceder al botón Eliminar
     if (e.target.closest(".opcion-eliminar")) {
         const idTransaccion = e.target.closest(".opcion-eliminar").getAttribute("data-id"); //Obtener ID de la transacción
-        const confirmar = confirm("¿Estás seguro de que deseas eliminar esta transacción?");
-        if (!confirmar) return;
-        eliminarTransaccion(idTransaccion);
-        console.log("Eliminar transacción:", idTransaccion);
+        mostrarConfirmacion("¿Estás seguro de que deseas eliminar esta transacción?", (confirmar) => {
+        if (confirmar) {
+            eliminarTransaccion(idTransaccion);
+            console.log("Eliminar transacción:", idTransaccion);
+        } 
+    });
     }
   });
 });
-

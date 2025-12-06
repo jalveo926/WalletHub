@@ -1,9 +1,18 @@
 <link rel="stylesheet" href="../css/ComponentsCSS/popup.css">
 
-<!--Div para mostrar pop ups-->
-<div class="popup-general">
+<!--Div para mostrar popup de mensaje-->
+<div class="popup-general" id="popup-mensaje">
     <div class="popup-content">
         <p id="popup-text"></p>
-        <button id="popup-btn">OK</button>
+        <button id="popup-btn" class="botones-popup">OK</button>
+    </div>
+</div>
+
+<!--Div para mostrar popup de confirmación-->
+<div class="popup-general" id="popup-confirmacion">
+    <div class="popup-content">
+        <p id="popup-confirm-text"></p>
+        <button id="popup-aceptar-btn" class="botones-popup">Sí</button>
+        <button id="popup-cancelar-btn" class="botones-popup">No</button>
     </div>
 </div>
