@@ -67,7 +67,7 @@ footer .cerrar-sesion {
     font-weight: bold;
     border-radius: 6px;
     cursor: pointer;
-    transition: 0.25s ease;
+    transition: 0.25s ease; /* Suaviza la transición */
     font-size: 15px;
 }
 

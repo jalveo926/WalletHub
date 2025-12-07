@@ -35,7 +35,7 @@ form {
     background-color: #fff;
     border-radius: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    position: relative; 
+    position: relative; /*Necesario para ubicar correctamente el botón de cierre u otros elementos absolutos*/
 }
 
 /*Estilos para los formularios de inicio de sesión y registro*/
@@ -99,7 +99,7 @@ img {
 a {
     text-decoration: none;
     color: #fff;
-    position: absolute;
+    position: absolute; /* Posiciona el botón de cierre en la esquina del contenedor */
     top: 15px;
     right: 20px;
     font-weight: bold;
@@ -128,7 +128,7 @@ a:hover {
 
 /*Contenedor del input con icono*/
 .password-wrapper {
-    position: relative;
+    position: relative; /*Necesario para posicionar el ícono dentro del input*/
     width: 100%;
 }
 

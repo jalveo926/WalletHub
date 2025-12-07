@@ -63,7 +63,7 @@
   width: 26px;
   height: 26px;
   cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease; /*Suaviza los cambios de tamaño y opacidad al hacer hover*/
 }
 
 .icons img {
@@ -72,8 +72,8 @@
 }
 
 .icons:hover {
-  transform: scale(1.2);
-  opacity: 0.8;
+  transform: scale(1.2); /*Aumenta el tamaño al pasar el cursor*/
+  opacity: 0.8; /*Reduce ligeramente la opacidad al pasar el cursor*/
 }
 
 
@@ -81,7 +81,7 @@
 @media screen and (max-width: 600px) {
   .encabezado {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-start; /* Alinea a la izquierda en pantallas pequeñas */
     gap: 15px;
   }
 
