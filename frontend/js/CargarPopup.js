@@ -12,7 +12,8 @@ window.addEventListener("DOMContentLoaded", () => {
         .then(html => {
             document.getElementById("popup-container").innerHTML = html; //Insertar el HTML cargado en el contenedor del popup
 
-            //--------- POPUP DE MENSAJE ---------
+            //POPUP DE MENSAJE
+            
             const popup = document.querySelector("#popup-container #popup-mensaje"); //Contenedor del popup
             const popupText = popup.querySelector("#popup-text"); //Texto del popup
             const popupBtn = popup.querySelector("#popup-btn"); //Botón de cierre del popup
@@ -28,7 +29,8 @@ window.addEventListener("DOMContentLoaded", () => {
                 popup.style.display = "none";
             });
 
-            //--------- POPUP DE CONFIRMACIÓN ---------
+            //POPUP DE CONFIRMACIÓN
+            
             const popupConfirm = document.querySelector("#popup-container #popup-confirmacion");
             const popupConfirmText = popupConfirm.querySelector("#popup-confirm-text");
             const btnAceptar = popupConfirm.querySelector("#popup-aceptar-btn");

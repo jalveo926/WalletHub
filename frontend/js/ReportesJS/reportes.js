@@ -1,7 +1,8 @@
 const API_URL = 'https://localhost:7258/api'; // URL base de la API
 let transacciones = []; // Almacena todas las transacciones cargadas
 
-// ================== CARGAR RESUMEN ==================
+//CARGAR RESUMEN
+
 async function cargarResumen(periodo) {
     const token = localStorage.getItem('token'); // Obtener token
     if (!token) {
@@ -45,7 +46,8 @@ async function cargarResumen(periodo) {
     document.getElementById('saldo').textContent = `$${Number(datos.diferencia ?? (datos.totalIngresos - datos.totalGastos)).toFixed(2)}`; // Calcular diferencia si no viene en datos
 }
 
-// ================== CARGAR TRANSACCIONES ==================
+//CARGAR TRANSACCIONES
+
 async function cargarTransaccionesPeriodo(periodo) { // Cargar todas las transacciones y filtrar después
     const token = localStorage.getItem('token');
     if (!token) { window.location.href = '../pages/autenticacion.html'; return; }
@@ -63,7 +65,8 @@ async function cargarTransaccionesPeriodo(periodo) { // Cargar todas las transac
     aplicarFiltroTablas(periodo); // Filtrar y renderizar
 }
 
-// ================== FILTRAR Y RENDERIZAR TABLAS ==================
+//FILTRAR Y RENDERIZAR TABLAS
+
 function aplicarFiltroTablas(periodo) { // Filtrar transacciones según periodo
     const hoy = new Date(); // Fecha actual
     let inicio = new Date(); // Fecha de inicio
@@ -117,7 +120,8 @@ function renderTablas(ingresos, gastos) { // Renderizar tablas de ingresos y gas
     });
 }
 
-// ================== GENERAR PDF ==================
+//GENERAR PDF
+
 async function generarPDF(periodo) { // Generar y descargar PDF del reporte
     const token = localStorage.getItem('token');
     if (!token) { window.location.href = '../pages/autenticacion.html'; return; }
@@ -151,7 +155,8 @@ async function generarPDF(periodo) { // Generar y descargar PDF del reporte
     window.URL.revokeObjectURL(url); // Liberar URL
 }
 
-// ================== INICIALIZACIÓN ==================
+//INICIALIZACIÓN
+
 document.addEventListener('DOMContentLoaded', () => { // Al cargar la página
     const periodoSelect = document.getElementById('periodoSelect'); // Selector de periodo
     const periodoInicial = periodoSelect.value; // Periodo inicial seleccionado

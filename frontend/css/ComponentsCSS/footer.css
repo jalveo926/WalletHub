@@ -36,17 +36,6 @@ footer ul li a:hover {
     color: #16A085;
 }
 
-/* Idioma select */
-footer select {
-    padding: 6px 10px;
-    border-radius: 4px;
-    border: none;
-    background-color: white;
-    color: #0A1F44;
-    font-weight: 600;
-    cursor: pointer;
-}
-
 footer label {
     margin-right: 5px;
 }

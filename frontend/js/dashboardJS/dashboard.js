@@ -21,7 +21,7 @@ function obtenerRango(opcion) { //Función para que devuelva las fechas de inici
     return { fechaInicio, fechaFin };
 }
 
-// ==================== FUNCIONES PARA CREAR GRAFICAS ====================
+//FUNCIONES PARA CREAR GRAFICAS
 
 const API_URL = 'https://localhost:7258/api'; 
 const token = localStorage.getItem("token"); /* Obtener token del almacenamiento local */

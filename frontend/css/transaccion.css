@@ -19,9 +19,6 @@ body{
     align-items: center;
 }
 
-
- 
-
 /* Estilo del encabezado antes de la lista */
 .transacciones-options {
     display: flex;
@@ -51,7 +48,6 @@ body{
 .tituloFiltro {
     display: flex;
     justify-content: space-between;
-   
 }
 
 .botonesCrear button {
@@ -89,7 +85,6 @@ body{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
   gap: 10px;
   
 }
@@ -241,6 +236,7 @@ input[type="range"] {
     animation: popupSlideIn 0.3s ease-out;
 }
 
+/* Animación para la aparición del popup */
 @keyframes popupSlideIn {
     from {
         opacity: 0;

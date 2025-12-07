@@ -1,4 +1,4 @@
-const API_URL = 'https://localhost:7258/api'; // Reemplacen con la de su computadora
+const API_URL = 'https://localhost:7258/api'; 
 
 // Manejar el inicio de sesión
 
@@ -17,7 +17,7 @@ formLogin.addEventListener('submit', async (e) => {
     const envio = {
 
         correoUsu: email,
-        contrasena: password //Cambiar esto en el backend
+        contrasena: password 
     }
 
     try {
@@ -75,11 +75,11 @@ formRegistro.addEventListener('submit', async (e) => {
      const envio = {
         nombreUsu: usuario,
         correoUsu: email,
-        contrasena: password //Cambiar esto en el backend
+        contrasena: password 
     }
     
     try {
-        const response = await fetch(`${API_URL}/Registro/RegistrarUsuario`, { //Arreglar esta ruta en C#
+        const response = await fetch(`${API_URL}/Registro/RegistrarUsuario`, { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -1,4 +1,4 @@
-// ==================== FUNCIONES PARA ABRIR Y CERRAR POPUPS ====================
+//FUNCIONES PARA ABRIR Y CERRAR POPUPS
 
 // Variable global para almacenar todas las categorías
 let todasLasCategorias = [];

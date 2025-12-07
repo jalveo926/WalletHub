@@ -1,13 +1,11 @@
-
-
 // Variable global para almacenar las transacciones cargadas desde la API
 let data = {
     mensaje: "",
     transacciones: []
 }; 
 
+//CARGAR CATEGORÍAS
 
-// ------------------ CARGAR CATEGORÍAS ------------------
 function cargarCategorias() {
     const filtroCategoria = document.getElementById("filtroCategoria");
 
@@ -22,7 +20,8 @@ function cargarCategorias() {
 }
 
 
-// ------------------ MOSTRAR TRANSACCIONES ------------------ Aqui se crean tambien los botones de modificiar y eliminar
+//MOSTRAR TRANSACCIONES
+//Aqui se crean tambien los botones de modificiar y eliminar
 function mostrarTransacciones(lista) {
     const contenedor = document.getElementById("lista-transacciones");
     contenedor.innerHTML = "";
@@ -57,10 +56,8 @@ function mostrarTransacciones(lista) {
 
 }
 
+//APLICAR FILTROS
 
-
-
-// ------------------ APLICAR FILTROS ------------------
 function aplicarFiltros() {
     const tipo = document.getElementById("filtroTipo").value;
     const categoria = document.getElementById("filtroCategoria").value;
@@ -158,9 +155,8 @@ function actualizarEstadoBotonesFiltros() {
     btnLimpiar.disabled = !tieneTransacciones;
 }
 
+//EVENTOS
 
-
-// ------------------ EVENTOS ------------------
 // Cargar categorías y mostrar transacciones al cargar la página
 //Configuracion de elementos dinámicos y sus eventos
 document.addEventListener("DOMContentLoaded", () => {

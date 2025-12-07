@@ -1,8 +1,3 @@
-main {
-    flex: 1;
-    padding: 20px 200px; /*Espacio lateral para centrar contenido en pantallas amplias*/
-}
-
 h1 {
     color: #0A1F44;
 }
@@ -48,8 +43,8 @@ h1 {
     color: black;
 }
 
-/*Estilos para pantallas menores de 1000px*/
-@media (max-width: 1000px) {
+/*Estilos para pantallas menores de 1370px*/
+@media (max-width: 1370px) {
 .integranteInfo {
 flex-direction: column; /*Los elementos cambian de posición para que sea en columna*/
 padding: 12px;
