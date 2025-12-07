@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <title>Dashboard</title>
+</head>
+<body>
+    <div id="header"></div>
+    <main>
+        <div class="dashboard-header">
+            <h1>DASHBOARD</h1>
+
+            <div class="filtro-tiempo">
+                <label for="combobox-filtro-tiempo">Periodo: </label>
+                <select id="combobox-filtro-tiempo">
+                    <option value="semana" selected>Última semana</option>
+                    <option value="mes">Último mes</option>
+                    <option value="ano">Último año</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="dashboard-layout">
+
+            <!-- Columna izquierda (gráficas) -->
+            <div class="charts-column">
+
+                <!-- Gráfica de barras -->
+                <div class="chart-large">
+                    <canvas id="ingresos-vs-gastos"></canvas>
+                </div>
+
+                <!-- Gráficas de dona lado a lado -->
+                <div class="charts-small-row">
+                    <div class="chart-small">
+                        <canvas id="gastos-por-categoria"></canvas>
+                    </div>
+                    <div class="chart-small">
+                        <canvas id="ingresos-por-categoria"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Columna derecha (saldo + lista transacciones) -->
+            <div class="saldo-column">
+                <h1>Saldo Actual</h1>
+                <h1 id="saldo-actual"></h1>
+
+                <div class="ultimas-transacciones">
+                    <h2>Últimas Transacciones</h2>
+                    <ul class="transacciones-lista"></ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="footer"></div>
+
+    <div id="popup-container"></div>
+
+    <script src="../js/CargarPopup.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script> <!-- Biblioteca Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script> <!-- Plugin para etiquetas en gráficos -->
+    <script src="../js/dashboardJS/dashboard.js"></script>
+    <script src="../js/CargaLayoutGeneral.js"></script>
+</body>
+</html>

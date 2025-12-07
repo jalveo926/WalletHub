@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+/*Estilos globales para todos los elementos*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to top, #0A1F44, #16A085);
+    font-family: "Nunito", sans-serif;
+}
+
+/*Formulario en columna*/
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/*Estilo general de los formularios de autenticación*/
+.form-autenticacion {
+    font-family: "Roboto", sans-serif;
+    color: #0A1F44;
+}
+
+/*Espacio inferior entre el título y el formulario*/
+.titulo {
+    padding-bottom: 15px;
+}
+
+/*Contenedor principal que abarca los formularios y el panel de bienvenida*/
+.contenedor {
+    display: flex;
+    width: 850px;
+    height: 500px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    position: relative; /*Necesario para ubicar correctamente el botón de cierre u otros elementos absolutos*/
+}
+
+/*Estilos para los formularios de inicio de sesión y registro*/
+.login-contenedor,
+.registro-contenedor {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50%; /*Ocupa la mitad del contenedor*/
+    padding: 50px;
+}
+
+/*Hace que el elemento oculto no se muestre*/
+.oculto {
+    display: none;
+}
+
+/*Estilos de los elementos del formulario*/
+form input {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #95A1B0;
+    font-size: 14px;
+}
+
+form button {
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #16A085;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+form button:hover {
+    background-color: #3A7BD5;
+}
+
+/*Panel de bienvenida*/
+.panel-bienvenida {
+    width: 50%;
+    background: linear-gradient(to bottom, #0A1F44, #16A085);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+}
+
+img {
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+/*Estilo del enlace para cerrar el formulario*/
+a {
+    text-decoration: none;
+    color: #fff;
+    position: absolute; /* Posiciona el botón de cierre en la esquina del contenedor */
+    top: 15px;
+    right: 20px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+a:hover {
+    color: #95A1B0;
+}
+
+/*Estilo de los botones para cambiar entre registros*/
+#mostrar-registro,
+#mostrar-login {
+    margin-top: 20px;
+    background: none;
+    border: none;
+    color: #2da0a8;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#mostrar-registro:hover,
+#mostrar-login:hover {
+    color: #3A7BD5;
+}
+
+/*Contenedor del input con icono*/
+.password-wrapper {
+    position: relative; /*Necesario para posicionar el ícono dentro del input*/
+    width: 100%;
+}
+
+/*Estilo del input*/
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px; /*Espacio para el icono*/
+}
+
+/*Ícono dentro del input*/
+.toggle-password {
+    position: absolute;
+    right: 12px; /*Distancia al borde derecho del input*/
+    top: 50%; /*Posiciona verticalmente en la mitad del contenedor.*/
+    transform: translateY(-50%); /*Ajusta el <span> para que quede centrado verticalmente*/
+    width: 22px;
+    height: 22px;
+    background-image: url("../assets/icons/eye-off.svg"); /*Ícono del ojo cerrado por defecto*/
+    background-repeat: no-repeat; 
+    background-size: contain; /*Ajusta la imagen para que cabe completamente dentro del span sin deformarse.*/
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.toggle-password:hover {
+    opacity: 1;
+}
+
+/*Estilos para los mensajes de error*/
+.mensaje {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    display: none; /*Oculto por defecto*/
+}
+ 
+.mensaje-error {
+    background-color: #FDEDEC;
+    color: #c0392b;
+    border: 1px solid #e74c3c;
+}

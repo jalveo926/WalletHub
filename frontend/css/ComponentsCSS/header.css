@@ -1,0 +1,97 @@
+/* CONTENEDOR PRINCIPAL DEL HEADER */
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0A1F44;
+  padding: 10px 30px;
+  
+}
+
+/* LOGO IZQUIERDA */
+.logo-izquierda {
+  display: flex;
+  align-items: center;
+}
+
+.WalletHubLogo {
+  width: 180px;
+  max-width: 30vw; /* Ajuste responsivo */
+  height: auto;
+}
+
+/* NAV DERECHA COMPLETA */
+.encabezado-derecha {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+/* LISTA DE LINKS */
+.listaLinks {
+  display: flex;
+  gap: 15px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.listaLinks li a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 12px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.listaLinks li a:hover {
+  background-color: #16A085;
+  color: #FFFFFF;
+  border-radius: 4px;
+}
+
+/* ICONOS A LA DERECHA */
+.icon-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  align-items: center;
+}
+
+.icons {
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease; /*Suaviza los cambios de tamaño y opacidad al hacer hover*/
+}
+
+.icons img {
+  width: 100%;
+  height: 100%;
+}
+
+.icons:hover {
+  transform: scale(1.2); /*Aumenta el tamaño al pasar el cursor*/
+  opacity: 0.8; /*Reduce ligeramente la opacidad al pasar el cursor*/
+}
+
+
+/* RESPONSIVE */
+@media screen and (max-width: 600px) {
+  .encabezado {
+    flex-direction: column;
+    align-items: flex-start; /* Alinea a la izquierda en pantallas pequeñas */
+    gap: 15px;
+  }
+
+  .encabezado-derecha {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .listaLinks {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}

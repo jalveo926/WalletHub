@@ -26,21 +26,25 @@ namespace WalletHub.Migrations
                 {
                     b.Property<string>("idCategoria")
                         .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasColumnType("nvarchar(5)")
+                        .HasColumnName("idCategoria");
 
                     b.Property<string>("idUsuario")
                         .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasColumnType("nvarchar(5)")
+                        .HasColumnName("idUsuario");
 
                     b.Property<string>("nombreCateg")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("nombreCateg");
 
                     b.Property<string>("tipoCateg")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(30)")
+                        .HasColumnName("tipoCateg");
 
                     b.HasKey("idCategoria");
 
@@ -115,31 +119,38 @@ namespace WalletHub.Migrations
                 {
                     b.Property<string>("idReporte")
                         .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasColumnType("nvarchar(5)")
+                        .HasColumnName("idReporte");
 
                     b.Property<DateTime>("fechaCreacionRepo")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fechaCreacionRepo");
 
                     b.Property<DateTime>("finalPeriodo")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("finalPeriodo");
 
                     b.Property<string>("idUsuario")
                         .IsRequired()
                         .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasColumnType("nvarchar(5)")
+                        .HasColumnName("idUsuario");
 
                     b.Property<DateTime>("inicioPeriodo")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("inicioPeriodo");
 
                     b.Property<string>("rutaArchivoRepo")
                         .IsRequired()
                         .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasColumnType("nvarchar(300)")
+                        .HasColumnName("rutaArchivoRepo");
 
                     b.Property<string>("tipoArchivoRepo")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("tipoArchivoRepo");
 
                     b.HasKey("idReporte");
 
@@ -152,28 +163,34 @@ namespace WalletHub.Migrations
                 {
                     b.Property<string>("idTransaccion")
                         .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasColumnType("nvarchar(5)")
+                        .HasColumnName("idTransaccion");
 
                     b.Property<string>("descripcionTransac")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("descripcionTransac");
 
                     b.Property<DateTime>("fechaTransac")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fechaTransac");
 
                     b.Property<string>("idCategoria")
                         .IsRequired()
                         .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasColumnType("nvarchar(5)")
+                        .HasColumnName("idCategoria");
 
                     b.Property<string>("idUsuario")
                         .IsRequired()
                         .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasColumnType("nvarchar(5)")
+                        .HasColumnName("idUsuario");
 
                     b.Property<decimal>("montoTransac")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("montoTransac");
 
                     b.HasKey("idTransaccion");
 
@@ -182,32 +199,113 @@ namespace WalletHub.Migrations
                     b.HasIndex("idUsuario");
 
                     b.ToTable("Transaccion", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            idTransaccion = "TR001",
+                            descripcionTransac = "Compra de supermercado",
+                            fechaTransac = new DateTime(2025, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            idCategoria = "CA002",
+                            idUsuario = "US001",
+                            montoTransac = 150.75m
+                        },
+                        new
+                        {
+                            idTransaccion = "TR002",
+                            descripcionTransac = "Pago de salario mensual",
+                            fechaTransac = new DateTime(2025, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            idCategoria = "CA007",
+                            idUsuario = "US001",
+                            montoTransac = 2000.00m
+                        },
+                        new
+                        {
+                            idTransaccion = "TR003",
+                            descripcionTransac = "Taxi al trabajo",
+                            fechaTransac = new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            idCategoria = "CA003",
+                            idUsuario = "US002",
+                            montoTransac = 50.00m
+                        },
+                        new
+                        {
+                            idTransaccion = "TR004",
+                            descripcionTransac = "Cena con amigos",
+                            fechaTransac = new DateTime(2025, 2, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            idCategoria = "CA006",
+                            idUsuario = "US003",
+                            montoTransac = 300.00m
+                        },
+                        new
+                        {
+                            idTransaccion = "TR005",
+                            descripcionTransac = "Pago de salario mensual",
+                            fechaTransac = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            idCategoria = "CA007",
+                            idUsuario = "US004",
+                            montoTransac = 1200.00m
+                        });
                 });
 
             modelBuilder.Entity("WalletHub.Models.Usuario", b =>
                 {
                     b.Property<string>("idUsuario")
                         .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasColumnType("nvarchar(5)")
+                        .HasColumnName("idUsuario");
 
                     b.Property<string>("correoUsu")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(30)")
+                        .HasColumnName("correoUsu");
 
                     b.Property<string>("nombreUsu")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("nombreUsu");
 
                     b.Property<string>("pwHashUsu")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("pwHashUsu");
 
                     b.HasKey("idUsuario");
 
                     b.ToTable("Usuario", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            idUsuario = "US001",
+                            correoUsu = "jesus.alveo@utp.ac.pa",
+                            nombreUsu = "Jesus",
+                            pwHashUsu = "AQAAAAIAAYagAAAAELTGLo7+TfUQMvP8jqKL5+BbQSorW9tghAnPuU2xuvpqifTarMSVYOKMm1V0Cq/XHw=="
+                        },
+                        new
+                        {
+                            idUsuario = "US002",
+                            correoUsu = "erick.hou@utp.ac.pa",
+                            nombreUsu = "Erick",
+                            pwHashUsu = "AQAAAAIAAYagAAAAEB45Z6Gu4V/N2CkXvobsT6xIH8lAkdIE7qsAlZJRFHi/tmy5u7G6uWhflAFuQvhh/w=="
+                        },
+                        new
+                        {
+                            idUsuario = "US003",
+                            correoUsu = "roniel.quintero@utp.ac.pa",
+                            nombreUsu = "Roniel",
+                            pwHashUsu = "AQAAAAIAAYagAAAAEIDl+SkyIySpcBx88SBrCDMNZVlj/4Wfkqxcbbv1BNTNG10+6aOVCX2/JFHX+FrSsg=="
+                        },
+                        new
+                        {
+                            idUsuario = "US004",
+                            correoUsu = "jessica.zheng@utp.ac.pa",
+                            nombreUsu = "Jessica",
+                            pwHashUsu = "AQAAAAIAAYagAAAAEF8fIe8K49ZHrRycUBl5W8tpc2d+vpxKQI00CG2JuxHSGLvo/hf/ZJCUiH9/ZeZYdQ=="
+                        });
                 });
 
             modelBuilder.Entity("WalletHub.Models.Categoria", b =>
@@ -215,7 +313,8 @@ namespace WalletHub.Migrations
                     b.HasOne("WalletHub.Models.Usuario", "Usuario")
                         .WithMany("Categorias")
                         .HasForeignKey("idUsuario")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("Categoria_idUsuario_FK");
 
                     b.Navigation("Usuario");
                 });
@@ -226,7 +325,8 @@ namespace WalletHub.Migrations
                         .WithMany("Reportes")
                         .HasForeignKey("idUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("Reporte_idUsuario_FK");
 
                     b.Navigation("Usuario");
                 });
@@ -237,13 +337,15 @@ namespace WalletHub.Migrations
                         .WithMany("Transacciones")
                         .HasForeignKey("idCategoria")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("Transaccion_idCategoria_FK");
 
                     b.HasOne("WalletHub.Models.Usuario", "Usuario")
                         .WithMany("Transacciones")
                         .HasForeignKey("idUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("Transaccion_idUsuario_FK");
 
                     b.Navigation("Categoria");
 

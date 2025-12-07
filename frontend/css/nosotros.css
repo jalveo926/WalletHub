@@ -1,0 +1,56 @@
+/*Estilos para la sección de integrantes del equipo. Incluye la foto e información*/
+.integranteInfo {
+    display: flex;
+    flex-direction: row; /*Los elementos se colocan en fila*/
+    align-items: stretch;
+    gap: 20px;
+    margin-bottom: 30px;
+    background-color: #F4F6F8;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.integranteInfo img {
+    width: 300px;                    
+    height: auto;                   
+    margin: auto;                   
+    border-radius: 10px;   
+}
+
+/*Contenedor de la información del integrante*/
+.infoDerecha {
+    display: flex;
+    flex-direction: column; /*Los elementos se colocan en columna*/   
+    justify-content: center; 
+    padding: 10px;
+    flex: 1;
+}
+
+/*Estilos para los textos e información del integrante*/
+.integranteInfo p,
+.integranteInfo ul {
+    margin: 10px;
+    max-width: 700px;
+    color: #0A1F44;
+}
+
+.integranteInfo ul li {
+    color: black;
+}
+
+/*Estilos para pantallas menores de 1370px*/
+@media (max-width: 1370px) {
+.integranteInfo {
+flex-direction: column; /*Los elementos cambian de posición para que sea en columna*/
+padding: 12px;
+gap: 12px;
+}
+
+/*Las imágenes se adaptan al ancho disponible*/
+.integranteInfo img {
+max-width: 100%; /*La imagen no sobrepasa el ancho del contenedor*/
+height: auto;
+margin: 0 auto;
+}
+}
