@@ -18,7 +18,7 @@
     border-radius: 10px;   
 }
 
-/*Contenedor de la información del integrante para*/
+/*Contenedor de la información del integrante*/
 .infoDerecha {
     display: flex;
     flex-direction: column; /*Los elementos se colocan en columna*/   
