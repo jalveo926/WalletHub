@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 body{
     min-width: 1096px;
 }
@@ -261,6 +263,15 @@ input[type="range"] {
     color: white;
 }
 
+/*Tipo de letra distinto al body para los formularios de transaccion y categoria */
+.popup-form {
+    font-family: "Roboto", sans-serif; 
+}
+
+.popup-header h2 {
+    color: #fff;
+}
+
 .popup-header h2 {
     margin: 0;
     font-size: 20px;
@@ -299,7 +310,7 @@ input[type="range"] {
 .form-grupo label {
     font-weight: 600;
     margin-bottom: 6px;
-    color: #0A1F44;
+    color:  #0E6B57;
     font-size: 14px;
 }
 
@@ -310,7 +321,6 @@ input[type="range"] {
     border: 2px solid #e0e0e0;
     border-radius: 6px;
     font-size: 14px;
-    font-family: inherit;
     transition: border-color 0.2s;
 }
 
@@ -390,3 +400,4 @@ button:disabled:hover {
         margin-bottom: 10px;
     }
 }
+
