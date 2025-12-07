@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
 * {
-  box-sizing: border-box;
+  box-sizing: border-box; /*Para que el padding y border no afecten al tamaño total del elemento*/
 }
 
 html, body {
@@ -26,7 +26,7 @@ h1, h2 {
 }
   
 main {
-    flex: 1;
+    flex: 1; /*Para que el main ocupe todo el espacio disponible entre el header y el footer*/
     padding: 20px 200px; /* Para dar espacio a los botones */
 }
 

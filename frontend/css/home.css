@@ -1,5 +1,5 @@
 main {
-    flex: 1;
+    flex: 1; 
     padding: 20px 200px;
 }
 
@@ -7,7 +7,7 @@ main {
 .noticia {
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    align-items: stretch; /*Alinea los elementos al inicio del contenedor*/
     gap: 20px;
     margin-bottom: 30px;
     background-color: #F4F6F8;
@@ -19,7 +19,7 @@ main {
 .noticia img {
     width: auto;                    
     height: 300px;                   
-    object-fit: cover;                      
+    object-fit: cover; /*La imagen cubre el área asignada sin distorsionarse*/                      
 }
 
 /*Contenedor del contenido a la derecha*/
@@ -31,7 +31,7 @@ main {
     flex: 1;
 }
 
-a {
+.infoDerecha a {
     text-decoration: none;
     color: #16A085;
     font-weight: bold;
@@ -40,4 +40,27 @@ a {
 
 a:hover {
     color: #3A7BD5;
+}
+
+/*Estilos para pantallas menores de 1370px*/
+@media (max-width: 1370px) {
+.noticia {
+flex-direction: column; /*Los elementos cambian de posición para que sea en columna*/
+padding: 12px;
+gap: 12px;
+}
+
+/*Las imágenes se adaptan al ancho disponible*/
+.noticia img {
+max-width: 100%; /*La imagen no sobrepasa el ancho del contenedor*/
+height: auto;
+margin: 0 auto;
+}
+
+/*El video se adapta al tamaño del contenedor*/
+.noticia iframe {
+width: 100%;
+max-width: 100%;
+aspect-ratio: 16 / 9; /*Mantiene una proporción estándar de video*/
+}
 }

@@ -100,3 +100,13 @@
     gap: 10px; /* Espacio entre elementos */
   }
 }
+
+@media (max-width: 1370px) {
+  .reportes-resumen {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /*Dos columnas*/
+  }
+
+  .reportes-tablas {
+    grid-template-columns: 1fr; /*Una columna*/
+  }
+}
