@@ -6,14 +6,15 @@ window.mostrarPopup = function(mensaje) {
 window.addEventListener("DOMContentLoaded", () => {
     fetch("../components/popup.html") //Carga el HTML del popup desde un archivo externo
         .then(res => {
-            if (!res.ok) throw new Error(`No se pudo cargar popup.html: ${res.status}`); 
+            if (!res.ok) throw new Error(`No se pudo cargar popup.html: ${res.status}`);
             return res.text();
         })
         .then(html => {
             document.getElementById("popup-container").innerHTML = html; //Insertar el HTML cargado en el contenedor del popup
 
             //POPUP DE MENSAJE
-            
+
+            //querySelector para obtener los elementos del popup
             const popup = document.querySelector("#popup-container #popup-mensaje"); //Contenedor del popup
             const popupText = popup.querySelector("#popup-text"); //Texto del popup
             const popupBtn = popup.querySelector("#popup-btn"); //Botón de cierre del popup
@@ -30,7 +31,7 @@ window.addEventListener("DOMContentLoaded", () => {
             });
 
             //POPUP DE CONFIRMACIÓN
-            
+
             const popupConfirm = document.querySelector("#popup-container #popup-confirmacion");
             const popupConfirmText = popupConfirm.querySelector("#popup-confirm-text");
             const btnAceptar = popupConfirm.querySelector("#popup-aceptar-btn");

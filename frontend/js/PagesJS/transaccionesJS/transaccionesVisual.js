@@ -2,15 +2,17 @@
 let data = {
     mensaje: "",
     transacciones: []
-}; 
+};
 
 //CARGAR CATEGORÍAS
 
 function cargarCategorias() {
     const filtroCategoria = document.getElementById("filtroCategoria");
 
+    //new set nos ayuda a obtener solo los valores únicos de un array y ... los desglosa en un nuevo array
     const categoriasUnicas = [...new Set(data.transacciones.map(t => t.nombreCateg))];
 
+    //cat es cada categoría única que se añade al dropdown filtroCategoria
     categoriasUnicas.forEach(cat => {
         const option = document.createElement("option");
         option.value = cat;
@@ -23,6 +25,8 @@ function cargarCategorias() {
 //MOSTRAR TRANSACCIONES
 //Aqui se crean tambien los botones de modificiar y eliminar
 function mostrarTransacciones(lista) {
+    //En lista se reciben las transacciones ya sean normales o filtradas
+
     const contenedor = document.getElementById("lista-transacciones");
     contenedor.innerHTML = "";
 
@@ -31,10 +35,12 @@ function mostrarTransacciones(lista) {
         return;
     }
 
-   lista.forEach(t => {
-    const tipoClase = t.tipoCategoria === "Ingreso" ? "ingreso" : "gasto";
+    lista.forEach(t => {
+        // Determinar clase CSS según el tipo de transacción
+        const tipoClase = t.tipoCategoria === "Ingreso" ? "ingreso" : "gasto";
 
-    contenedor.innerHTML += `
+        // Crear el HTML de cada item transacción (tarjetas)
+        contenedor.innerHTML += `
         <div class="item ${tipoClase}">
             <div class="item-encabezado">
                 <h3>${t.nombreCateg}</h3>
@@ -52,7 +58,7 @@ function mostrarTransacciones(lista) {
             <span>Fecha: ${new Date(t.fechaTransac).toLocaleDateString()}</span> 
         </div>
     `;
-  });
+    });
 
 }
 
@@ -75,13 +81,15 @@ function aplicarFiltros() {
 
     // Validar rango de fechas
     if (fechaDesde !== "" && fechaHasta !== "") {
-    if (new Date(fechaHasta) < new Date(fechaDesde)) {
-        mostrarPopup("La fecha 'Hasta' no puede ser menor que 'Desde'.");
-        return;
+        if (new Date(fechaHasta) < new Date(fechaDesde)) {
+            mostrarPopup("La fecha 'Hasta' no puede ser menor que 'Desde'.");
+            return;
+        }
     }
-}
 
     // Filtrar por tipo
+
+    //filter nos ayuda a crear un nuevo array con los elementos que cumplan la condición
     if (tipo !== "Todos") {
         filtradas = filtradas.filter(t => t.tipoCategoria === tipo);
     }
@@ -102,12 +110,12 @@ function aplicarFiltros() {
         const hasta = new Date(fechaHasta);
         filtradas = filtradas.filter(t => new Date(t.fechaTransac) <= hasta);
     }
-
+    //filter nos ayuda a crear un nuevo array con los elementos que cumplan la condición
     mostrarTransacciones(filtradas);
 }
 
 function resetearFiltros() {
-    
+
     // Resetear select de tipo
     document.getElementById("filtroTipo").value = "Todos";
 
@@ -118,6 +126,7 @@ function resetearFiltros() {
     const slider = document.getElementById("filtroMontoMax");
     const valorSlider = document.getElementById("valorMontoMax");
 
+    //Math.max nos ayuda a obtener el valor máximo de un array y los ... desglosan el array en valores individuales
     const maxMonto = Math.max(...data.transacciones.map(t => t.montoTransac));
     slider.value = maxMonto;
     valorSlider.textContent = maxMonto;
@@ -138,10 +147,14 @@ function configurarSlider() {
 
     if (data.transacciones.length === 0) return;
 
+    //Math.max nos ayuda a obtener el valor máximo de un array y los ... desglosan el array en valores individuales
     const maxMonto = Math.max(...data.transacciones.map(t => t.montoTransac));
 
+    //slider nos ayuda a establecer el valor máximo del slider al monto máximo encontrado
     slider.max = maxMonto;
     slider.value = maxMonto;
+
+    //valorSlider nos ayuda a mostrar el valor máximo al lado del slider y toFixed(2) limita a 2 decimales
     valorSlider.textContent = maxMonto.toFixed(2);
 }
 
@@ -151,6 +164,7 @@ function actualizarEstadoBotonesFiltros() {
     const btnLimpiar = document.getElementById("limpiarBtn");
     const tieneTransacciones = data.transacciones.length > 0;
 
+    // Deshabilitar botones si no hay transacciones
     btnAplicarFiltros.disabled = !tieneTransacciones;
     btnLimpiar.disabled = !tieneTransacciones;
 }
@@ -161,76 +175,76 @@ function actualizarEstadoBotonesFiltros() {
 //Configuracion de elementos dinámicos y sus eventos
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Bloquear fechas futuras
-  const hoy = new Date().toISOString().split("T")[0];
-  document.getElementById("filtroFechaDesde").setAttribute("max", hoy);
-  document.getElementById("filtroFechaHasta").setAttribute("max", hoy);
+    // Bloquear fechas futuras
+    const hoy = new Date().toISOString().split("T")[0];
+    document.getElementById("filtroFechaDesde").setAttribute("max", hoy);
+    document.getElementById("filtroFechaHasta").setAttribute("max", hoy);
 
-  // Deshabilitar botones inicialmente
-  actualizarEstadoBotonesFiltros();
+    // Deshabilitar botones inicialmente
+    actualizarEstadoBotonesFiltros();
 
-  // Cargar datos desde API
-  cargarTransaccionesDesdeAPI();
+    // Cargar datos desde API
+    cargarTransaccionesDesdeAPI();
 
-  // Slider cambia en tiempo real
-  document.getElementById("filtroMontoMax").addEventListener("input", (e) => {
-    document.getElementById("valorMontoMax").textContent = parseFloat(e.target.value).toFixed(2);
-    aplicarFiltros();
-  });
-
-  // Filtros automáticos
-  document.getElementById("filtroTipo").addEventListener("change", aplicarFiltros);
-  document.getElementById("filtroCategoria").addEventListener("change", aplicarFiltros);
-
-  // Filtros manuales (fechas)
-  document.getElementById("aplicarFiltrosBtn").addEventListener("click", aplicarFiltros);
-
-  // Resetear filtros
-  document.getElementById("limpiarBtn").addEventListener("click", resetearFiltros);
-
-  // Event delegation para abrir/cerrar menú de opciones
-  document.addEventListener("click", (e) => {
-    // Cerrar todos los menús si se hace clic fuera
-    if (!e.target.closest(".btn-opciones-container")) {
-      document.querySelectorAll(".menu-opciones").forEach(menu => {
-        menu.classList.add("hidden");
-      });
-    }
-
-    // Abrir/cerrar menú al hacer clic en btn-opciones
-    if (e.target.closest(".btn-opciones")) {
-      e.stopPropagation();
-      const btn = e.target.closest(".btn-opciones");
-      const container = btn.closest(".btn-opciones-container");
-      const menu = container.querySelector(".menu-opciones");
-      
-      // Cerrar otros menús
-      document.querySelectorAll(".menu-opciones").forEach(m => {
-        if (m !== menu) {
-          m.classList.add("hidden");
-        }
-      });
-      
-      // Toggle del menú actual
-      menu.classList.toggle("hidden");
-    }
-    // Acceder al botón Modificar
-    if (e.target.closest(".opcion-modificar")) {
-        const idTransaccion = e.target.closest(".opcion-modificar").getAttribute("data-id"); //Obtener ID de la transacción
-        console.log("Modificar transacción:", idTransaccion);
-        abrirPopupModificarTransaccion(idTransaccion);
-        
-    }
-    
-    // Acceder al botón Eliminar
-    if (e.target.closest(".opcion-eliminar")) {
-        const idTransaccion = e.target.closest(".opcion-eliminar").getAttribute("data-id"); //Obtener ID de la transacción
-        mostrarConfirmacion("¿Estás seguro de que deseas eliminar esta transacción?", (confirmar) => {
-        if (confirmar) {
-            eliminarTransaccion(idTransaccion);
-            console.log("Eliminar transacción:", idTransaccion);
-        } 
+    // Slider cambia en tiempo real
+    document.getElementById("filtroMontoMax").addEventListener("input", (e) => {
+        document.getElementById("valorMontoMax").textContent = parseFloat(e.target.value).toFixed(2);
+        aplicarFiltros();
     });
-    }
-  });
+
+    // Filtros automáticos
+    document.getElementById("filtroTipo").addEventListener("change", aplicarFiltros);
+    document.getElementById("filtroCategoria").addEventListener("change", aplicarFiltros);
+
+    // Filtros manuales (fechas)
+    document.getElementById("aplicarFiltrosBtn").addEventListener("click", aplicarFiltros);
+
+    // Resetear filtros
+    document.getElementById("limpiarBtn").addEventListener("click", resetearFiltros);
+
+    // Event delegation para abrir/cerrar menú de opciones
+    document.addEventListener("click", (e) => {
+        // Cerrar todos los menús si se hace clic fuera
+        if (!e.target.closest(".btn-opciones-container")) {
+            document.querySelectorAll(".menu-opciones").forEach(menu => {
+                menu.classList.add("hidden");
+            });
+        }
+
+        // Abrir/cerrar menú al hacer clic en btn-opciones
+        if (e.target.closest(".btn-opciones")) {
+            e.stopPropagation();
+            const btn = e.target.closest(".btn-opciones");
+            const container = btn.closest(".btn-opciones-container");
+            const menu = container.querySelector(".menu-opciones");
+
+            // Cerrar otros menús
+            document.querySelectorAll(".menu-opciones").forEach(m => {
+                if (m !== menu) {
+                    m.classList.add("hidden");
+                }
+            });
+
+            // Toggle del menú actual
+            menu.classList.toggle("hidden");
+        }
+        // Acceder al botón Modificar
+        if (e.target.closest(".opcion-modificar")) {
+            const idTransaccion = e.target.closest(".opcion-modificar").getAttribute("data-id"); //Obtener ID de la transacción
+            console.log("Modificar transacción:", idTransaccion);
+            abrirPopupModificarTransaccion(idTransaccion);
+
+        }
+
+        // Acceder al botón Eliminar
+        if (e.target.closest(".opcion-eliminar")) {
+            const idTransaccion = e.target.closest(".opcion-eliminar").getAttribute("data-id"); //Obtener ID de la transacción
+            mostrarConfirmacion("¿Estás seguro de que deseas eliminar esta transacción?", (confirmar) => {
+                if (confirmar) {
+                    eliminarTransaccion(idTransaccion);
+                    console.log("Eliminar transacción:", idTransaccion);
+                }
+            });
+        }
+    });
 });

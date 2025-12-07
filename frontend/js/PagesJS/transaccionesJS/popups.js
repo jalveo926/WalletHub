@@ -22,7 +22,7 @@ function abrirPopupTransaccion() {
 async function abrirPopupModificarTransaccion(idTransaccion) {
     // Buscar la transacción en el array global
     const transaccion = data.transacciones.find(t => t.idTransaccion == idTransaccion);
-    
+
     if (!transaccion) {
         mostrarPopup("No se encontró la transacción");
         return;
@@ -30,34 +30,34 @@ async function abrirPopupModificarTransaccion(idTransaccion) {
 
     // Cargar las categorías primero
     await cargarCategoriasCombobox("categoriaModificar", "tipoModificar");
-    
+
     // Llenar el formulario con los datos de la transacción
     document.getElementById("tipoModificar").value = transaccion.tipoCategoria;
-    
+
     // Filtrar categorías según el tipo
     filtrarCategoriasPorTipo("categoriaModificar", "tipoModificar");
-    
+
     // Establecer la categoría seleccionada
     document.getElementById("categoriaModificar").value = transaccion.nombreCateg;
     document.getElementById("descripcionModificar").value = transaccion.descripcionTransac;
     document.getElementById("montoModificar").value = transaccion.montoTransac;
-    
+
     // Formatear la fecha correctamente (solo la parte de la fecha, sin hora)
     const fecha = new Date(transaccion.fechaTransac);
     const fechaFormateada = fecha.toISOString().split("T")[0];
     document.getElementById("fechaModificar").value = fechaFormateada;
-    
+
     // Guardar el ID de la transacción en un atributo del formulario para usarlo después
     document.getElementById("formModificarTransaccion").setAttribute("data-id-transaccion", idTransaccion);
-    
+
     // Mostrar el popup
     document.getElementById("popupModificarTransaccion").classList.remove("hidden");
 }
 
 function cerrarPopupModificarTransaccion() {
     document.getElementById("popupModificarTransaccion").classList.add("hidden");
-    document.getElementById("formModificarTransaccion").reset();
-    document.getElementById("formModificarTransaccion").removeAttribute("data-id-transaccion");
+    document.getElementById("formModificarTransaccion").reset(); // Limpiar el formulario cuando se cierra el popup
+    document.getElementById("formModificarTransaccion").removeAttribute("data-id-transaccion"); // Eliminar el atributo del ID para evitar confusiones
 }
 
 function cerrarPopupTransaccion() {
@@ -71,6 +71,7 @@ document.addEventListener("click", (e) => {
     const popupTransaccion = document.getElementById("popupTransaccion");
     const popupModificar = document.getElementById("popupModificarTransaccion");
 
+    //e.target es el elemento en el que se hizo clic
     if (e.target === popupCategoria) {
         cerrarPopupCategoria();
     }
@@ -110,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Formulario de categoría
     const formCategoria = document.getElementById("formCategoria");
     if (formCategoria) {
-        formCategoria.addEventListener("submit", async (e) => {
+        formCategoria.addEventListener("submit", async(e) => {
             e.preventDefault();
             await crearCategoria();
         });
@@ -119,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Formulario de transacción
     const formTransaccion = document.getElementById("formTransaccion");
     if (formTransaccion) {
-        formTransaccion.addEventListener("submit", async (e) => {
+        formTransaccion.addEventListener("submit", async(e) => {
             e.preventDefault();
             await crearTransaccion();
         });
@@ -128,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Formulario de modificar transacción
     const formModificar = document.getElementById("formModificarTransaccion");
     if (formModificar) {
-        formModificar.addEventListener("submit", async (e) => {
+        formModificar.addEventListener("submit", async(e) => {
             e.preventDefault();
             const idTransaccion = formModificar.getAttribute("data-id-transaccion");
             await actualizarTransaccion(idTransaccion);
@@ -188,7 +189,7 @@ async function cargarCategoriasCombobox(idComboboxCategoria, idComboBoxTipoCat) 
 
         const resultado = await respuesta.json();
         todasLasCategorias = resultado.categorias || [];
-        
+
         // Filtrar categorías por el tipo seleccionado 
         filtrarCategoriasPorTipo(idComboboxCategoria, idComboBoxTipoCat);
 

@@ -1,31 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-
-body{
+body {
     min-width: 1096px;
 }
 
+
 /* Estilo de los botones de crear categoria/transaccion */
+
 .botonesMainContainer {
     display: flex;
     justify-content: space-between;
     gap: 10px;
     margin-bottom: 20px;
-  }
+}
+
 
 /* Contenedor de los botones de filtrado*/
+
 .aplicarFiltrosContainer {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
+
 /* Estilo del encabezado antes de la lista */
+
 .transacciones-options {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    
-    gap: 10px ;
+    gap: 10px;
     color: #0A1F44;
     margin-bottom: 10px;
 }
@@ -35,12 +39,13 @@ body{
     margin-bottom: 0px;
 }
 
-.opciones-izq{
+.opciones-izq {
     display: flex;
     gap: 30px;
 }
 
-#filtroTipo,#filtroCategoria {
+#filtroTipo,
+#filtroCategoria {
     max-height: fit-content;
     margin-top: auto;
 }
@@ -54,43 +59,48 @@ body{
     margin-left: 10px;
 }
 
+
+/* Estilo de la lista de transacciones/categorias */
+
 .lista-transacciones {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
 }
 
+
 /* Estilo de cada item de la lista de transacciones/categorias  */
+
 .item {
-  background-color: #F4F6F8;
-  border: 2px solid #ccc;
-  padding: 10px;
-  border-radius: 8px;
-  color: #0A1F44;
+    background-color: #F4F6F8;
+    border: 2px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    color: #0A1F44;
 }
 
 .item.ingreso {
-  border-left: 6px solid #2ecc71; /* Me ayuda a aplicarlo solo a un borde */
-  color: #2e7d32;
-  background-color: #E8F8F2;
+    border-left: 6px solid #2ecc71;
+    /* Me ayuda a aplicarlo solo a un borde */
+    color: #2e7d32;
+    background-color: #E8F8F2;
 }
 
 .item.gasto {
-  border-left: 6px solid #e74c3c; 
-  color: #c0392b;
-  background-color: #FDEDEC;
+    border-left: 6px solid #e74c3c;
+    color: #c0392b;
+    background-color: #FDEDEC;
 }
 
 .item-encabezado {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
 }
 
 .item h3 {
- margin: 0;
+    margin: 0;
 }
 
 .fecha-filtros {
@@ -107,11 +117,14 @@ body{
     color: #0A1F44;
 }
 
+
 /* Estilo del boton de opciones en cada item */
+
 .btn-opciones {
     width: 32px;
     height: 32px;
     background: url("../assets/icons/options.svg") no-repeat center;
+    /* Me ayuda a centrar la imagen dentro del botón */
     background-size: 20px;
     border: none;
     cursor: pointer;
@@ -122,14 +135,18 @@ body{
     border-radius: 10px;
 }
 
+
 /* Contenedor para el botón de opciones y el menú */
+
 .btn-opciones-container {
     position: relative;
     display: flex;
     align-items: center;
 }
 
+
 /* Menú desplegable de opciones */
+
 .menu-opciones {
     position: absolute;
     top: 100%;
@@ -139,6 +156,7 @@ body{
     border-radius: 6px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 100;
+    /* Asegura que el menú esté por encima de otros elementos */
     min-width: 160px;
     margin-top: 5px;
     overflow: hidden;
@@ -146,12 +164,14 @@ body{
 
 .menu-opciones.hidden {
     display: none;
+    /* Oculta el menú cuando no está activo */
 }
 
 .opcion-modificar,
 .opcion-eliminar {
     display: block;
     width: 100%;
+    /* Hace que el botón ocupe todo el ancho del menú */
     padding: 12px 16px;
     border: none;
     background-color: white;
@@ -190,9 +210,10 @@ body{
     border-radius: 10px;
 }
 
+
 /* Estilo del slider de monto maximo */
+
 .monto-slider {
-    
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -208,9 +229,12 @@ input[type="range"] {
     width: 250px;
 }
 
+
 /* Estilo del contenedor de los popups */
+
 .popup-overlay {
     position: fixed;
+    /* Fija el popup en la pantalla */
     top: 0;
     left: 0;
     width: 100%;
@@ -220,6 +244,7 @@ input[type="range"] {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    /* Asegura que el popup esté por encima de otros elementos */
 }
 
 .popup-overlay.hidden {
@@ -234,9 +259,12 @@ input[type="range"] {
     max-width: 450px;
     padding: 0;
     animation: popupSlideIn 0.3s ease-out;
+    /* Aplica la animación con una duración de 0.3 segundos y una curva de aceleración suave */
 }
 
+
 /* Animación para la aparición del popup */
+
 @keyframes popupSlideIn {
     from {
         opacity: 0;
@@ -259,9 +287,11 @@ input[type="range"] {
     color: white;
 }
 
+
 /*Tipo de letra distinto al body para los formularios de transaccion y categoria */
+
 .popup-form {
-    font-family: "Roboto", sans-serif; 
+    font-family: "Roboto", sans-serif;
 }
 
 .popup-header h2 {
@@ -293,6 +323,9 @@ input[type="range"] {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
+
+/* Estilos del formularios dentro del popup */
+
 .popup-form {
     padding: 20px;
 }
@@ -306,7 +339,7 @@ input[type="range"] {
 .form-grupo label {
     font-weight: 600;
     margin-bottom: 6px;
-    color:  #0E6B57;
+    color: #0E6B57;
     font-size: 14px;
 }
 
@@ -339,6 +372,9 @@ input[type="range"] {
     justify-content: flex-end;
 }
 
+
+/* Estilo de los botones dentro del popup */
+
 .btn-cancelar,
 .btn-guardar {
     padding: 10px 20px;
@@ -364,13 +400,13 @@ input[type="range"] {
     color: white;
 }
 
-
-
 .btn-guardar:active {
     transform: scale(0.98);
 }
 
+
 /* Estilo para botones deshabilitados */
+
 button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -382,18 +418,18 @@ button:disabled:hover {
     background-color: #ccc;
 }
 
-@media (max-width:1370px){
-    .tituloFiltro{
+
+/* Estilos responsivos */
+
+@media (max-width:1370px) {
+    .tituloFiltro {
         display: flex;
         flex-direction: column;
     }
-
-    .opciones-izq{
+    .opciones-izq {
         margin-bottom: 10px;
     }
-
-    .transacciones-options{
+    .transacciones-options {
         margin-bottom: 10px;
     }
 }
-

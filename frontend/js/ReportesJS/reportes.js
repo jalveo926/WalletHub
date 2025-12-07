@@ -30,6 +30,7 @@ async function cargarResumen(periodo) {
 
     if (resp.status === 401) { // Token expirado
         alert('Tu sesión expiró. Inicia sesión de nuevo.');
+        localStorage.removeItem('token');
         window.location.href = '../pages/autenticacion.html'; // Redirigir 
         return;
     }
@@ -42,7 +43,7 @@ async function cargarResumen(periodo) {
     // Mostrar totales en la UI
     const datos = resultado.datos;
     document.getElementById('totalIngresos').textContent = `$${Number(datos.totalIngresos ?? 0).toFixed(2)}`; // Manejo de null/undefined
-    document.getElementById('totalGastos').textContent = `$${Number(datos.totalGastos ?? 0).toFixed(2)}`; 
+    document.getElementById('totalGastos').textContent = `$${Number(datos.totalGastos ?? 0).toFixed(2)}`;
     document.getElementById('saldo').textContent = `$${Number(datos.diferencia ?? (datos.totalIngresos - datos.totalGastos)).toFixed(2)}`; // Calcular diferencia si no viene en datos
 }
 
@@ -57,7 +58,8 @@ async function cargarTransaccionesPeriodo(periodo) { // Cargar todas las transac
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
     });
 
-    if (resp.status === 401) { alert('Tu sesión expiró'); window.location.href = '../pages/autenticacion.html'; return; } // Token expirado
+    if (resp.status === 401) { alert('Tu sesión expiró');
+        window.location.href = '../pages/autenticacion.html'; return; } // Token expirado
     if (!resp.ok) { console.error('Error al obtener transacciones'); return; } // Manejo de error
 
     const resultado = await resp.json(); // Parsear JSON
@@ -135,7 +137,8 @@ async function generarPDF(periodo) { // Generar y descargar PDF del reporte
 
     const mapPeriodo = { semana: "semana", mes: "mes", anio: "año", todo: "todo" }; // Mapeo para la API
     let dto = { tipoPeriodo: mapPeriodo[periodo] }; // DTO para la API
-    if (periodo === "todo") { dto.inicio = inicio.toISOString(); dto.fin = hoy.toISOString(); } // Fechas para "todo"
+    if (periodo === "todo") { dto.inicio = inicio.toISOString();
+        dto.fin = hoy.toISOString(); } // Fechas para "todo"
 
     const resp = await fetch(`${API_URL}/Reporte/DescargarPdfPeriodo`, { // Llamada a la API
         method: 'POST',
@@ -143,7 +146,8 @@ async function generarPDF(periodo) { // Generar y descargar PDF del reporte
         body: JSON.stringify(dto)
     });
 
-    if (!resp.ok) { console.error(await resp.text()); alert("Error generando PDF"); return; } // Manejo de error
+    if (!resp.ok) { console.error(await resp.text());
+        alert("Error generando PDF"); return; } // Manejo de error
 
     // Descargar PDF
     const blob = await resp.blob(); // Obtener blob del PDF
@@ -172,6 +176,6 @@ document.addEventListener('DOMContentLoaded', () => { // Al cargar la página
     });
 
     // Botón exportar PDF
-    const btnExportarPdf = document.getElementById('btnExportarPdf'); 
+    const btnExportarPdf = document.getElementById('btnExportarPdf');
     if (btnExportarPdf) btnExportarPdf.addEventListener('click', () => generarPDF(periodoSelect.value)); // Generar PDF al hacer clic
 });
