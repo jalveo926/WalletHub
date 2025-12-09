@@ -91,12 +91,26 @@ async function cargarResumen(fechaInicio, fechaFin) { //Función para llamar al 
         (!datos.ingresosPorCategoria || datos.ingresosPorCategoria.length === 0)) {
 
         contenedor.innerHTML = `
-            <div class="charts-column">
-                <p>Crea una transacción para comenzar.</p>
-            </div>
-        `;
+            <p class="mensaje-sin-datos">Crea una transacción para comenzar.</p>
+            `;
         return;
     } else {
+        contenedor.innerHTML = `
+                <!-- Gráfica de barras -->
+                <div class="chart-large">
+                    <canvas id="ingresos-vs-gastos"></canvas>
+                </div>
+
+                <!-- Gráficas de dona lado a lado -->
+                <div class="charts-small-row">
+                    <div class="chart-small">
+                        <canvas id="gastos-por-categoria"></canvas>
+                    </div>
+                    <div class="chart-small">
+                        <canvas id="ingresos-por-categoria"></canvas>
+                    </div>
+                </div>
+        `;
         crearIngresosVsGastos(datos.totalIngresos, datos.totalGastos);
         crearGastosPorCategoria(datos.gastosPorCategoria);
         crearIngresosPorCategoria(datos.ingresosPorCategoria);
@@ -258,7 +272,6 @@ function crearIngresosVsGastos(totalIngresos, totalGastos) { //Función para cre
     });
 }
 
-
 function crearGastosPorCategoria(gastosPorCategoria) { //Función para crear la gráfica de gastos por categoría
     const ctx = document.getElementById('gastos-por-categoria').getContext('2d');
 
@@ -363,16 +376,16 @@ function crearIngresosPorCategoria(ingresosPorCategoria) { //Función para crear
     });
 }
 
+const combo = document.getElementById("combobox-filtro-tiempo");
+
+combo.addEventListener("change", () => { //Código que se ejecuta al cambiar el filtro de tiempo
+    const { fechaInicio, fechaFin } = obtenerRango(combo.value);
+    cargarResumen(fechaInicio, fechaFin);
+});
+
 document.addEventListener("DOMContentLoaded", () => { //Código que se ejecuta al cargar la página
     const { fechaInicio, fechaFin } = obtenerRango("semana"); //Rango por defecto: última semana
     cargarResumen(fechaInicio, fechaFin);
     cargarUltimasTransacciones();
     cargarSaldoActual();
-
-    const combo = document.getElementById("combobox-filtro-tiempo");
-
-    combo.addEventListener("change", () => {
-        const { fechaInicio, fechaFin } = obtenerRango(combo.value);
-        cargarResumen(fechaInicio, fechaFin);
-    });
 })
