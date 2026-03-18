@@ -18,7 +18,7 @@ Una aplicación moderna y potente que transforma la manera en que gestionas tu d
 
 📈 **Visualizaciones Potentes** - Gráficos que cuentan la historia de tu dinero
 
-📤 **Exporta Todo** - Lleva tus datos a Excel o PDF cuando quieras
+📤 **Exporta Todo** - Lleva tus datos a PDF cuando quieras
 
 ---
 
@@ -28,7 +28,7 @@ Una aplicación moderna y potente que transforma la manera en que gestionas tu d
 
 **Frontend:** HTML5 · CSS3 · JavaScript · Chart.js
 
-**Extras:** EPPlus para Excel · PDFSharp para reportes
+**Extras:** PDFSharp para reportes
 
 ---
 
@@ -38,7 +38,7 @@ Una aplicación moderna y potente que transforma la manera en que gestionas tu d
 - ✅ Categorías personalizables que se adaptan a tu estilo de vida
 - ✅ Dashboard interactivo con tu balance actualizado
 - ✅ Reportes visuales que revelan patrones de gasto
-- ✅ Exportación instantánea a Excel y PDF
+- ✅ Exportación instantánea a PDF
 - ✅ Filtros por fecha y tipo para análisis profundo
 
 ---
@@ -50,6 +50,7 @@ Una aplicación moderna y potente que transforma la manera en que gestionas tu d
 - 🔔 Alertas de presupuesto
 - 🏦 Integración bancaria
 - 📅 Pagos recurrentes
+- 📈 Exportaci[on a .xslx
 
 ---
 
